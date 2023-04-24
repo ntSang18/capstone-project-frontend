@@ -1,0 +1,88 @@
+import instance from './AxiosConfig';
+
+class AuthService {
+  get entity() {
+    return 'auth';
+  }
+
+  async register(obj) {
+    try {
+      const res = await instance.post(`${this.entity}/register`, {
+        ...obj,
+      });
+      return res;
+    } catch (err) {
+      return { err: err };
+    }
+  }
+
+  async login(obj) {
+    try {
+      const res = await instance.post(
+        `${this.entity}/login`,
+        { ...obj },
+        { withCredentials: true },
+      );
+      return res;
+    } catch (err) {
+      return { err: err };
+    }
+  }
+
+  async forgot(obj) {
+    try {
+      const res = await instance.post(`${this.entity}/forgot`, {
+        ...obj,
+      });
+      return res;
+    } catch (err) {
+      return { err: err };
+    }
+  }
+
+  async reconfirm(obj) {
+    try {
+      const res = await instance.post(`${this.entity}/reconfirm`, {
+        ...obj,
+      });
+      return res;
+    } catch (err) {
+      return { err: err };
+    }
+  }
+
+  async googleOauth2(obj) {
+    try {
+      const res = await instance.post(
+        `${this.entity}/google-oauth2`,
+        {
+          ...obj,
+        },
+        { withCredentials: true },
+      );
+      return res;
+    } catch (err) {
+      return { err: err };
+    }
+  }
+
+  async logout() {
+    try {
+      const res = await instance.post(`${this.entity}/logout`, {}, { withCredentials: true });
+      return res;
+    } catch (err) {
+      return { err: err };
+    }
+  }
+
+  async reset(obj) {
+    try {
+      const res = await instance.post(`${this.entity}/reset`, { ...obj });
+      return res;
+    } catch (err) {
+      return { err: err };
+    }
+  }
+}
+
+export default new AuthService();
