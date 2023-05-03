@@ -1,10 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import LoginView from '@/views/client/auth/LoginView.vue';
-import RegisterView from '@/views/client/auth/RegisterView.vue';
-import ForgotView from '@/views/client/auth/ForgotView.vue';
-import ReconfirmView from '@/views/client/auth/ReconfirmView.vue';
-import ResetView from '@/views/client/auth/ResetView.vue';
-import MainLayout from '@/layouts/client/MainLayout.vue';
+import LoginView from '@/views/client/auth/LoginView';
+import RegisterView from '@/views/client/auth/RegisterView';
+import ForgotView from '@/views/client/auth/ForgotView';
+import ReconfirmView from '@/views/client/auth/ReconfirmView';
+import ResetView from '@/views/client/auth/ResetView';
+import MainLayout from '@/layouts/client/MainLayout';
+import HomeView from '@/views/client/HomeView';
+import DetailPostView from '@/views/client/DetailPostView';
 
 const routes = [
   {
@@ -48,13 +50,30 @@ const routes = [
     component: ResetView,
   },
   {
-    path: '/',
+    path: '',
     name: 'Index',
     meta: {
       title: 'Index',
     },
     component: MainLayout,
-    children: [],
+    children: [
+      {
+        path: '',
+        name: 'Home',
+        meta: {
+          title: 'Home',
+        },
+        component: HomeView,
+      },
+      {
+        path: '/:id',
+        name: 'Detail Post',
+        meta: {
+          title: 'Details',
+        },
+        component: DetailPostView,
+      },
+    ],
   },
 ];
 
