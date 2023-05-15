@@ -1,0 +1,11 @@
+@import url(./common.css);
+
+.status.success {
+  background-color: #67C23A;
+  color: #fff;
+}
+
+.status.fail {
+  background-color: #F56C6C;
+  color: #fff;
+}

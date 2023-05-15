@@ -1,0 +1,77 @@
+@import url(./common.css);
+
+#support {
+  background-color: #f4f4f4;
+  padding: 12px 120px;
+}
+
+#support .container {
+  border: 7px dashed #e8eefc;
+  padding: 30px;
+  border-radius: 8px;
+  background-color: #fff;
+  margin-bottom: 50px;
+}
+
+#support .support-bg {
+  height: 150px;
+  background: url(@/assets/images/background/support-bg.jpg) center no-repeat;
+  background-size: contain;
+}
+
+#support .support-content {
+  padding: 0 10px;
+  margin-top: 30px;
+  text-align: center;
+}
+
+#support .support-content .support-title {
+  font-size: 17px;
+  color: #233762;
+}
+
+#support .support-content .list-support {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 20px;
+  margin-bottom: 25px;
+}
+
+#support .support-content .list-support .support-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#support .support-content .list-support .support-item .support-item-title {
+  font-weight: 700;
+  display: block;
+  margin-bottom: 10px;
+  color: #f60;
+  text-transform: uppercase;
+}
+
+#support .support-content .list-support .support-item .support-contact {
+  display: block;
+  color: #233762;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 5px 0;
+}
+
+#support .support-content .page-contact {
+  display: inline-flex;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px 30px;
+  background-color: #3961fb;
+  border: 1px solid #3961fb;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#support .support-content .page-contact:hover {
+  text-decoration: underline;
+}
