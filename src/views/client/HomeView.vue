@@ -72,21 +72,21 @@
             <button class="sort-item">Có video</button>
           </div>
           <ul class="list-container">
-            <MainPost type="1" />
-            <MainPost type="1" />
-            <MainPost type="1" />
-            <MainPost type="2" />
-            <MainPost type="2" />
-            <MainPost type="2" />
-            <MainPost type="3" />
-            <MainPost type="3" />
-            <MainPost type="3" />
-            <MainPost type="4" />
-            <MainPost type="4" />
-            <MainPost type="4" />
-            <MainPost type="5" />
-            <MainPost type="5" />
-            <MainPost type="5" />
+            <main-post type="1" />
+            <main-post type="1" />
+            <main-post type="1" />
+            <main-post type="2" />
+            <main-post type="2" />
+            <main-post type="2" />
+            <main-post type="3" />
+            <main-post type="3" />
+            <main-post type="3" />
+            <main-post type="4" />
+            <main-post type="4" />
+            <main-post type="4" />
+            <main-post type="5" />
+            <main-post type="5" />
+            <main-post type="5" />
           </ul>
         </section>
         <section id="pagination">
@@ -231,16 +231,16 @@
         <section id="new-post" class="section link">
           <h2 class="section-header">Tin mới đăng</h2>
           <ul class="list-container">
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
+            <aside-post />
+            <aside-post />
+            <aside-post />
+            <aside-post />
+            <aside-post />
+            <aside-post />
+            <aside-post />
+            <aside-post />
+            <aside-post />
+            <aside-post />
           </ul>
         </section>
 
@@ -311,8 +311,6 @@
         </section>
       </div>
     </div>
-
-    <Support />
   </div>
 </template>
 
@@ -320,14 +318,13 @@
 import 'swiper/swiper-bundle.css';
 import MainPost from '@/components/client/post/MainPost.vue';
 import AsidePost from '@/components/client/post/AsidePost.vue';
-import Support from '@/components/client/SupportSection.vue';
+
 export default {
   components: {
     MainPost,
     AsidePost,
-    Support,
   },
 };
 </script>
 
-<style scoped src="@/assets/styles/home.css"></style>
+<style scoped src="@/assets/styles/client/home.css"></style>

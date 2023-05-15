@@ -1,5 +1,5 @@
 <template>
-  <li :class="'post-item ' + classNameType">
+  <li class="post-item saved">
     <div class="post-thumb">
       <img
         src="https://pt123.cdn.static123.com/images/thumbs/450x300/fit/2021/03/10/z2372635816674-545794dbbc111cba4b6b0b4ed0d7d184_1615391076.jpg"
@@ -7,15 +7,9 @@
       <div class="number-img">
         <span>7 ảnh</span>
       </div>
-      <div class="saved"><i class="bx bxs-heart"></i></div>
     </div>
     <div class="post-meta">
       <h3 class="post-title">
-        <div v-if="type != 5" class="stars-wrapper">
-          <div class="stars" v-for="n in 6 - type" :key="n">
-            <i class="bx bxs-star"></i>
-          </div>
-        </div>
         PHÒNG TRỌ MỚI RẤT ĐẸP SỐ 373/1/2A ĐƯỜNG LÝ THƯỜNG KIỆT, QUẬN TÂN BÌNh Binh thanh sang sang
         sang sang sang sang sang sang sang sang san sang sang sang sang sang sang sang
       </h3>
@@ -38,36 +32,28 @@
           />
           <span class="author-name">Nguyen Thanh Sang</span>
         </div>
-        <div v-if="type == 1" class="btn-group">
+        <div class="btn-group">
           <button class="author-phone-number">0777908037</button>
           <button class="author-chat">Nhắn tin</button>
         </div>
       </div>
     </div>
+    <div class="delete-action">
+      <el-popconfirm
+        title="Xóa tin này khỏi tin đã lưu"
+        confirm-button-text="Đồng ý"
+        cancel-button-text="Hủy"
+      >
+        <template #reference>
+          <button class="btn-delete">Xóa tin</button>
+        </template>
+      </el-popconfirm>
+    </div>
   </li>
 </template>
 
 <script>
-export default {
-  props: {
-    type: Number,
-  },
-  computed: {
-    classNameType() {
-      if (this.type == 1) {
-        return 'vip-1';
-      } else if (this.type == 2) {
-        return 'vip-2';
-      } else if (this.type == 3) {
-        return 'vip-3';
-      } else if (this.type == 4) {
-        return 'vip-4';
-      } else {
-        return 'normal';
-      }
-    },
-  },
-};
+export default {};
 </script>
 
 <style scoped src="@/assets/styles/client/post.css"></style>

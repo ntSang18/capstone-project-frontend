@@ -122,4 +122,4 @@ export default {
 };
 </script>
 
-<style scoped src="@/assets/styles/auth.css"></style>
+<style scoped src="@/assets/styles/client/auth.css"></style>

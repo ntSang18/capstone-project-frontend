@@ -46,4 +46,4 @@
 export default { name: 'FooterSection' };
 </script>
 
-<style scoped src="@/assets/styles/footer.css"></style>
+<style scoped src="@/assets/styles/client/footer.css"></style>

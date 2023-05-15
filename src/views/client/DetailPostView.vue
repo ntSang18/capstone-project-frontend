@@ -198,33 +198,31 @@
         <section id="vip-post" class="section link">
           <h2 class="section-header">Tin nổi bật</h2>
           <ul class="list-container">
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
+            <aside-post />
+            <aside-post />
+            <aside-post />
+            <aside-post />
+            <aside-post />
           </ul>
         </section>
 
         <section id="new-post" class="section link">
           <h2 class="section-header">Tin mới đăng</h2>
           <ul class="list-container">
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
-            <AsidePost />
+            <aside-post />
+            <aside-post />
+            <aside-post />
+            <aside-post />
+            <aside-post />
+            <aside-post />
+            <aside-post />
+            <aside-post />
+            <aside-post />
+            <aside-post />
           </ul>
         </section>
       </div>
     </div>
-
-    <Support />
   </div>
 </template>
 
@@ -233,7 +231,6 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/swiper-bundle.css';
 import { Pagination, Navigation } from 'swiper';
 import AsidePost from '@/components/client/post/AsidePost.vue';
-import Support from '@/components/client/SupportSection';
 export default {
   data() {
     return {
@@ -244,7 +241,6 @@ export default {
     Swiper,
     SwiperSlide,
     AsidePost,
-    Support,
   },
   setup() {
     return {
@@ -254,4 +250,4 @@ export default {
 };
 </script>
 
-<style scoped src="@/assets/styles/detail.css"></style>
+<style scoped src="@/assets/styles/client/detail.css"></style>

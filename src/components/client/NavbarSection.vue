@@ -62,34 +62,34 @@
                   <div class="title">
                     <span> Quản lý tài khoản</span>
                   </div>
-                  <router-link to="/" class="action-item">
+                  <router-link to="/info" class="action-item">
                     <img src="@/assets/images/icon/info.png" />
                     <span>Thông tin cá nhân</span>
                   </router-link>
-                  <router-link to="/" class="action-item">
+                  <router-link to="/manage" class="action-item">
                     <img src="@/assets/images/icon/manage-post.png" />
                     <span>Quản lý tin</span>
                   </router-link>
-                  <router-link to="/" class="action-item">
+                  <router-link to="/saved" class="action-item">
                     <img src="@/assets/images/icon/post-saved.png" />
                     <span>Tin đã lưu</span>
                   </router-link>
                   <div class="title">
                     <span> Dịch vụ trả phí </span>
                   </div>
-                  <router-link to="/" class="action-item">
+                  <router-link to="/payment" class="action-item">
                     <img src="@/assets/images/icon/money.png" />
                     <span>Nạp tiền</span>
                   </router-link>
-                  <router-link to="/" class="action-item">
+                  <router-link to="/price" class="action-item">
                     <img src="@/assets/images/icon/price-tag.png" />
                     <span>Bảng giá dịch vụ</span>
                   </router-link>
-                  <router-link to="/" class="action-item">
+                  <router-link to="/payment-history" class="action-item">
                     <img src="@/assets/images/icon/receipt.png" />
                     <span>Lịch sử nạp tiền </span>
                   </router-link>
-                  <router-link to="/" class="action-item">
+                  <router-link to="/purchase-history" class="action-item">
                     <img src="@/assets/images/icon/payment-history.png" />
                     <span>Lịch sử thanh toán </span>
                   </router-link>
@@ -139,4 +139,4 @@ export default {
 };
 </script>
 
-<style scoped src="@/assets/styles/nav.css"></style>
+<style scoped src="@/assets/styles/client/nav.css"></style>

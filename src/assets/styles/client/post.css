@@ -288,3 +288,37 @@
 .post-item.aside .post-meta .post-time {
   font-size: 12px;
 }
+
+/* SAVED */
+
+.post-item.saved {
+  border-top: none;
+  border-bottom: 1px solid #ddd;
+}
+
+.post-item.saved .post-title {
+  color: #333;
+}
+
+.post-item.saved .delete-action {
+  padding-left: 20px;
+  margin-left: 20px;
+  border-left: 1px dashed #ddd;
+}
+
+.post-item.saved .delete-action .btn-delete{
+  padding: 10px 40px;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #e13427;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all ease .3s;
+}
+
+.post-item.saved .delete-action .btn-delete:hover {
+  background-color: #e13327be;
+}

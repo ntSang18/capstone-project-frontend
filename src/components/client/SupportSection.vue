@@ -38,4 +38,4 @@ export default {
 };
 </script>
 
-<style scoped src="@/assets/styles/support.css"></style>
+<style scoped src="@/assets/styles/client/support.css"></style>

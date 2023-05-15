@@ -48,4 +48,4 @@ export default {
 };
 </script>
 
-<style scoped src="@/assets/styles/post.css"></style>
+<style scoped src="@/assets/styles/client/post.css"></style>

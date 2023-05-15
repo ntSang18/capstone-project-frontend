@@ -1,6 +1,11 @@
 @import url(./common.css);
 
 #support {
+  background-color: #f4f4f4;
+  padding: 12px 120px;
+}
+
+#support .container {
   border: 7px dashed #e8eefc;
   padding: 30px;
   border-radius: 8px;
