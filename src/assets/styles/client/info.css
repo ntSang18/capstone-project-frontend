@@ -19,6 +19,7 @@
   border-radius: 50%;
   border: 5px solid #fafafa;
   margin-bottom: 5px;
+  cursor: pointer;
 }
 
 .form .avatar-container input {

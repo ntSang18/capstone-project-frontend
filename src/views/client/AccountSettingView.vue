@@ -13,13 +13,17 @@
         <div class="left">
           <div class="password">
             <h2 class="sub-title">Thay đổi mật khẩu</h2>
-            <form class="form-change-password">
+            <div class="form-change-password">
+              <div :class="error ? 'error show' : 'error'">
+                {{ error }}
+              </div>
               <div class="inp-group">
                 <label for="current-password">Mật khẩu hiện tại</label>
                 <el-input
                   id="current-password"
                   type="password"
                   placeholder="Nhập mật khẩu hiện tại"
+                  v-model="info.currentPassword"
                   show-password
                 />
               </div>
@@ -29,6 +33,7 @@
                   id="new-password"
                   type="password"
                   placeholder="Nhập mật khẩu mới"
+                  v-model="info.newPassword"
                   show-password
                 />
               </div>
@@ -38,11 +43,14 @@
                   id="repeat-password"
                   type="password"
                   placeholder="Nhập lại mật khẩu mới"
+                  v-model="info.repeatNewPassword"
                   show-password
                 />
               </div>
-              <button class="btn-change-password"><span>Đổi mật khẩu</span></button>
-            </form>
+              <button class="btn-change-password" @click="changePassword()">
+                <span>Đổi mật khẩu</span>
+              </button>
+            </div>
           </div>
         </div>
         <div class="right">
@@ -56,7 +64,7 @@
               <div class="item-left">
                 <i class="bx bx-notification-off"></i> <span>Trạng thái hoạt động</span>
               </div>
-              <el-switch v-model="night" size="small" class="switch" />
+              <el-switch v-model="status" size="small" class="switch" />
             </div>
             <button class="btn-delete-account">Xóa tài khoản</button>
           </div>
@@ -67,11 +75,54 @@
 </template>
 
 <script>
+import AuthService from '@/services/AuthService';
+import { MESSAGES } from '@/common/message';
 export default {
   data() {
     return {
+      info: {
+        currentPassword: '',
+        newPassword: '',
+        repeatNewPassword: '',
+      },
       night: false,
+      status: false,
+      error: '',
     };
+  },
+  methods: {
+    checkFormInfo() {
+      this.error = '';
+      if (this.info.newPassword.length < 8) {
+        this.error = MESSAGES.ERROR_PASSWORD;
+        return false;
+      } else if (this.info.repeatNewPassword !== this.info.newPassword) {
+        this.error = MESSAGES.ERROR_CONFIRM_PASSWORD;
+        return false;
+      }
+      return true;
+    },
+    clearForm() {
+      this.info.currentPassword = '';
+      this.info.newPassword = '';
+      this.repeatNewPassword = '';
+    },
+    async changePassword() {
+      if (!this.checkFormInfo()) {
+        return;
+      }
+      const obj = {
+        current_password: this.info.currentPassword,
+        new_password: this.info.newPassword,
+      };
+      const res = await AuthService.change(obj);
+      if (res.status === 200) {
+        this.$store.state.toast.success('Thay đổi mật khẩu thannhf công!');
+        this.clearForm();
+      } else {
+        this.$store.state.toast.error('Thay đổi mật khẩu thất bại!');
+      }
+    },
   },
 };
 </script>

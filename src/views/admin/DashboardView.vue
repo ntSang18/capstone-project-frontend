@@ -21,7 +21,7 @@
       <li>
         <i class="bx bxs-group"></i>
         <span class="text">
-          <h3>2834</h3>
+          <h3>{{ boxInfo.totalUser }}</h3>
           <p>Người dùng</p>
         </span>
       </li>
@@ -51,7 +51,7 @@
       <div class="package">
         <h3 class="head-title">Gói đăng tin</h3>
         <ul class="package-list">
-          <li class="package-item vip1">
+          <li class="package-item-dashboard vip1">
             <p>VIP 1</p>
             <div class="stars">
               <i class="bx bxs-star"></i>
@@ -61,7 +61,7 @@
               <i class="bx bxs-star"></i>
             </div>
           </li>
-          <li class="package-item vip2">
+          <li class="package-item-dashboard vip2">
             <p>VIP 2</p>
             <div class="stars">
               <i class="bx bxs-star"></i>
@@ -70,7 +70,7 @@
               <i class="bx bxs-star"></i>
             </div>
           </li>
-          <li class="package-item vip3">
+          <li class="package-item-dashboard vip3">
             <p>VIP 3</p>
             <div class="stars">
               <i class="bx bxs-star"></i>
@@ -78,14 +78,14 @@
               <i class="bx bxs-star"></i>
             </div>
           </li>
-          <li class="package-item vip4">
+          <li class="package-item-dashboard vip4">
             <p>VIP 4</p>
             <div class="stars">
               <i class="bx bxs-star"></i>
               <i class="bx bxs-star"></i>
             </div>
           </li>
-          <li class="package-item normal">
+          <li class="package-item-dashboard normal">
             <p>Normal</p>
           </li>
         </ul>
@@ -95,9 +95,18 @@
 </template>
 
 <script>
+import UserService from '@/services/UserService';
 export default {
+  props: {
+    changePage: Function,
+  },
   data() {
     return {
+      boxInfo: {
+        totalPost: 1020,
+        totalUser: 0,
+        totalIncome: 70000000,
+      },
       tableData: [
         {
           date: '2016-05-03',
@@ -121,6 +130,18 @@ export default {
         },
       ],
     };
+  },
+  mounted() {
+    this.changePage(1);
+    this.getTotalUser();
+  },
+  methods: {
+    async getTotalUser() {
+      const res = await UserService.getUsers();
+      if (res.status === 200) {
+        this.boxInfo.totalUser = res.data.total_user;
+      }
+    },
   },
 };
 </script>

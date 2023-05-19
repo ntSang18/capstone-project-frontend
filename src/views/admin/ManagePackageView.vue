@@ -141,8 +141,14 @@
 <script>
 import PackageItem from '@/components/admin/PackageItem.vue';
 export default {
+  props: {
+    changePage: Function,
+  },
   components: {
     PackageItem,
+  },
+  mounted() {
+    this.changePage(4);
   },
 };
 </script>

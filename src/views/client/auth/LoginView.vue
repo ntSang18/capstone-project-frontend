@@ -39,19 +39,22 @@
 import { validateEmail } from '@/utils/validate';
 import { MESSAGES } from '@/common/message';
 import AuthService from '@/services/AuthService';
+import UserService from '@/services/UserService';
 import { mapActions } from 'vuex';
+import { ROLES } from '@/common/roles';
 export default {
   data() {
     return {
       info: {
         email: '',
         password: '',
+        role: ROLES.USER,
       },
       error: '',
     };
   },
   methods: {
-    ...mapActions(['deToken']),
+    ...mapActions(['setToken', 'setUser']),
     checkInfo() {
       this.error = '';
       if (!validateEmail(this.info.email)) {
@@ -69,8 +72,14 @@ export default {
       }
       const res = await AuthService.login(this.info);
       if (res.status === 200) {
-        await this.deToken(res.data);
+        await this.setToken(res.data);
+        const response = await UserService.getCurrentUser();
+        if (response.status === 200) {
+          this.setUser(response.data);
+        }
         this.$router.push('/');
+      } else {
+        this.$store.state.toast.error('Email hoặc mật khẩu chưa chính xác!');
       }
     },
     async signInWithGoogle(response) {
@@ -79,7 +88,11 @@ export default {
       };
       const res = await AuthService.googleOauth2(data);
       if (res.status === 200) {
-        await this.deToken(res.data);
+        await this.setToken(res.data);
+        const response = await UserService.getCurrentUser();
+        if (response.status === 200) {
+          this.setUser(response.data);
+        }
         this.$router.push('/');
       } else {
         this.$store.state.toast.error('Có lỗi xảy ra!');

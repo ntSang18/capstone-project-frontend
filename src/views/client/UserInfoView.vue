@@ -26,24 +26,24 @@
             <h2 class="content-title">Thông tin chung</h2>
             <div class="inp-group">
               <label for="email">Email</label>
-              <el-input id="email" type="email" disabled />
+              <el-input id="email" type="email" disabled v-model="info.email" />
             </div>
             <div class="inp-group">
               <label for="phone">Số điện thoại</label>
-              <el-input id="phone" type="email" disabled />
+              <el-input id="phone" type="email" disabled v-model="info.phone_number" />
             </div>
             <div class="inp-group">
               <label for="username">Họ và tên</label>
-              <el-input id="username" type="text" clearable />
+              <el-input id="username" type="text" clearable v-model="info.username" />
             </div>
             <div class="inp-group">
               <label for="facebook">Facebook</label>
               <el-input
                 id="facebook"
-                v-model="input"
                 type="text"
                 clearable
                 placeholder="Liên kết đến tài khoản facebook"
+                v-model="info.facebook"
               />
             </div>
           </div>
@@ -52,81 +52,121 @@
             <h2 class="content-title">Thông tin địa chỉ</h2>
             <div class="inp-group">
               <label for="province">Tỉnh, Thành phố</label>
-              <el-select id="province" placeholder="Tỉnh, Thành phố">
+              <el-select
+                id="province"
+                placeholder="Tỉnh, Thành phố"
+                filterable
+                v-model="info.province"
+                @change="provinceChange()"
+              >
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  v-for="item in provinces"
+                  :key="item.province_id"
+                  :label="item.province_name"
+                  :value="item.province_name"
+                  @click="getDistricts(item.province_id)"
                 />
               </el-select>
             </div>
             <div class="inp-group">
               <label for="district">Quận, Huyện, Thị xã</label>
-              <el-select id="district" placeholder="Quận, Huyện, Thị xã">
+              <el-select
+                id="district"
+                placeholder="Quận, Huyện, Thị xã"
+                filterable
+                v-model="info.district"
+                @change="districtChange()"
+              >
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  v-for="item in districts"
+                  :key="item.district_id"
+                  :label="item.district_name"
+                  :value="item.district_name"
+                  @click="getWards(item.district_id)"
                 />
               </el-select>
             </div>
             <div class="inp-group">
-              <label for="commune">Phường, Xã, Thị trấn</label>
-              <el-select id="commune" placeholder="Phường, Xã, Thị trấn">
+              <label for="ward">Phường, Xã, Thị trấn</label>
+              <el-select
+                id="ward"
+                filterable
+                placeholder="Phường, Xã, Thị trấn"
+                v-model="info.ward"
+              >
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  v-for="item in wards"
+                  :key="item.ward_id"
+                  :label="item.ward_name"
+                  :value="item.ward_name"
                 />
               </el-select>
             </div>
             <div class="inp-group">
-              <label for="specific">Địa chị cụ thể</label>
-              <el-input id="specific" type="text" placeholder="Địa chị cụ thể" clearable />
+              <label for="specific">Địa chỉ cụ thể</label>
+              <el-input
+                id="specific"
+                type="text"
+                placeholder="Số nhà, tên đường..."
+                clearable
+                v-model="info.specific_address"
+              />
             </div>
           </div>
         </div>
 
-        <el-button type="primary">Lưu & Cập nhật</el-button>
+        <el-button type="primary" @click="updateUser()">Lưu & Cập nhật</el-button>
       </form>
     </section>
   </div>
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
+import AddressService from '@/services/AddressService';
+import UserService from '@/services/UserService';
 export default {
   data() {
     return {
-      options: [
-        {
-          value: 'Option1',
-          label: 'Option1',
-        },
-        {
-          value: 'Option2',
-          label: 'Option2',
-        },
-        {
-          value: 'Option3',
-          label: 'Option3',
-        },
-        {
-          value: 'Option4',
-          label: 'Option4',
-        },
-        {
-          value: 'Option5',
-          label: 'Option5',
-        },
-      ],
-      input: '',
+      info: {
+        id: null,
+        email: '',
+        phone_number: '',
+        username: '',
+        facebook: '',
+        image: null,
+        province: '',
+        district: '',
+        ward: '',
+        specific_address: '',
+      },
+      provinces: [],
+      districts: [],
+      wards: [],
       avatarUrl: '',
     };
   },
+  mounted() {
+    this.getInfo();
+    this.getProvinces();
+  },
+  computed: {
+    ...mapState(['user']),
+  },
   methods: {
+    ...mapActions(['setUser']),
+    getInfo() {
+      this.info.id = this.user.id;
+      this.info.email = this.user.email;
+      this.info.phone_number = this.user.phone_number;
+      this.info.username = this.user.username;
+      this.info.facebook = this.user.facebook;
+      this.info.province = this.user.province;
+      this.info.district = this.user.district;
+      this.info.ward = this.user.ward;
+      this.info.specific_address = this.user.specific_address;
+      this.avatarUrl = this.user.image_url;
+    },
     selectImage() {
       this.$refs.fileInput.click();
     },
@@ -134,8 +174,62 @@ export default {
       let input = this.$refs.fileInput;
       let file = input.files;
       if (file && file[0]) {
-        this.imagePicked = file[0];
-        this.avatarUrl = URL.createObjectURL(this.imagePicked);
+        this.info.image = file[0];
+        this.avatarUrl = URL.createObjectURL(this.info.image);
+      }
+    },
+    async getProvinces() {
+      const res = await AddressService.getProvinces();
+      if (res.status === 200) {
+        this.provinces = res.data.results;
+      }
+    },
+    async getDistricts(id) {
+      const res = await AddressService.getDistricts(id);
+      if (res.status === 200) {
+        this.districts = res.data.results;
+      }
+    },
+    async getWards(id) {
+      const res = await AddressService.getWards(id);
+      if (res.status === 200) {
+        this.wards = res.data.results;
+      }
+    },
+    provinceChange() {
+      this.info.district = '';
+      this.info.ward = '';
+    },
+    districtChange() {
+      this.info.ward = '';
+    },
+    async updateUser() {
+      if (!this.info.username.trim()) {
+        this.$store.state.toast.error('Tên không được trống!');
+        return;
+      }
+
+      const obj = new FormData();
+      obj.append('id', this.info.id);
+      obj.append('phone_number', this.info.phone_number);
+      obj.append('username', this.info.username);
+      obj.append('facebook', this.info.facebook);
+      if (this.info.image) obj.append('image', this.info.image);
+      obj.append('province', this.info.province);
+      obj.append('district', this.info.district);
+      obj.append('ward', this.info.ward);
+      obj.append('specific_address', this.info.specific_address);
+
+      const res = await UserService.updateUser(obj);
+      if (res.status === 200) {
+        this.$store.state.toast.success('Cập nhật thông tin thành công!');
+        this.setUser(res.data);
+        this.getInfo();
+        this.info.image = null;
+      } else {
+        this.$store.state.toast.error('Cập nhật thông tin thất bại!');
+        this.getInfo();
+        this.info.image = null;
       }
     },
   },

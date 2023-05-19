@@ -5,31 +5,31 @@
       <span class="text">Admin</span>
     </router-link>
     <ul class="side-menu top ps-0">
-      <li :class="active === 1 ? 'active' : ''" @click="triggerActive(1)">
+      <li :class="page === 1 ? 'active' : ''">
         <router-link to="/admin">
           <i class="bx bxs-dashboard"></i>
           <span class="text">Bảng điều khiển</span>
         </router-link>
       </li>
-      <li :class="active === 2 ? 'active' : ''" @click="triggerActive(2)">
+      <li :class="page === 2 ? 'active' : ''">
         <router-link to="/admin/manage-post">
           <i class="bx bxs-notepad"></i>
           <span class="text">Tin đăng</span>
         </router-link>
       </li>
-      <li :class="active === 3 ? 'active' : ''" @click="triggerActive(3)">
+      <li :class="page === 3 ? 'active' : ''">
         <router-link to="/admin/manage-account">
           <i class="bx bxs-group"></i>
           <span class="text">Người dùng</span>
         </router-link>
       </li>
-      <li :class="active === 4 ? 'active' : ''" @click="triggerActive(4)">
+      <li :class="page === 4 ? 'active' : ''">
         <router-link to="/admin/manage-package">
           <i class="bx bxs-purchase-tag"></i>
           <span class="text">Gói đăng tin</span>
         </router-link>
       </li>
-      <li :class="active === 5 ? 'active' : ''" @click="triggerActive(5)">
+      <li :class="page === 5 ? 'active' : ''">
         <router-link to="/admin/income">
           <i class="bx bx-money"></i>
           <span class="text">Doanh thu</span>
@@ -57,16 +57,7 @@
 export default {
   props: {
     hide: Boolean,
-  },
-  data() {
-    return {
-      active: 1,
-    };
-  },
-  methods: {
-    triggerActive(index) {
-      this.active = index;
-    },
+    page: Number,
   },
 };
 </script>

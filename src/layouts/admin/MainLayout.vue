@@ -1,9 +1,9 @@
 <template>
   <div id="main-layout" :class="theme ? '' : 'dark'">
-    <sidebar-section :hide="hideSidebar" />
+    <sidebar-section :hide="hideSidebar" :page="page" />
     <section id="content">
       <navbar-section :triggerSidebar="triggerHideSidebar" :triggerTheme="triggerTheme" />
-      <router-view />
+      <router-view :changePage="changePage" />
     </section>
   </div>
 </template>
@@ -16,6 +16,7 @@ export default {
     return {
       hideSidebar: false,
       theme: true,
+      page: 1,
     };
   },
   components: {
@@ -28,6 +29,9 @@ export default {
     },
     triggerTheme() {
       this.theme = !this.theme;
+    },
+    changePage(page) {
+      this.page = page;
     },
   },
 };
