@@ -14,7 +14,7 @@ class AuthService {
       });
       return res;
     } catch (err) {
-      return { err: err };
+      return err;
     }
   }
 
@@ -27,7 +27,7 @@ class AuthService {
       );
       return res;
     } catch (err) {
-      return { err: err };
+      return err;
     }
   }
 
@@ -38,7 +38,7 @@ class AuthService {
       });
       return res;
     } catch (err) {
-      return { err: err };
+      return err;
     }
   }
 
@@ -49,7 +49,7 @@ class AuthService {
       });
       return res;
     } catch (err) {
-      return { err: err };
+      return err;
     }
   }
 
@@ -64,7 +64,7 @@ class AuthService {
       );
       return res;
     } catch (err) {
-      return { err: err };
+      return err;
     }
   }
 
@@ -77,7 +77,7 @@ class AuthService {
       );
       return res;
     } catch (err) {
-      return { err: err };
+      return err;
     }
   }
 
@@ -86,7 +86,7 @@ class AuthService {
       const res = await instance(contentType).post(`${this.entity}/reset`, { ...obj });
       return res;
     } catch (err) {
-      return { err: err };
+      return err;
     }
   }
 
@@ -95,7 +95,7 @@ class AuthService {
       const res = await instance(contentType).post(`${this.entity}/change`, { ...obj });
       return res;
     } catch (err) {
-      return { err: err };
+      return err;
     }
   }
 }

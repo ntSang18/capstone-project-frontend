@@ -78,6 +78,8 @@ export default {
           this.setUser(response.data);
         }
         this.$router.push('/');
+      } else if (res.response.status === 423) {
+        this.$store.state.toast.error('Tài khoản đã bị khóa!');
       } else {
         this.$store.state.toast.error('Email hoặc mật khẩu chưa chính xác!');
       }
@@ -94,6 +96,8 @@ export default {
           this.setUser(response.data);
         }
         this.$router.push('/');
+      } else if (res.response.status === 423) {
+        this.$store.state.toast.error('Tài khoản đã bị khóa!');
       } else {
         this.$store.state.toast.error('Có lỗi xảy ra!');
       }
