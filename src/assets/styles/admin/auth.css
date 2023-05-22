@@ -1,0 +1,70 @@
+@import url(./common.css);
+
+#auth {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  background-image: url('@/assets/images/background/login-background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  justify-content: center;
+  align-items: center;
+}
+
+#auth .form {
+  width: 400px;
+  display: flex;
+  flex-direction: column ;
+  justify-content: center;
+  align-items: center;
+  background-color: #0C0C1E;
+  opacity: 0.9;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+}
+
+#auth .form h2 {
+  font-size: 28px;
+  color: var(--light);
+  margin-bottom: 30px;
+}
+
+#auth .form input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: #060714;
+  color: var(--grey);
+  margin-bottom: 15px;
+  padding: 10px;
+  opacity: 1;
+  font-size: 16px;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+}
+
+#auth .form button {
+  border: none;
+  background-color: var(--blue);
+  width: 100%;
+  padding: 10px;
+  color: var(--light);
+  font-size: 16px;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+#auth .form a {
+  width: 100%;
+  text-align: start;
+  font-size: 14px;
+  color: var(--grey);
+  transition: all ease .3s;
+}
+
+#auth .form a:hover {
+  color: var(--blue);
+}

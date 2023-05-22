@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import checkMiddleware from './middleware';
+
 import LoginView from '@/views/admin/auth/LoginView';
+import ForgotView from '@/views/admin/auth/ForgotView';
 import MainLayout from '@/layouts/admin/MainLayout';
 import DashboardView from '@/views/admin/DashboardView';
 import ManagePostView from '@/views/admin/ManagePostView';
@@ -9,15 +12,23 @@ import ManagePackageView from '@/views/admin/ManagePackageView';
 const routes = [
   {
     path: '/admin/login',
-    name: 'login',
+    name: 'Login',
     meta: {
       title: 'Login',
     },
     component: LoginView,
   },
   {
+    path: '/admin/forgot',
+    name: 'Forgot',
+    meta: {
+      title: 'Forgot',
+    },
+    component: ForgotView,
+  },
+  {
     path: '/admin',
-    name: 'index',
+    name: 'Index',
     meta: {
       title: 'Index',
     },
@@ -62,6 +73,16 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  scrollBehavior() {
+    return { top: 0 };
+  },
+});
+
+router.beforeEach(checkMiddleware);
+
+router.beforeEach((to, from, next) => {
+  document.title = `${to.meta.title}`;
+  next();
 });
 
 export default router;

@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import checkMiddleware from './middleware';
+
 import LoginView from '@/views/client/auth/LoginView';
 import RegisterView from '@/views/client/auth/RegisterView';
 import ForgotView from '@/views/client/auth/ForgotView';
@@ -100,14 +102,6 @@ const routes = [
         component: PostManageView,
       },
       {
-        path: '/manage',
-        name: 'Post Management',
-        meta: {
-          title: 'Post Management',
-        },
-        component: PostManageView,
-      },
-      {
         path: '/saved',
         name: 'Saved Post',
         meta: {
@@ -178,6 +172,16 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  scrollBehavior() {
+    return { top: 0 };
+  },
+});
+
+router.beforeEach(checkMiddleware);
+
+router.beforeEach((to, from, next) => {
+  document.title = `${to.meta.title}`;
+  next();
 });
 
 export default router;

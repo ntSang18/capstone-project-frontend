@@ -106,7 +106,7 @@
   z-index: 2;
 }
 
-#dashboard .table-data .package .package-list li::before {
+#dashboard .table-data .package .package-list .package-item-dashboard::before {
   content: '';
   position: absolute;
   height: 100%;

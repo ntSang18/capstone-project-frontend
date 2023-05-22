@@ -54,7 +54,7 @@ export default {
       if (res.status === 200) {
         this.$store.state.toast.info('Kiểm tra email để đặt lại mật khẩu!');
       } else {
-        this.$store.state.toast.error('Email chính xác!');
+        this.$store.state.toast.error('Email không chính xác!');
       }
     },
   },

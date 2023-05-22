@@ -9,9 +9,10 @@
 
 :root {
   --light-orange: #FFBA00;
-  --orange: #FF8800;
+  --orange: #FF6D25;
   --dark-orange: #ED570E;
-  --back-ground: #F4F4F4;
+  --background: #F4F4F4;
+  --white: #FFFFFF;
 }
 
 ul {

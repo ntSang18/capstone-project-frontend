@@ -34,50 +34,60 @@
             </a>
             <template #dropdown>
               <div class="drop-down">
-                <div class="user-info">
-                  <div class="img-container">
-                    <img src="@/assets/images/default/user.png" alt="" />
-                  </div>
-                  <div class="info-content">
-                    <h2>Nguyen Thanh Sang</h2>
-                    <span class="info-email">thanhsang6325@gmail.com</span>
-                    <div class="separate"></div>
-                    <div class="info-follow">
-                      <span>0 Người theo dõi</span>
+                <div v-if="user" class="drop-down-header">
+                  <div class="user-info">
+                    <div class="img-container">
+                      <img v-if="user.image" src="user.image" />
+                      <img v-else src="@/assets/images/default/user.png" />
+                    </div>
+                    <div class="info-content">
+                      <h2>{{ user.username }}</h2>
+                      <span class="info-email">{{ user.email }}</span>
                       <div class="separate"></div>
-                      <span>0 Người theo dõi</span>
+                      <div class="info-follow">
+                        <span>0 Người theo dõi</span>
+                        <div class="separate"></div>
+                        <span>0 Người theo dõi</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="user-balance">
+                    <div class="container">
+                      <h4>Số dư</h4>
+                      <div class="balance">
+                        <strong>{{ user.balance }}</strong>
+                        <img src="@/assets/images/icon/gold.png" />
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="user-balance">
-                  <div class="container">
-                    <h4>Số dư</h4>
-                    <div class="balance">
-                      <strong>0</strong>
-                      <img src="@/assets/images/icon/gold.png" />
-                    </div>
+                <div v-else class="drop-down-header">
+                  <div class="btn-wrapper">
+                    <router-link to="/login" class="btn-auth">
+                      <span>Đăng nhập/Đăng ký</span>
+                    </router-link>
                   </div>
                 </div>
                 <div class="list-action">
                   <div class="title">
                     <span> Quản lý tài khoản</span>
                   </div>
-                  <router-link to="/info" class="action-item">
+                  <router-link :to="user ? '/info' : '/login'" class="action-item">
                     <img src="@/assets/images/icon/info.png" />
                     <span>Thông tin cá nhân</span>
                   </router-link>
-                  <router-link to="/manage" class="action-item">
+                  <router-link :to="user ? '/manage' : '/login'" class="action-item">
                     <img src="@/assets/images/icon/manage-post.png" />
                     <span>Quản lý tin</span>
                   </router-link>
-                  <router-link to="/saved" class="action-item">
+                  <router-link :to="user ? '/saved' : '/login'" class="action-item">
                     <img src="@/assets/images/icon/post-saved.png" />
                     <span>Tin đã lưu</span>
                   </router-link>
                   <div class="title">
                     <span> Dịch vụ trả phí </span>
                   </div>
-                  <router-link to="/payment" class="action-item">
+                  <router-link :to="user ? '/payment' : '/login'" class="action-item">
                     <img src="@/assets/images/icon/money.png" />
                     <span>Nạp tiền</span>
                   </router-link>
@@ -85,18 +95,18 @@
                     <img src="@/assets/images/icon/price-tag.png" />
                     <span>Bảng giá dịch vụ</span>
                   </router-link>
-                  <router-link to="/payment-history" class="action-item">
+                  <router-link :to="user ? '/payment-history' : '/login'" class="action-item">
                     <img src="@/assets/images/icon/receipt.png" />
                     <span>Lịch sử nạp tiền </span>
                   </router-link>
-                  <router-link to="/purchase-history" class="action-item">
+                  <router-link :to="user ? '/purchase-history' : '/login'" class="action-item">
                     <img src="@/assets/images/icon/payment-history.png" />
                     <span>Lịch sử thanh toán </span>
                   </router-link>
                   <div class="title">
                     <span> Khác </span>
                   </div>
-                  <router-link to="/" class="action-item">
+                  <router-link :to="user ? '/account-setting' : '/login'" class="action-item">
                     <img src="@/assets/images/icon/setting.png" />
                     <span>Cài đặt tài khoản </span>
                   </router-link>
@@ -108,10 +118,10 @@
                     <img src="@/assets/images/icon/feedback.png" />
                     <span>Đóng góp ý kiến</span>
                   </router-link>
-                  <router-link to="/" class="action-item">
+                  <a class="action-item" @click="logout()">
                     <img src="@/assets/images/icon/logout.png" />
                     <span>Đăng xuất</span>
-                  </router-link>
+                  </a>
                 </div>
               </div>
             </template>
@@ -131,11 +141,23 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
+import AuthService from '@/services/AuthService';
 export default {
   data() {
     return {};
   },
-  methods: {},
+  computed: {
+    ...mapState(['user']),
+  },
+  methods: {
+    ...mapActions(['clearStore']),
+    async logout() {
+      this.clearStore();
+      this.$router.push('/login');
+      await AuthService.logout();
+    },
+  },
 };
 </script>
 

@@ -156,6 +156,9 @@
 <script>
 import numberToVND from '@/utils/numberToVND';
 export default {
+  props: {
+    changePage: Function,
+  },
   data() {
     return {
       tableData: [
@@ -188,6 +191,9 @@ export default {
         },
       ],
     };
+  },
+  mounted() {
+    this.changePage(2);
   },
   methods: {
     numberToVND,

@@ -1,5 +1,7 @@
 import instance from './AxiosConfig';
 
+const contentType = 'application/json';
+
 class AuthService {
   get entity() {
     return 'auth';
@@ -7,53 +9,53 @@ class AuthService {
 
   async register(obj) {
     try {
-      const res = await instance.post(`${this.entity}/register`, {
+      const res = await instance(contentType).post(`${this.entity}/register`, {
         ...obj,
       });
       return res;
     } catch (err) {
-      return { err: err };
+      return err;
     }
   }
 
   async login(obj) {
     try {
-      const res = await instance.post(
+      const res = await instance(contentType).post(
         `${this.entity}/login`,
         { ...obj },
         { withCredentials: true },
       );
       return res;
     } catch (err) {
-      return { err: err };
+      return err;
     }
   }
 
   async forgot(obj) {
     try {
-      const res = await instance.post(`${this.entity}/forgot`, {
+      const res = await instance(contentType).post(`${this.entity}/forgot`, {
         ...obj,
       });
       return res;
     } catch (err) {
-      return { err: err };
+      return err;
     }
   }
 
   async reconfirm(obj) {
     try {
-      const res = await instance.post(`${this.entity}/reconfirm`, {
+      const res = await instance(contentType).post(`${this.entity}/reconfirm`, {
         ...obj,
       });
       return res;
     } catch (err) {
-      return { err: err };
+      return err;
     }
   }
 
   async googleOauth2(obj) {
     try {
-      const res = await instance.post(
+      const res = await instance(contentType).post(
         `${this.entity}/google-oauth2`,
         {
           ...obj,
@@ -62,25 +64,38 @@ class AuthService {
       );
       return res;
     } catch (err) {
-      return { err: err };
+      return err;
     }
   }
 
   async logout() {
     try {
-      const res = await instance.post(`${this.entity}/logout`, {}, { withCredentials: true });
+      const res = await instance(contentType).post(
+        `${this.entity}/logout`,
+        {},
+        { withCredentials: true },
+      );
       return res;
     } catch (err) {
-      return { err: err };
+      return err;
     }
   }
 
   async reset(obj) {
     try {
-      const res = await instance.post(`${this.entity}/reset`, { ...obj });
+      const res = await instance(contentType).post(`${this.entity}/reset`, { ...obj });
       return res;
     } catch (err) {
-      return { err: err };
+      return err;
+    }
+  }
+
+  async change(obj) {
+    try {
+      const res = await instance(contentType).post(`${this.entity}/change`, { ...obj });
+      return res;
+    } catch (err) {
+      return err;
     }
   }
 }
