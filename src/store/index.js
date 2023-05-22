@@ -1,9 +1,10 @@
 import { createStore } from 'vuex';
 import { useToast } from 'vue-toastification';
-import verifyJwtToken from '@/utils/deToken';
+import createPersistedState from 'vuex-persistedstate';
 
 const toast = useToast();
 export default createStore({
+  plugins: [createPersistedState()],
   state: {
     toast: toast,
     token: null,
@@ -11,15 +12,13 @@ export default createStore({
   },
   getters: {},
   mutations: {
-    async deToken(state, data) {
+    async setToken(state, data) {
       state.token = data.token;
-      state.user = await verifyJwtToken(data.token);
       sessionStorage.setItem('token', state.token);
-      sessionStorage.setItem('user', JSON.stringify(state.customer));
     },
-    updateUser(state, data) {
+    setUser(state, data) {
       state.user = data;
-      sessionStorage.setItem('user', JSON.stringify(state.customer));
+      sessionStorage.setItem('user', JSON.stringify(state.user));
     },
     clearStore(state) {
       sessionStorage.clear();
@@ -28,11 +27,11 @@ export default createStore({
     },
   },
   actions: {
-    deToken(content, data) {
-      content.commit('deToken', data);
+    setToken(content, data) {
+      content.commit('setToken', data);
     },
-    updateUser(content, data) {
-      content.commit('updateUser', data);
+    setUser(content, data) {
+      content.commit('setUser', data);
     },
     clearStore(content) {
       content.commit('clearStore');

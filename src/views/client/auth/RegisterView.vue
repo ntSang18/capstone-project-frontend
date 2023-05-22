@@ -96,8 +96,8 @@ export default {
       const data = {
         username: this.info.username,
         email: this.info.email,
+        phone_number: this.info.phoneNumber,
         password: this.info.password,
-        role: 'ROLE_USER',
       };
       const res = await AuthService.register(data);
       if (res.status === 200) {

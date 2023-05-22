@@ -180,7 +180,8 @@
   margin: 0 8px;
 }
 
-.drop-down .user-balance {
+.drop-down .user-balance,
+.drop-down .btn-wrapper {
   padding: 16px 12px;
 }
 
@@ -211,6 +212,28 @@
 .drop-down .user-balance .container .balance img {
   width: 24px;
   height: 24px;
+}
+
+.drop-down .btn-wrapper .btn-auth {
+  display: block;
+  text-align: center;
+  padding: 10px 0px;
+  width: 100%;
+  background-color: var(--orange);
+  border-radius: 5px;
+  border: none;
+  transition: all ease .3s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.drop-down .btn-wrapper .btn-auth:hover {
+  background-color: var(--dark-orange);
+}
+
+.drop-down .btn-wrapper .btn-auth span {
+  color: #fff;
+  font-weight: 600;
 }
 
 .drop-down .list-action .title {
