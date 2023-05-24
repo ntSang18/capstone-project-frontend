@@ -45,6 +45,12 @@ li {
 	--dark: #FBFBFB;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .main-container {
 	width: 100%;
 	padding: 36px 24px;
@@ -81,6 +87,11 @@ li {
 	color: var(--dark);
 }
 
+.main-container .head-title .btn-group {
+	display: flex;
+	column-gap: 20px;
+}
+
 .main-container .head-title button {
 	height: 36px;
 	padding: 0 16px;
@@ -88,6 +99,7 @@ li {
 	background: var(--blue);
 	color: var(--light);
 	display: flex;
+	outline: none;
 	justify-content: center;
 	align-items: center;
 	grid-gap: 10px;

@@ -8,10 +8,16 @@
           <el-breadcrumb-item>Quản lý người dùng</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-      <button class="btn-download">
-        <i class="bx bxs-cloud-download"></i>
-        <span class="text" @click="exportCsv()">Download CSV</span>
-      </button>
+      <div class="btn-group">
+        <button class="btn-create" @click="triggerCreateDialog(true)">
+          <i class="bx bxs-plus-circle"></i>
+          <span class="text">Tạo tài khoản</span>
+        </button>
+        <button class="btn-download">
+          <i class="bx bxs-cloud-download"></i>
+          <span class="text" @click="exportCsv()">Download CSV</span>
+        </button>
+      </div>
     </div>
 
     <div class="tab-container">
@@ -21,9 +27,6 @@
             <div class="table-head">
               <h3 class="table-title">Tài khoản người dùng</h3>
               <div class="operations">
-                <el-button type="primary" @click="triggerCreateDialog(true)"
-                  >Tạo tài khoản</el-button
-                >
                 <el-button type="danger" @click="deleteUser()">Xóa tất cả</el-button>
               </div>
             </div>
@@ -73,9 +76,20 @@
                     <el-button v-else size="small" type="info" @click="lockUser(scope.row.id)">
                       <i class="bx bx-lock-alt"></i>
                     </el-button>
-                    <el-button size="small" type="danger" @click="deleteUser(scope.row.id)">
-                      <i class="bx bx-trash-alt"></i>
-                    </el-button>
+                    <el-popconfirm
+                      width="200"
+                      confirm-button-type="danger"
+                      confirm-button-text="Xác nhận"
+                      cancel-button-text="Hủy"
+                      title="Xác nhận xóa tài khoản này?"
+                      @confirm="deleteUser(scope.row.id)"
+                    >
+                      <template #reference>
+                        <el-button size="small" type="danger"
+                          ><i class="bx bx-trash-alt"></i
+                        ></el-button>
+                      </template>
+                    </el-popconfirm>
                   </div>
                 </template>
               </el-table-column>
@@ -96,11 +110,7 @@
           <div class="table-container">
             <div class="table-head">
               <h3 class="table-title">Tài khoản quản lý</h3>
-              <div class="operations">
-                <el-button type="primary" @click="triggerCreateDialog(true)"
-                  >Tạo tài khoản</el-button
-                >
-              </div>
+              <div class="operations"></div>
             </div>
             <el-table
               :data="filterAdminPage"
@@ -185,6 +195,7 @@
 import UserService from '@/services/UserService';
 import CreateUserDialog from '@/components/admin/CreateUserDialog';
 import ViewUserDialog from '@/components/admin/ViewUserDialog';
+import { dateFormatter } from '@/utils/dateFormatter';
 export default {
   props: {
     changePage: Function,
@@ -253,6 +264,7 @@ export default {
     },
   },
   methods: {
+    dateFormatter,
     exportCsv() {
       let csv =
         'id, email, username, phone_number, facebook, image_url, balance, role, created_at, updated_at, locked, province, district, ward, specific_address\n';
@@ -277,9 +289,6 @@ export default {
         this.user.list = res.data.users.filter(u => u.role === 'ROLE_USER');
         this.admin.list = res.data.users.filter(u => u.role === 'ROLE_ADMIN');
       }
-    },
-    dateFormatter(date) {
-      return date.split('T')[0];
     },
     async lockUser(id) {
       const obj = {

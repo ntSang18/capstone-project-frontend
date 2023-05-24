@@ -44,7 +44,7 @@
         </a>
       </li>
       <li>
-        <a class="logout">
+        <a class="logout" @click="logout()">
           <i class="bx bxs-log-out-circle"></i>
           <span class="text">Logout</span>
         </a>
@@ -54,10 +54,20 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+import AuthService from '@/services/AuthService';
 export default {
   props: {
     hide: Boolean,
     page: Number,
+  },
+  methods: {
+    ...mapActions(['clearStore']),
+    async logout() {
+      this.clearStore();
+      this.$router.push('/admin/login');
+      await AuthService.logout();
+    },
   },
 };
 </script>

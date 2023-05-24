@@ -161,10 +161,10 @@ export default {
       this.info.phone_number = this.user.phone_number;
       this.info.username = this.user.username;
       this.info.facebook = this.user.facebook;
-      this.info.province = this.user.province;
-      this.info.district = this.user.district;
-      this.info.ward = this.user.ward;
-      this.info.specific_address = this.user.specific_address;
+      this.info.province = this.user.address.province;
+      this.info.district = this.user.address.district;
+      this.info.ward = this.user.address.ward;
+      this.info.specific_address = this.user.address.specific_address;
       this.avatarUrl = this.user.image_url;
     },
     selectImage() {
@@ -210,7 +210,6 @@ export default {
       }
 
       const obj = new FormData();
-      obj.append('id', this.info.id);
       obj.append('phone_number', this.info.phone_number);
       obj.append('username', this.info.username);
       obj.append('facebook', this.info.facebook);
@@ -220,7 +219,7 @@ export default {
       obj.append('ward', this.info.ward);
       obj.append('specific_address', this.info.specific_address);
 
-      const res = await UserService.updateUser(obj);
+      const res = await UserService.updateUser(this.info.id, obj);
       if (res.status === 200) {
         this.$store.state.toast.success('Cập nhật thông tin thành công!');
         this.setUser(res.data);

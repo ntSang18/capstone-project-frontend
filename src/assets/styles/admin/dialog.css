@@ -1,12 +1,13 @@
 @import url(./common.css);
 
-#create-user-dialog,
-#view-user-dialog {
-  background-color: var(--light);
+.dialog-component {
+  background-color: var(--light) !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
 }
 
 .el-dialog__header {
-  margin-right: 0px;
+  margin-right: 0px !important;
 }
 
 .dialog-header {
@@ -25,6 +26,22 @@
   font-size: 20px;
   cursor: pointer;
   vertical-align: middle;
+}
+
+.dialog-component .inp-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-component .inp-group.half {
+  width: 50%;
+}
+
+.dialog-component .inp-group label {
+  font-size: 14px;
+  color: var(--dark);
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
 #create-user-dialog .dialog-body {
@@ -50,17 +67,6 @@
   opacity: 1;
   padding: 8px;
   transition: visibility 0s, opacity 0.5s linear;
-}
-
-#create-user-dialog .dialog-body .inp-group {
-  display: flex;
-  flex-direction: column;
-}
-
-#create-user-dialog .dialog-body .inp-group label {
-  font-size: 14px;
-  color: var(--dark);
-  margin-bottom: 5px;
 }
 
 #view-user-dialog .dialog-body {
@@ -135,4 +141,194 @@
 #view-user-dialog .dialog-body .info-container table td.name {
   white-space: nowrap;
   width: 25%;
+}
+
+/* CREATE POST DIALOG */
+
+#create-post-dialog {
+  color: var(--dark);
+}
+
+#create-post-dialog .create-section {
+  margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: 70fr 30fr;
+  column-gap: 30px;
+}
+
+#create-post-dialog .dialog-body .sub-title {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: var(--dark);
+}
+
+#create-post-dialog .dialog-body .form-address {
+  display: flex;
+  flex-direction: column;
+}
+
+#create-post-dialog .dialog-body .form-address .row {
+  margin-bottom: 20px;
+}
+#create-post-dialog .dialog-body .form-address .row.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+}
+
+#create-post-dialog .dialog-body .right .map {
+  display: block;
+  width: 100%;
+  aspect-ratio : 1 / 1;
+}
+
+#create-post-dialog .dialog-body #post-info .inp-group,
+#create-post-dialog .dialog-body #post-advance .inp-group {
+  margin-bottom: 15px;
+}
+
+#create-post-dialog .dialog-body .post-note {
+  padding: 15px;
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: 5px;
+}
+
+#create-post-dialog .dialog-body .post-note-title {
+  font-size: 20px;
+  font-weight: normal;
+  margin-bottom: 15px;
+}
+
+#create-post-dialog .dialog-body .post-note ul {
+  list-style-type: square;
+  margin-left: 15px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+#create-post-dialog .dialog-body #post-img .sub-text{
+  color: var(--dark);
+  margin-bottom: 10px;
+}
+
+#create-post-dialog .dialog-body .form-img {
+  width: 100%;
+}
+
+#create-post-dialog .dialog-body .form-img input {
+  display: none;
+}
+
+#create-post-dialog .dialog-body .form-img .drag {
+  width: 100%;
+  padding: 50px 10px;
+  background: var(--grey);
+  border: 1px dashed var(--dark-grey);
+  text-align: center;
+  cursor: copy;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  row-gap: 15px;
+  transition: .2s ease all;
+}
+#create-post-dialog .dialog-body .form-img .drag:hover {
+  border-color: var(--blue);
+}
+
+#create-post-dialog .dialog-body .form-img .drag img {
+  width: 67px;
+  height: 67px;
+  object-fit: cover;
+}
+
+#create-post-dialog .dialog-body .form-img .drag span {
+  font-size: 14px;
+  color: var(--dark);
+}
+
+#create-post-dialog .dialog-body .form-img .drag span strong {
+  color: #409eff;
+  font-weight: normal;
+}
+
+#create-post-dialog .dialog-body .form-img .img-upload-container {
+  width: 100%;
+  padding: 12px;
+  background: var(--grey);
+  border: 1px dashed var(--dark-grey);
+  margin-top: 10px;
+  border-radius: 6px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+#create-post-dialog .dialog-body .img-upload-container::-webkit-scrollbar {
+  width: 10px;
+}
+#create-post-dialog .dialog-body .img-upload-container::-webkit-scrollbar-thumb {
+  background: var(--dark-grey); 
+  border-radius: 5px;
+}
+
+#create-post-dialog .dialog-body .form-img .img-upload-container .img-upload-item {
+  width: 100%;
+  aspect-ratio : 1 / 1;
+  position: relative;
+  min-width: 0px;
+  border-radius: 5px;
+}
+
+#create-post-dialog .dialog-body .form-img .img-upload-container .img-upload-item:hover > .item-action {
+  opacity: 1;
+}
+
+#create-post-dialog .dialog-body .form-img .img-upload-container .img-upload-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+#create-post-dialog .dialog-body .form-img .img-upload-container .item-action {
+  position: absolute;
+  background-color: rgba(0, 0, 0, .5);
+  width: 100%;
+  height: 98%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  border-radius: 5px;
+  column-gap: 20px;
+  opacity: 0;
+  transition: .3s ease all;
+} 
+
+#create-post-dialog .dialog-body .form-img .img-upload-container .item-action i {
+  cursor: pointer;
+  color: #fff;
+  font-size: 20px;
+}
+
+.img-dialog-container {
+  height: 317px;
+  display: flex;
+  align-items: center;
+  background-color: #16181f;
+}
+
+.img-dialog-container img {
+  width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 0;
 }

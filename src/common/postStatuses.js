@@ -1,0 +1,9 @@
+const STATUS = {
+  UNCONFIRMED: 'UNCONFIRMED',
+  UNPAID: 'UNPAID',
+  DENIED: 'DENIED',
+  EXPiRED: 'EXPIRED',
+  PUBLIC: 'PUBLIC',
+};
+
+export { STATUS };

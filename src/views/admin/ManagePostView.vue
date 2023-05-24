@@ -8,10 +8,16 @@
           <el-breadcrumb-item>Quản lý tin đăng</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-      <button class="btn-download">
-        <i class="bx bxs-cloud-download"></i>
-        <span class="text">Download CSV</span>
-      </button>
+      <div class="btn-group">
+        <button class="btn-create" @click="triggerCreatePostDialog(true)">
+          <i class="bx bxs-plus-circle"></i>
+          <span class="text">Tạo bài đăng</span>
+        </button>
+        <button class="btn-download">
+          <i class="bx bxs-cloud-download"></i>
+          <span class="text">Download CSV</span>
+        </button>
+      </div>
     </div>
 
     <div class="tab-container">
@@ -148,55 +154,155 @@
             </div>
           </div>
         </el-tab-pane>
+        <el-tab-pane label="Danh mục tin">
+          <div class="table-container">
+            <div class="table-head">
+              <h3 class="table-title">Danh mục tin đăng</h3>
+              <div class="operations">
+                <el-button @click="openCreateCatalogDialog()" type="primary">
+                  Tạo danh mục
+                </el-button>
+              </div>
+            </div>
+            <ul class="list-catalog">
+              <li v-for="item in catalog.list" :key="item.id" class="catalog-item">
+                <div class="catalog-info">
+                  <div class="general-info">
+                    <h3 class="catalog-name">{{ item.name }}</h3>
+                    <span class="catalog-created-at">
+                      <i class="bx bx-time"></i> Tạo lúc:
+                      <strong>{{ dateTimeFormatter(item.created_at) }}</strong>
+                    </span>
+                  </div>
+                  <ul class="numbers-info">
+                    <li>
+                      Tổng số tin: <strong>{{ item.total_count }}</strong>
+                    </li>
+                    <li>
+                      Số tin đang hiển thị: <strong>{{ item.total_public_post }}</strong>
+                    </li>
+                    <li>
+                      Số tin đã hết hạn: <strong>{{ item.total_expired_post }}</strong>
+                    </li>
+                    <li>
+                      Số tin bị từ chối: <strong>{{ item.total_denied_post }}</strong>
+                    </li>
+                    <li>
+                      Số tin chưa thanh toán: <strong>{{ item.total_unpaid_post }}</strong>
+                    </li>
+                    <li>
+                      Số tin chưa duyệt: <strong>{{ item.total_unconfirmed_post }}</strong>
+                    </li>
+                  </ul>
+                </div>
+                <div class="catalog-operations">
+                  <el-tooltip content="Chỉnh sửa danh mục" placement="top" effect="light">
+                    <el-button @click="openUpdateCatalogDialog(item)" type="warning" circle>
+                      <i class="bx bx-edit-alt"></i>
+                    </el-button>
+                  </el-tooltip>
+                  <el-tooltip content="Xóa danh mục" placement="top" effect="light">
+                    <el-button type="danger" circle><i class="bx bx-trash"></i></el-button>
+                  </el-tooltip>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </el-tab-pane>
       </el-tabs>
     </div>
+
+    <catalog-dialog
+      :dialogVisible="dialogVisible.catalog"
+      :getCatalogs="getCatalogs"
+      :catalog="catalog.catalog"
+      @triggerDialog="triggerCatalogDialog"
+    />
+
+    <create-post-dialog
+      :dialogVisible="dialogVisible.createPost"
+      @triggerDialog="triggerCreatePostDialog"
+      :getPosts="getPosts"
+    />
   </main>
 </template>
 
 <script>
 import numberToVND from '@/utils/numberToVND';
+import CatalogService from '@/services/CatalogService';
+import CatalogDialog from '@/components/admin/CatalogDialog';
+import { dateTimeFormatter } from '@/utils/dateFormatter';
+import CreatePostDialog from '@/components/admin/CreatePostDialog';
+import PostService from '@/services/PostService';
+import { STATUS } from '@/common/postStatuses';
 export default {
   props: {
     changePage: Function,
   },
+  components: {
+    CatalogDialog,
+    CreatePostDialog,
+  },
   data() {
     return {
-      tableData: [
-        {
-          id: 1,
-          avatar: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg',
-          title: 'cho thuê Ký Túc Xá giá 1.5tr bao điện nước',
-          price: 1500000,
-          deposit: 1500000,
-          start: '2023-05-02',
-          end: '2023-05-07',
-        },
-        {
-          id: 2,
-          avatar: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg',
-          title: 'cho thuê Ký Túc Xá giá 1.5tr bao điện nước',
-          price: 1500000,
-          deposit: 1500000,
-          start: '2023-05-02',
-          end: '2023-05-07',
-        },
-        {
-          id: 3,
-          avatar: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg',
-          title: 'cho thuê Ký Túc Xá giá 1.5tr bao điện nước',
-          price: 1500000,
-          deposit: 1500000,
-          start: '2023-05-02',
-          end: '2023-05-07',
-        },
-      ],
+      post: {
+        all: [],
+        public: [],
+        expired: [],
+        denied: [],
+        unpaid: [],
+        unconfirmed: [],
+      },
+      catalog: {
+        list: [],
+        catalog: null,
+      },
+      dialogVisible: {
+        catalog: false,
+        createPost: false,
+      },
     };
   },
   mounted() {
     this.changePage(2);
+    this.getCatalogs();
+    this.getPosts();
   },
+  computed: {},
   methods: {
+    dateTimeFormatter,
     numberToVND,
+    async getCatalogs() {
+      const res = await CatalogService.getCatalogs();
+      if (res.status === 200) {
+        this.catalog.list = res.data;
+      }
+    },
+    triggerCatalogDialog(value) {
+      this.dialogVisible.catalog = value;
+    },
+    triggerCreatePostDialog(value) {
+      this.dialogVisible.createPost = value;
+    },
+    openCreateCatalogDialog() {
+      this.catalog.catalog = null;
+      this.triggerCatalogDialog(true);
+    },
+    openUpdateCatalogDialog(item) {
+      this.catalog.catalog = item;
+      this.triggerCatalogDialog(true);
+    },
+    async getPosts() {
+      const res = await PostService.getPosts();
+      if (res.status === 200) {
+        this.post.all = res.data;
+        this.post.public = this.post.all.filter(post => post.status === STATUS.PUBLIC);
+        this.post.expired = this.post.all.filter(post => post.status === STATUS.EXPiRED);
+        this.post.denied = this.post.all.filter(post => post.status === STATUS.DENIED);
+        this.post.unpaid = this.post.all.filter(post => post.status === STATUS.UNPAID);
+        this.post.unconfirmed = this.post.all.filter(post => post.status === STATUS.UNCONFIRMED);
+      }
+    },
   },
 };
 </script>

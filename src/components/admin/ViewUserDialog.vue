@@ -1,5 +1,12 @@
 <template>
-  <el-dialog id="view-user-dialog" v-model="modelDialogVisible" :show-close="false" width="60%">
+  <el-dialog
+    id="view-user-dialog"
+    class="dialog-component"
+    v-model="modelDialogVisible"
+    :show-close="false"
+    top="5vh"
+    width="60%"
+  >
     <template #header>
       <div class="dialog-header">
         <h2 class="dialog-title">Tài khoản người dùng #{{ user.id }}</h2>

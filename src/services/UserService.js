@@ -44,9 +44,9 @@ class UserService {
     }
   }
 
-  async updateUser(obj) {
+  async updateUser(id, obj) {
     try {
-      const res = await instance(formContentType).patch(`${this.entity}`, obj);
+      const res = await instance(formContentType).patch(`${this.entity}/${id}`, obj);
       return res;
     } catch (err) {
       return err;
