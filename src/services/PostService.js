@@ -34,6 +34,42 @@ class PostService {
       return err;
     }
   }
+
+  async updatePost(id, obj) {
+    try {
+      const res = await instance(formContentType).patch(`${this.entity}/${id}`, obj);
+      return res;
+    } catch (err) {
+      return err;
+    }
+  }
+
+  async confirmPost(obj) {
+    try {
+      const res = await instance(jsonContentType).patch(`${this.entity}/confirm`, obj);
+      return res;
+    } catch (err) {
+      return err;
+    }
+  }
+
+  async denyPost(id, obj) {
+    try {
+      const res = await instance(jsonContentType).patch(`${this.entity}/deny/${id}`, obj);
+      return res;
+    } catch (err) {
+      return err;
+    }
+  }
+
+  async deletePost(obj) {
+    try {
+      const res = await instance(jsonContentType).delete(`${this.entity}`, { data: { ...obj } });
+      return res;
+    } catch (err) {
+      return err;
+    }
+  }
 }
 
 export default new PostService();

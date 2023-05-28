@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    id="create-post-dialog"
+    id="update-post-dialog"
     v-model="modelDialogVisible"
     :show-close="false"
     width="80%"
@@ -10,7 +10,7 @@
   >
     <template #header>
       <div class="dialog-header">
-        <h2 class="dialog-title">Tạo bài đăng mới</h2>
+        <h2 class="dialog-title">Chỉnh sửa bài đăng #{{ post.id }}</h2>
         <i class="bx bx-x" @click="closeDialog()"></i>
       </div>
     </template>
@@ -24,7 +24,7 @@
                 <label for="province">Tỉnh/Thành phố</label>
                 <el-select
                   id="province"
-                  v-model="info.address.province"
+                  v-model="info.province"
                   filterable
                   placeholder="-- Chọn tỉnh/tp --"
                 >
@@ -41,7 +41,7 @@
                 <label for="district">Quận/Huyện</label>
                 <el-select
                   id="district"
-                  v-model="info.address.district"
+                  v-model="info.district"
                   filterable
                   placeholder="-- Chọn quận/huyện --"
                 >
@@ -58,7 +58,7 @@
                 <label for="ward">Phường/Xã</label>
                 <el-select
                   id="ward"
-                  v-model="info.address.ward"
+                  v-model="info.ward"
                   filterable
                   placeholder="-- Chọn phường/xã --"
                 >
@@ -76,7 +76,7 @@
                 <label for="specific-address">Địa chỉ cụ thể</label>
                 <el-input
                   id="specific-address"
-                  v-model="info.address.specific_address"
+                  v-model="info.specific_address"
                   placeholder="Nhập số nhà và đường. Ví dụ: 60 Ngô Sỹ Liên"
                   clearable
                 />
@@ -138,11 +138,11 @@
             </div>
             <div class="inp-group half">
               <label for="post-username">Thông tin liên hệ</label>
-              <el-input id="post-username" v-model="additionalInfo.username" disabled />
+              <el-input id="post-username" v-model="info.username" disabled />
             </div>
             <div class="inp-group half">
               <label for="post-phone">Điện thoại</label>
-              <el-input id="post-phone" v-model="additionalInfo.phoneNumber" disabled />
+              <el-input id="post-phone" v-model="info.phone_number" disabled />
             </div>
             <div class="inp-group half">
               <label for="post-price">Giá cho thuê</label>
@@ -247,6 +247,18 @@
           <h2 class="sub-title">Hình ảnh</h2>
           <p class="sub-text">Cập nhật hình ảnh rõ ràng sẽ cho thuê nhanh hơn</p>
           <form class="form-img">
+            <div class="original-media-container">
+              <h3>Ảnh mặc định</h3>
+              <div class="img-upload-container">
+                <div v-for="(media, index) in info.medias" :key="media.id" class="img-upload-item">
+                  <img :src="media.url" />
+                  <div class="item-action">
+                    <i class="bx bx-zoom-in" @click="handlePictureCardPreview(media.url)"></i>
+                    <i class="bx bx-trash" @click="delOriginalImage(index, media)"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
             <input
               ref="imgInput"
               type="file"
@@ -286,7 +298,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="closeDialog()">Hủy</el-button>
-        <el-button type="primary" @click="createPost()"> Tạo tin </el-button>
+        <el-button type="primary" @click="updatePost()"> Sửa tin </el-button>
       </span>
     </template>
   </el-dialog>
@@ -296,13 +308,14 @@
 import AddressService from '@/services/AddressService';
 import { TARGETS } from '@/common/postTargets';
 import { TYPES } from '@/common/postTypes';
-import { mapState } from 'vuex';
 import PostService from '@/services/PostService';
+import { dateTimeFormatter } from '@/utils/dateFormatter';
 export default {
   props: {
     dialogVisible: Boolean,
     getPosts: Function,
     catalogs: Array,
+    post: Object,
   },
   data() {
     return {
@@ -314,20 +327,17 @@ export default {
         target: '',
         type: '',
         acreage: '',
-        address: {
-          province: '',
-          district: '',
-          ward: '',
-          specific_address: '',
-        },
+        province: '',
+        district: '',
+        ward: '',
+        specific_address: '',
+        removed_media_ids: [],
         images: [],
+        medias: [],
         expired_at: '',
         catalog_id: '',
-        user_id: null,
-      },
-      additionalInfo: {
         username: '',
-        phoneNumber: '',
+        phone_number: '',
       },
       imageHandler: {
         isDragging: false,
@@ -343,13 +353,8 @@ export default {
       postTypes: [],
     };
   },
-  mounted() {
-    this.info.user_id = this.user.id;
-    this.additionalInfo.username = this.user.username;
-    this.additionalInfo.phoneNumber = this.user.phone_number;
-  },
+  mounted() {},
   computed: {
-    ...mapState(['user']),
     modelDialogVisible: {
       get() {
         return this.dialogVisible;
@@ -364,10 +369,28 @@ export default {
     },
   },
   methods: {
+    dateTimeFormatter,
     setupData() {
       this.getProvinces();
       this.postTargets = TARGETS;
       this.postTypes = TYPES;
+
+      this.info.title = this.post.title;
+      this.info.description = this.post.description;
+      this.info.price = this.post.price;
+      this.info.deposit = this.post.deposit;
+      this.info.target = this.post.target;
+      this.info.type = this.post.type;
+      this.info.acreage = this.post.acreage;
+      this.info.province = this.post.address.province;
+      this.info.district = this.post.address.district;
+      this.info.ward = this.post.address.ward;
+      this.info.specific_address = this.post.address.specific_address;
+      this.info.expired_at = this.dateTimeFormatter(this.post.expired_at);
+      this.info.catalog_id = this.post.catalog.id;
+      this.info.username = this.post.user.username;
+      this.info.phone_number = this.post.user.phone_number;
+      this.info.medias = this.post.medias;
     },
     clearDialog() {
       this.info.title = '';
@@ -377,13 +400,17 @@ export default {
       this.info.target = '';
       this.info.type = '';
       this.info.acreage = '';
-      this.info.address.province = '';
-      this.info.address.district = '';
-      this.info.address.ward = '';
-      this.info.address.specific_address = '';
+      this.info.province = '';
+      this.info.district = '';
+      this.info.ward = '';
+      this.info.specific_address = '';
       this.info.images = [];
+      this.info.medias = [];
+      this.info.removed_media_ids = [];
       this.info.expired_at = '';
       this.info.catalog_id = '';
+      this.info.username = '';
+      this.info.phone_number = '';
     },
     closeDialog() {
       this.clearDialog();
@@ -419,6 +446,10 @@ export default {
     delImage(index) {
       this.info.images.splice(index, 1);
     },
+    delOriginalImage(index, media) {
+      this.info.medias.splice(index, 1);
+      this.info.removed_media_ids.push(media.id);
+    },
     handlePictureCardPreview(path) {
       this.imageHandler.dialogImageUrl = path;
       this.imageHandler.dialogVisible = true;
@@ -450,11 +481,10 @@ export default {
         !this.info.target ||
         !this.info.type ||
         !this.info.acreage ||
-        !this.info.address.province ||
-        !this.info.address.district ||
-        !this.info.address.ward ||
-        !this.info.address.specific_address ||
-        !this.info.images.length ||
+        !this.info.province ||
+        !this.info.district ||
+        !this.info.ward ||
+        !this.info.specific_address ||
         !this.info.expired_at ||
         !this.info.catalog_id
       ) {
@@ -471,17 +501,17 @@ export default {
       obj.append('target', this.info.target);
       obj.append('type', this.info.type);
       obj.append('acreage', this.info.acreage);
-      obj.append('province', this.info.address.province);
-      obj.append('district', this.info.address.district);
-      obj.append('ward', this.info.address.ward);
-      obj.append('specific_address', this.info.address.specific_address);
+      obj.append('province', this.info.province);
+      obj.append('district', this.info.district);
+      obj.append('ward', this.info.ward);
+      obj.append('specific_address', this.info.specific_address);
+      this.info.removed_media_ids.forEach(id => obj.append('removed_media_ids', id));
       this.info.images.forEach(image => obj.append('images', image));
       obj.append('expired_at', this.info.expired_at);
-      obj.append('user_id', this.info.user_id);
       obj.append('catalog_id', this.info.catalog_id);
       return obj;
     },
-    async createPost() {
+    async updatePost() {
       if (!this.checkInfo()) {
         this.$store.state.toast.info('Vui lòng nhập đầy đủ thông tin!');
         return;
@@ -489,9 +519,9 @@ export default {
 
       const obj = this.createFormData();
 
-      const res = await PostService.createPublicPost(obj);
+      const res = await PostService.updatePost(this.post.id, obj);
       if (res.status === 200) {
-        this.$store.state.toast.success('Tạo tin đăng thành công!');
+        this.$store.state.toast.success('Chỉnh sửa tin đăng thành công!');
         this.closeDialog();
         this.getPosts();
       } else {

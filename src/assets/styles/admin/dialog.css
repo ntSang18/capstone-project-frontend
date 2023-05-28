@@ -145,49 +145,52 @@
 
 /* CREATE POST DIALOG */
 
-#create-post-dialog {
+.post-dialog {
   color: var(--dark);
 }
 
-#create-post-dialog .create-section {
+.post-dialog .create-section {
   margin-bottom: 30px;
   display: grid;
   grid-template-columns: 70fr 30fr;
   column-gap: 30px;
 }
+.post-dialog .create-section.half {
+  grid-template-columns: 1fr 1fr;
+}
 
-#create-post-dialog .dialog-body .sub-title {
+.post-dialog .dialog-body .sub-title {
   font-size: 20px;
   margin-bottom: 20px;
   color: var(--dark);
 }
 
-#create-post-dialog .dialog-body .form-address {
+.post-dialog .dialog-body .form-address {
   display: flex;
   flex-direction: column;
 }
 
-#create-post-dialog .dialog-body .form-address .row {
+.post-dialog .dialog-body .form-address .row {
   margin-bottom: 20px;
 }
-#create-post-dialog .dialog-body .form-address .row.grid {
+.post-dialog .dialog-body .form-address .row.grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 20px;
 }
 
-#create-post-dialog .dialog-body .right .map {
+.post-dialog .dialog-body .right .map {
   display: block;
   width: 100%;
   aspect-ratio : 1 / 1;
 }
 
-#create-post-dialog .dialog-body #post-info .inp-group,
-#create-post-dialog .dialog-body #post-advance .inp-group {
+.post-dialog .dialog-body #post-info .inp-group,
+.post-dialog .dialog-body #post-advance .inp-group {
   margin-bottom: 15px;
 }
 
-#create-post-dialog .dialog-body .post-note {
+.post-dialog .dialog-body .post-note {
   padding: 15px;
   color: #856404;
   background-color: #fff3cd;
@@ -196,33 +199,33 @@
   border-radius: 5px;
 }
 
-#create-post-dialog .dialog-body .post-note-title {
+.post-dialog .dialog-body .post-note-title {
   font-size: 20px;
   font-weight: normal;
   margin-bottom: 15px;
 }
 
-#create-post-dialog .dialog-body .post-note ul {
+.post-dialog .dialog-body .post-note ul {
   list-style-type: square;
   margin-left: 15px;
   font-size: 14px;
   line-height: 1.5;
 }
 
-#create-post-dialog .dialog-body #post-img .sub-text{
+.post-dialog .dialog-body #post-img .sub-text{
   color: var(--dark);
   margin-bottom: 10px;
 }
 
-#create-post-dialog .dialog-body .form-img {
+.post-dialog .dialog-body .form-img {
   width: 100%;
 }
 
-#create-post-dialog .dialog-body .form-img input {
+.post-dialog .dialog-body .form-img input {
   display: none;
 }
 
-#create-post-dialog .dialog-body .form-img .drag {
+.post-dialog .dialog-body .form-img .drag {
   width: 100%;
   padding: 50px 10px;
   background: var(--grey);
@@ -237,27 +240,27 @@
   row-gap: 15px;
   transition: .2s ease all;
 }
-#create-post-dialog .dialog-body .form-img .drag:hover {
+.post-dialog .dialog-body .form-img .drag:hover {
   border-color: var(--blue);
 }
 
-#create-post-dialog .dialog-body .form-img .drag img {
+.post-dialog .dialog-body .form-img .drag img {
   width: 67px;
   height: 67px;
   object-fit: cover;
 }
 
-#create-post-dialog .dialog-body .form-img .drag span {
+.post-dialog .dialog-body .form-img .drag span {
   font-size: 14px;
   color: var(--dark);
 }
 
-#create-post-dialog .dialog-body .form-img .drag span strong {
+.post-dialog .dialog-body .form-img .drag span strong {
   color: #409eff;
   font-weight: normal;
 }
 
-#create-post-dialog .dialog-body .form-img .img-upload-container {
+.post-dialog .dialog-body .form-img .img-upload-container {
   width: 100%;
   padding: 12px;
   background: var(--grey);
@@ -270,15 +273,15 @@
   max-height: 400px;
   overflow-y: auto;
 }
-#create-post-dialog .dialog-body .img-upload-container::-webkit-scrollbar {
+.post-dialog .dialog-body .img-upload-container::-webkit-scrollbar {
   width: 10px;
 }
-#create-post-dialog .dialog-body .img-upload-container::-webkit-scrollbar-thumb {
+.post-dialog .dialog-body .img-upload-container::-webkit-scrollbar-thumb {
   background: var(--dark-grey); 
   border-radius: 5px;
 }
 
-#create-post-dialog .dialog-body .form-img .img-upload-container .img-upload-item {
+.post-dialog .dialog-body .form-img .img-upload-container .img-upload-item {
   width: 100%;
   aspect-ratio : 1 / 1;
   position: relative;
@@ -286,18 +289,18 @@
   border-radius: 5px;
 }
 
-#create-post-dialog .dialog-body .form-img .img-upload-container .img-upload-item:hover > .item-action {
+.post-dialog .dialog-body .form-img .img-upload-container .img-upload-item:hover > .item-action {
   opacity: 1;
 }
 
-#create-post-dialog .dialog-body .form-img .img-upload-container .img-upload-item img {
+.post-dialog .dialog-body .form-img .img-upload-container .img-upload-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 5px;
 }
 
-#create-post-dialog .dialog-body .form-img .img-upload-container .item-action {
+.post-dialog .dialog-body .form-img .img-upload-container .item-action {
   position: absolute;
   background-color: rgba(0, 0, 0, .5);
   width: 100%;
@@ -313,7 +316,7 @@
   transition: .3s ease all;
 } 
 
-#create-post-dialog .dialog-body .form-img .img-upload-container .item-action i {
+.post-dialog .dialog-body .form-img .img-upload-container .item-action i {
   cursor: pointer;
   color: #fff;
   font-size: 20px;
@@ -331,4 +334,49 @@
   max-height: 100%;
   object-fit: contain;
   border-radius: 0;
+}
+
+/* VIEW POST DIALOG */
+
+#view-post-dialog .inp-group .info {
+  background-color: var(--grey);
+  color: var(--dark);
+  font-size: 14px;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+#view-post-dialog .inp-group.half {
+  width: 70%;
+}
+
+#view-post-dialog .dialog-body .form-img .img-upload-container {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* UPDATE POST DIALOG */
+
+#update-post-dialog .dialog-body .form-img .original-media-container {
+  width: 100%;
+  padding: 12px;
+  background: var(--grey);
+  border: 1px dashed var(--dark-grey);
+  margin-top: 10px;
+  border-radius: 6px;
+  color: var(--dark);
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+#update-post-dialog .dialog-body .form-img .original-media-container .img-upload-container {
+  width: 100%;
+  padding: 0px;
+  border: none;
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 15px;
+  max-height: 400px;
+  overflow-y: auto;
 }

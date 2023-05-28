@@ -44,8 +44,8 @@
               <el-table-column type="selection" width="55" />
               <el-table-column fixed="left" prop="id" label="Id" width="70" sortable />
               <el-table-column label="Email" prop="email" width="300" />
-              <el-table-column label="Tên người dùng" prop="username" sortable width="180" />
-              <el-table-column label="Số điện thoại" prop="phone_number" sortable width="180" />
+              <el-table-column label="Tên người dùng" prop="username" width="180" />
+              <el-table-column label="Số điện thoại" prop="phone_number" width="180" />
               <el-table-column label="Ngày tạo" prop="created_at" sortable width="180">
                 <template #default="scope">
                   <span>{{ dateFormatter(scope.row.created_at) }}</span>
@@ -208,7 +208,7 @@ export default {
         search: '',
         pagination: {
           size: 20,
-          total: 10,
+          total: 0,
           page: 1,
         },
       },
@@ -217,7 +217,7 @@ export default {
         search: '',
         pagination: {
           size: 20,
-          total: 10,
+          total: 0,
           page: 1,
         },
       },

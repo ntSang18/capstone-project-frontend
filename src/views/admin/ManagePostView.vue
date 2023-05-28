@@ -22,30 +22,48 @@
 
     <div class="tab-container">
       <el-tabs>
+        <!-- PUBLIC POST -->
+
         <el-tab-pane label="Tin đang hiển thị">
           <div class="table-container">
             <div class="table-head">
               <h3 class="table-title">Tin đang hiển thị</h3>
               <div class="operations">
-                <el-button type="danger">Xóa tất cả</el-button>
+                <el-button type="danger" @click="deletePosts('PUBLIC')">Xóa tất cả</el-button>
               </div>
             </div>
             <el-table
-              :data="tableData"
+              :data="filterPublicPage"
               stripe
+              :default-sort="{ prop: 'id' }"
               style="width: 100%"
               max-height="1000"
+              height="400"
               cell-class-name="table-cell"
               header-cell-class-name="table-cell"
+              @selection-change="handleSelectionChangePublic"
+              v-loading="loading"
             >
               <el-table-column type="selection" width="55" />
               <el-table-column fixed="left" prop="id" label="Mã tin" width="90" sortable />
               <el-table-column label="Ảnh đại diện" prop="avatar" width="140">
                 <template #default="scope">
-                  <img :src="scope.row.avatar" class="avatar" />
+                  <img
+                    v-if="scope.row.medias.length"
+                    :src="scope.row.medias[0].url"
+                    class="avatar"
+                  />
                 </template>
               </el-table-column>
               <el-table-column label="Tiêu đề" prop="title" width="300" />
+              <el-table-column
+                prop="catalog.name"
+                label="Danh mục"
+                width="200"
+                :filters="catalog.filter"
+                :filter-method="filterCatalog"
+                filter-placement="bottom"
+              />
               <el-table-column label="Giá" prop="price" sortable width="120">
                 <template #default="scope">
                   <span>{{ numberToVND(scope.row.price) }}</span>
@@ -56,54 +74,96 @@
                   <span>{{ numberToVND(scope.row.deposit) }}</span>
                 </template>
               </el-table-column>
-              <el-table-column label="Ngày bắt đầu" prop="start" sortable width="180" />
-              <el-table-column label="Ngày kết thúc" prop="end" sortable width="180" />
+              <el-table-column label="Ngày bắt đầu" prop="paid" sortable width="180">
+                <template #default="scope">
+                  <span v-if="scope.row.paid_at">{{ dateTimeFormatter(scope.row.paid_at) }}</span>
+                  <span v-else>{{ dateTimeFormatter(scope.row.created_at) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="Ngày kết thúc" prop="expired_at" sortable width="180">
+                <template #default="scope">
+                  <span>{{ dateTimeFormatter(scope.row.expired_at) }}</span>
+                </template>
+              </el-table-column>
               <el-table-column fixed="right" width="200">
                 <template #header>
-                  <el-input v-model="search" size="small" placeholder="Type to search" />
+                  <el-input
+                    v-model="post.public.search"
+                    size="small"
+                    placeholder="Type to search"
+                    clearable
+                  />
                 </template>
                 <template #default="scope">
                   <div class="action-container">
-                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
-                      >Xem</el-button
+                    <el-tooltip content="Xem chi tiết tin" placement="top" effect="light">
+                      <el-button size="small" circle @click="openViewPostDialog(scope.row)">
+                        <i class="bx bx-search-alt"></i
+                      ></el-button>
+                    </el-tooltip>
+                    <el-tooltip content="Chỉnh sử tin" placement="top" effect="light">
+                      <el-button
+                        size="small"
+                        type="warning"
+                        circle
+                        @click="openUpdatePostDialog(scope.row)"
+                      >
+                        <i class="bx bx-edit-alt"></i
+                      ></el-button>
+                    </el-tooltip>
+                    <el-popconfirm
+                      width="200"
+                      confirm-button-type="danger"
+                      confirm-button-text="Xác nhận"
+                      cancel-button-text="Hủy"
+                      title="Xác nhận xóa tin này?"
+                      @confirm="deletePost(scope.row.id)"
                     >
-                    <el-button
-                      size="small"
-                      type="warning"
-                      @click="handleEdit(scope.$index, scope.row)"
-                      >Sửa</el-button
-                    >
-                    <el-button
-                      size="small"
-                      type="danger"
-                      @click="handleDelete(scope.$index, scope.row)"
-                      >Xóa</el-button
-                    >
+                      <template #reference>
+                        <el-button size="small" type="danger" circle
+                          ><i class="bx bx-trash-alt"></i
+                        ></el-button>
+                      </template>
+                    </el-popconfirm>
                   </div>
                 </template>
               </el-table-column>
             </el-table>
             <div class="pagination">
-              <el-pagination small background layout="prev, pager, next" :total="50" class="mt-4" />
+              <el-pagination
+                small
+                background
+                layout="prev, pager, next"
+                :page-size="post.public.pagination.size"
+                v-model:current-page="post.public.pagination.page"
+                :total="post.public.pagination.total"
+              />
             </div>
           </div>
         </el-tab-pane>
+
+        <!-- UNCONFIRMED POST -->
+
         <el-tab-pane label="Tin chưa duyệt">
           <div class="table-container">
             <div class="table-head">
               <h3 class="table-title">Tin chưa duyệt</h3>
               <div class="operations">
-                <el-button type="primary">Duyệt tất cả</el-button>
-                <el-button type="danger">Xóa tất cả</el-button>
+                <el-button type="primary" @click="confirmPost()">Duyệt tất cả</el-button>
+                <el-button type="danger" @click="deletePosts('UNCONFIRMED')">Xóa tất cả</el-button>
               </div>
             </div>
             <el-table
-              :data="tableData"
+              :data="filterUnconfirmedPage"
               stripe
+              :default-sort="{ prop: 'id' }"
               style="width: 100%"
               max-height="1000"
+              height="400"
               cell-class-name="table-cell"
               header-cell-class-name="table-cell"
+              @selection-change="handleSelectionChangeUnconfirmed"
+              v-loading="loading"
             >
               <el-table-column type="selection" width="55" />
               <el-table-column fixed="left" prop="id" label="Mã tin" width="90" sortable />
@@ -113,6 +173,14 @@
                 </template>
               </el-table-column>
               <el-table-column label="Tiêu đề" prop="title" width="300" />
+              <el-table-column
+                prop="catalog.name"
+                label="Danh mục"
+                width="200"
+                :filters="catalog.filter"
+                :filter-method="filterCatalog"
+                filter-placement="bottom"
+              />
               <el-table-column label="Giá" prop="price" sortable width="120">
                 <template #default="scope">
                   <span>{{ numberToVND(scope.row.price) }}</span>
@@ -123,37 +191,434 @@
                   <span>{{ numberToVND(scope.row.deposit) }}</span>
                 </template>
               </el-table-column>
-              <el-table-column label="Ngày tạo" prop="created_at" sortable width="180" />
+              <el-table-column label="Ngày tạo" prop="created_at" sortable width="180">
+                <template #default="scope">
+                  <span>{{ dateTimeFormatter(scope.row.created_at) }}</span>
+                </template>
+              </el-table-column>
               <el-table-column fixed="right" width="200">
                 <template #header>
-                  <el-input v-model="search" size="small" placeholder="Type to search" />
+                  <el-input
+                    v-model="post.unconfirmed.search"
+                    size="small"
+                    placeholder="Type to search"
+                    clearable
+                  />
                 </template>
                 <template #default="scope">
                   <div class="action-container">
-                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
-                      >Xem</el-button
+                    <el-tooltip content="Xem chi tiết tin" placement="top" effect="light">
+                      <el-button size="small" circle @click="openViewPostDialog(scope.row)">
+                        <i class="bx bx-search-alt"></i
+                      ></el-button>
+                    </el-tooltip>
+                    <el-tooltip content="Duyệt tin" placement="top" effect="light">
+                      <el-button
+                        size="small"
+                        type="primary"
+                        circle
+                        @click="confirmPost(scope.row.id)"
+                      >
+                        <i class="bx bx-check"></i
+                      ></el-button>
+                    </el-tooltip>
+                    <el-tooltip content="Từ chối tin" placement="top" effect="light">
+                      <el-button
+                        size="small"
+                        type="info"
+                        circle
+                        @click="openDenyPostDialog(scope.row)"
+                      >
+                        <i class="bx bx-x"></i
+                      ></el-button>
+                    </el-tooltip>
+                    <el-tooltip content="Chỉnh sử tin" placement="top" effect="light">
+                      <el-button
+                        size="small"
+                        type="warning"
+                        circle
+                        @click="openUpdatePostDialog(scope.row)"
+                      >
+                        <i class="bx bx-edit-alt"></i
+                      ></el-button>
+                    </el-tooltip>
+                    <el-popconfirm
+                      width="200"
+                      confirm-button-type="danger"
+                      confirm-button-text="Xác nhận"
+                      cancel-button-text="Hủy"
+                      title="Xác nhận xóa tin này?"
+                      @confirm="deletePost(scope.row.id)"
                     >
-                    <el-button
-                      size="small"
-                      type="primary"
-                      @click="handleEdit(scope.$index, scope.row)"
-                      >Duyệt</el-button
-                    >
-                    <el-button
-                      size="small"
-                      type="danger"
-                      @click="handleDelete(scope.$index, scope.row)"
-                      >Xóa</el-button
-                    >
+                      <template #reference>
+                        <el-button size="small" type="danger" circle
+                          ><i class="bx bx-trash-alt"></i
+                        ></el-button>
+                      </template>
+                    </el-popconfirm>
                   </div>
                 </template>
               </el-table-column>
             </el-table>
             <div class="pagination">
-              <el-pagination small background layout="prev, pager, next" :total="50" class="mt-4" />
+              <el-pagination
+                small
+                background
+                layout="prev, pager, next"
+                :page-size="post.unconfirmed.pagination.size"
+                v-model:current-page="post.unconfirmed.pagination.page"
+                :total="post.unconfirmed.pagination.total"
+              />
             </div>
           </div>
         </el-tab-pane>
+
+        <!-- UNPAID POST -->
+
+        <el-tab-pane label="Tin chưa thanh toán">
+          <div class="table-container">
+            <div class="table-head">
+              <h3 class="table-title">Tin chưa thanh toán</h3>
+              <div class="operations">
+                <el-button type="danger" @click="deletePosts('UNPAID')">Xóa tất cả</el-button>
+              </div>
+            </div>
+            <el-table
+              :data="filterUnpaidPage"
+              stripe
+              :default-sort="{ prop: 'id' }"
+              style="width: 100%"
+              max-height="1000"
+              height="400"
+              cell-class-name="table-cell"
+              header-cell-class-name="table-cell"
+              @selection-change="handleSelectionChangeUnpaid"
+              v-loading="loading"
+            >
+              <el-table-column type="selection" width="55" />
+              <el-table-column fixed="left" prop="id" label="Mã tin" width="90" sortable />
+              <el-table-column label="Ảnh đại diện" prop="avatar" width="140">
+                <template #default="scope">
+                  <img
+                    v-if="scope.row.medias.length"
+                    :src="scope.row.medias[0].url"
+                    class="avatar"
+                  />
+                </template>
+              </el-table-column>
+              <el-table-column label="Tiêu đề" prop="title" width="300" />
+              <el-table-column
+                prop="catalog.name"
+                label="Danh mục"
+                width="200"
+                :filters="catalog.filter"
+                :filter-method="filterCatalog"
+                filter-placement="bottom"
+              />
+              <el-table-column label="Giá" prop="price" sortable width="120">
+                <template #default="scope">
+                  <span>{{ numberToVND(scope.row.price) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="deposit" label="Tiền cọc" width="120" sortable>
+                <template #default="scope">
+                  <span>{{ numberToVND(scope.row.deposit) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="Ngày tạo" prop="paid" sortable width="180">
+                <template #default="scope">
+                  <span>{{ dateTimeFormatter(scope.row.created_at) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column fixed="right" width="200">
+                <template #header>
+                  <el-input
+                    v-model="post.unpaid.search"
+                    size="small"
+                    placeholder="Type to search"
+                    clearable
+                  />
+                </template>
+                <template #default="scope">
+                  <div class="action-container">
+                    <el-tooltip content="Xem chi tiết tin" placement="top" effect="light">
+                      <el-button size="small" @click="openViewPostDialog(scope.row)">
+                        <i class="bx bx-search-alt"></i
+                      ></el-button>
+                    </el-tooltip>
+                    <el-tooltip content="Chỉnh sử tin" placement="top" effect="light">
+                      <el-button
+                        size="small"
+                        type="warning"
+                        @click="openUpdatePostDialog(scope.row)"
+                      >
+                        <i class="bx bx-edit-alt"></i
+                      ></el-button>
+                    </el-tooltip>
+                    <el-popconfirm
+                      width="200"
+                      confirm-button-type="danger"
+                      confirm-button-text="Xác nhận"
+                      cancel-button-text="Hủy"
+                      title="Xác nhận xóa tin này?"
+                      @confirm="deletePost(scope.row.id)"
+                    >
+                      <template #reference>
+                        <el-button size="small" type="danger"
+                          ><i class="bx bx-trash-alt"></i
+                        ></el-button>
+                      </template>
+                    </el-popconfirm>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <div class="pagination">
+              <el-pagination
+                small
+                background
+                layout="prev, pager, next"
+                :page-size="post.unpaid.pagination.size"
+                v-model:current-page="post.unpaid.pagination.page"
+                :total="post.unpaid.pagination.total"
+              />
+            </div>
+          </div>
+        </el-tab-pane>
+
+        <!-- DENIED POST -->
+
+        <el-tab-pane label="Tin đã từ chối">
+          <div class="table-container">
+            <div class="table-head">
+              <h3 class="table-title">Tin đã từ chối</h3>
+              <div class="operations">
+                <el-button type="danger" @click="deletePosts('DENIED')">Xóa tất cả</el-button>
+              </div>
+            </div>
+            <el-table
+              :data="filterDeniedPage"
+              stripe
+              :default-sort="{ prop: 'id' }"
+              style="width: 100%"
+              max-height="1000"
+              height="400"
+              cell-class-name="table-cell"
+              header-cell-class-name="table-cell"
+              @selection-change="handleSelectionChangeDenied"
+              v-loading="loading"
+            >
+              <el-table-column type="selection" width="55" />
+              <el-table-column fixed="left" prop="id" label="Mã tin" width="90" sortable />
+              <el-table-column label="Ảnh đại diện" prop="avatar" width="140">
+                <template #default="scope">
+                  <img
+                    v-if="scope.row.medias.length"
+                    :src="scope.row.medias[0].url"
+                    class="avatar"
+                  />
+                </template>
+              </el-table-column>
+              <el-table-column label="Tiêu đề" prop="title" width="300" />
+              <el-table-column
+                prop="catalog.name"
+                label="Danh mục"
+                width="200"
+                :filters="catalog.filter"
+                :filter-method="filterCatalog"
+                filter-placement="bottom"
+              />
+              <el-table-column label="Giá" prop="price" sortable width="120">
+                <template #default="scope">
+                  <span>{{ numberToVND(scope.row.price) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="deposit" label="Tiền cọc" width="120" sortable>
+                <template #default="scope">
+                  <span>{{ numberToVND(scope.row.deposit) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="Ngày tạo" prop="paid" sortable width="180">
+                <template #default="scope">
+                  <span>{{ dateTimeFormatter(scope.row.created_at) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column fixed="right" width="200">
+                <template #header>
+                  <el-input
+                    v-model="post.denied.search"
+                    size="small"
+                    placeholder="Type to search"
+                    clearable
+                  />
+                </template>
+                <template #default="scope">
+                  <div class="action-container">
+                    <el-tooltip content="Xem chi tiết tin" placement="top" effect="light">
+                      <el-button size="small" @click="openViewPostDialog(scope.row)">
+                        <i class="bx bx-search-alt"></i
+                      ></el-button>
+                    </el-tooltip>
+                    <el-tooltip content="Chỉnh sử tin" placement="top" effect="light">
+                      <el-button
+                        size="small"
+                        type="warning"
+                        @click="openUpdatePostDialog(scope.row)"
+                      >
+                        <i class="bx bx-edit-alt"></i
+                      ></el-button>
+                    </el-tooltip>
+                    <el-popconfirm
+                      width="200"
+                      confirm-button-type="danger"
+                      confirm-button-text="Xác nhận"
+                      cancel-button-text="Hủy"
+                      title="Xác nhận xóa tin này?"
+                      @confirm="deletePost(scope.row.id)"
+                    >
+                      <template #reference>
+                        <el-button size="small" type="danger"
+                          ><i class="bx bx-trash-alt"></i
+                        ></el-button>
+                      </template>
+                    </el-popconfirm>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <div class="pagination">
+              <el-pagination
+                small
+                background
+                layout="prev, pager, next"
+                :page-size="post.denied.pagination.size"
+                v-model:current-page="post.denied.pagination.page"
+                :total="post.denied.pagination.total"
+              />
+            </div>
+          </div>
+        </el-tab-pane>
+
+        <!-- EXPIRED POST -->
+
+        <el-tab-pane label="Tin đã hết hạn">
+          <div class="table-container">
+            <div class="table-head">
+              <h3 class="table-title">Tin đã hết hạn</h3>
+              <div class="operations">
+                <el-button type="danger" @click="deletePosts('EXPIRED')">Xóa tất cả</el-button>
+              </div>
+            </div>
+            <el-table
+              :data="filterExpiredPage"
+              stripe
+              :default-sort="{ prop: 'id' }"
+              style="width: 100%"
+              max-height="1000"
+              height="400"
+              cell-class-name="table-cell"
+              header-cell-class-name="table-cell"
+              @selection-change="handleSelectionChangeExpired"
+              v-loading="loading"
+            >
+              <el-table-column type="selection" width="55" />
+              <el-table-column fixed="left" prop="id" label="Mã tin" width="90" sortable />
+              <el-table-column label="Ảnh đại diện" prop="avatar" width="140">
+                <template #default="scope">
+                  <img
+                    v-if="scope.row.medias.length"
+                    :src="scope.row.medias[0].url"
+                    class="avatar"
+                  />
+                </template>
+              </el-table-column>
+              <el-table-column label="Tiêu đề" prop="title" width="300" />
+              <el-table-column
+                prop="catalog.name"
+                label="Danh mục"
+                width="200"
+                :filters="catalog.filter"
+                :filter-method="filterCatalog"
+                filter-placement="bottom"
+              />
+              <el-table-column label="Giá" prop="price" sortable width="120">
+                <template #default="scope">
+                  <span>{{ numberToVND(scope.row.price) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="deposit" label="Tiền cọc" width="120" sortable>
+                <template #default="scope">
+                  <span>{{ numberToVND(scope.row.deposit) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="Ngày bắt đầu" prop="paid" sortable width="180">
+                <template #default="scope">
+                  <span v-if="scope.row.paid_at">{{ dateTimeFormatter(scope.row.paid_at) }}</span>
+                  <span v-else>{{ dateTimeFormatter(scope.row.created_at) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="Ngày kết thúc" prop="expired_at" sortable width="180">
+                <template #default="scope">
+                  <span>{{ dateTimeFormatter(scope.row.expired_at) }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column fixed="right" width="200">
+                <template #header>
+                  <el-input
+                    v-model="post.expired.search"
+                    size="small"
+                    placeholder="Type to search"
+                    clearable
+                  />
+                </template>
+                <template #default="scope">
+                  <div class="action-container">
+                    <el-tooltip content="Xem chi tiết tin" placement="top" effect="light">
+                      <el-button size="small" circle @click="openViewPostDialog(scope.row)">
+                        <i class="bx bx-search-alt"></i
+                      ></el-button>
+                    </el-tooltip>
+                    <el-tooltip content="Chỉnh sử tin" placement="top" effect="light">
+                      <el-button
+                        size="small"
+                        type="warning"
+                        circle
+                        @click="openUpdatePostDialog(scope.row)"
+                      >
+                        <i class="bx bx-edit-alt"></i
+                      ></el-button>
+                    </el-tooltip>
+                    <el-popconfirm
+                      width="200"
+                      confirm-button-type="danger"
+                      confirm-button-text="Xác nhận"
+                      cancel-button-text="Hủy"
+                      title="Xác nhận xóa tin này?"
+                      @confirm="deletePost(scope.row.id)"
+                    >
+                      <template #reference>
+                        <el-button size="small" type="danger" circle
+                          ><i class="bx bx-trash-alt"></i
+                        ></el-button>
+                      </template>
+                    </el-popconfirm>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <div class="pagination">
+              <el-pagination
+                small
+                background
+                layout="prev, pager, next"
+                :page-size="post.expired.pagination.size"
+                v-model:current-page="post.expired.pagination.page"
+                :total="post.expired.pagination.total"
+              />
+            </div>
+          </div>
+        </el-tab-pane>
+
         <el-tab-pane label="Danh mục tin">
           <div class="table-container">
             <div class="table-head">
@@ -223,6 +688,28 @@
       :dialogVisible="dialogVisible.createPost"
       @triggerDialog="triggerCreatePostDialog"
       :getPosts="getPosts"
+      :catalogs="catalog.list"
+    />
+
+    <view-post-dialog
+      :dialogVisible="dialogVisible.viewPost"
+      :post="post.dialogPost"
+      @triggerDialog="triggerViewPostDialog"
+    />
+
+    <update-post-dialog
+      :dialogVisible="dialogVisible.updatePost"
+      :post="post.dialogPost"
+      @triggerDialog="triggerUpdatePostDialog"
+      :catalogs="catalog.list"
+      :getPosts="getPosts"
+    />
+
+    <deny-post-dialog
+      :dialogVisible="dialogVisible.denyPost"
+      :post="post.dialogPost"
+      @triggerDialog="triggerDenyPostDialog"
+      :getPosts="getPosts"
     />
   </main>
 </template>
@@ -233,56 +720,222 @@ import CatalogService from '@/services/CatalogService';
 import CatalogDialog from '@/components/admin/CatalogDialog';
 import { dateTimeFormatter } from '@/utils/dateFormatter';
 import CreatePostDialog from '@/components/admin/CreatePostDialog';
+import ViewPostDialog from '@/components/admin/ViewPostDialog';
+import UpdatePostDialog from '@/components/admin/UpdatePostDialog';
+import DenyPostDialog from '@/components/admin/DenyPostDialog';
 import PostService from '@/services/PostService';
 import { STATUS } from '@/common/postStatuses';
+
 export default {
   props: {
     changePage: Function,
   },
+
   components: {
     CatalogDialog,
     CreatePostDialog,
+    ViewPostDialog,
+    UpdatePostDialog,
+    DenyPostDialog,
   },
+
   data() {
     return {
       post: {
         all: [],
+        public: {
+          list: [],
+          search: '',
+          pagination: {
+            size: 20,
+            total: 10,
+            page: 1,
+          },
+        },
+        expired: {
+          list: [],
+          search: '',
+          pagination: {
+            size: 20,
+            total: 10,
+            page: 1,
+          },
+        },
+        denied: {
+          list: [],
+          search: '',
+          pagination: {
+            size: 20,
+            total: 10,
+            page: 1,
+          },
+        },
+        unpaid: {
+          list: [],
+          search: '',
+          pagination: {
+            size: 20,
+            total: 10,
+            page: 1,
+          },
+        },
+        unconfirmed: {
+          list: [],
+          search: '',
+          pagination: {
+            size: 20,
+            total: 10,
+            page: 1,
+          },
+        },
+        dialogPost: null,
+      },
+      catalog: {
+        list: [],
+        catalog: null,
+        filter: [],
+      },
+      dialogVisible: {
+        catalog: false,
+        createPost: false,
+        viewPost: false,
+        updatePost: false,
+        denyPost: false,
+      },
+      idsPicked: {
         public: [],
         expired: [],
         denied: [],
         unpaid: [],
         unconfirmed: [],
       },
-      catalog: {
-        list: [],
-        catalog: null,
-      },
-      dialogVisible: {
-        catalog: false,
-        createPost: false,
-      },
+      loading: true,
     };
   },
+
   mounted() {
     this.changePage(2);
     this.getCatalogs();
     this.getPosts();
   },
-  computed: {},
+
+  computed: {
+    filterPublicPage() {
+      const startIndex = (this.post.public.pagination.page - 1) * this.post.public.pagination.size;
+      const endIndex = this.post.public.pagination.page * this.post.public.pagination.size;
+      return this.post.public.list
+        .filter(p => {
+          return (
+            !this.post.public.search ||
+            p.title.toLowerCase().includes(this.post.public.search.toLowerCase())
+          );
+        })
+        .slice(startIndex, endIndex);
+    },
+    filterExpiredPage() {
+      const startIndex =
+        (this.post.expired.pagination.page - 1) * this.post.expired.pagination.size;
+      const endIndex = this.post.expired.pagination.page * this.post.expired.pagination.size;
+      return this.post.expired.list
+        .filter(p => {
+          return (
+            !this.post.expired.search ||
+            p.title.toLowerCase().includes(this.post.expired.search.toLowerCase())
+          );
+        })
+        .slice(startIndex, endIndex);
+    },
+    filterDeniedPage() {
+      const startIndex = (this.post.denied.pagination.page - 1) * this.post.denied.pagination.size;
+      const endIndex = this.post.denied.pagination.page * this.post.denied.pagination.size;
+      return this.post.denied.list
+        .filter(p => {
+          return (
+            !this.post.denied.search ||
+            p.title.toLowerCase().includes(this.post.denied.search.toLowerCase())
+          );
+        })
+        .slice(startIndex, endIndex);
+    },
+    filterUnpaidPage() {
+      const startIndex = (this.post.unpaid.pagination.page - 1) * this.post.unpaid.pagination.size;
+      const endIndex = this.post.unpaid.pagination.page * this.post.unpaid.pagination.size;
+      return this.post.unpaid.list
+        .filter(p => {
+          return (
+            !this.post.unpaid.search ||
+            p.title.toLowerCase().includes(this.post.unpaid.search.toLowerCase())
+          );
+        })
+        .slice(startIndex, endIndex);
+    },
+    filterUnconfirmedPage() {
+      const startIndex =
+        (this.post.unconfirmed.pagination.page - 1) * this.post.unconfirmed.pagination.size;
+      const endIndex =
+        this.post.unconfirmed.pagination.page * this.post.unconfirmed.pagination.size;
+      return this.post.unconfirmed.list
+        .filter(p => {
+          return (
+            !this.post.unconfirmed.search ||
+            p.title.toLowerCase().includes(this.post.unconfirmed.search.toLowerCase())
+          );
+        })
+        .slice(startIndex, endIndex);
+    },
+  },
+
   methods: {
     dateTimeFormatter,
     numberToVND,
+    handleSelectionChangePublic(val) {
+      this.idsPicked.public = val;
+    },
+    handleSelectionChangeExpired(val) {
+      this.idsPicked.expired = val;
+    },
+    handleSelectionChangeDenied(val) {
+      this.idsPicked.denied = val;
+    },
+    handleSelectionChangeUnpaid(val) {
+      this.idsPicked.unpaid = val;
+    },
+    handleSelectionChangeUnconfirmed(val) {
+      this.idsPicked.unconfirmed = val;
+    },
     async getCatalogs() {
       const res = await CatalogService.getCatalogs();
       if (res.status === 200) {
         this.catalog.list = res.data;
+        this.catalog.filter = this.catalog.list.map(catalog => {
+          return {
+            text: catalog.name,
+            value: catalog.id,
+          };
+        });
       }
+    },
+    filterCatalog(value, row) {
+      return row.catalog.id === value;
     },
     triggerCatalogDialog(value) {
       this.dialogVisible.catalog = value;
     },
     triggerCreatePostDialog(value) {
       this.dialogVisible.createPost = value;
+    },
+    triggerViewPostDialog(value) {
+      this.dialogVisible.viewPost = value;
+    },
+    triggerUpdatePostDialog(value) {
+      this.dialogVisible.updatePost = value;
+    },
+    triggerDenyPostDialog(value) {
+      this.dialogVisible.denyPost = value;
+    },
+    openDenyPostDialog(item) {
+      this.post.dialogPost = item;
+      this.triggerDenyPostDialog(true);
     },
     openCreateCatalogDialog() {
       this.catalog.catalog = null;
@@ -292,15 +945,87 @@ export default {
       this.catalog.catalog = item;
       this.triggerCatalogDialog(true);
     },
+    openViewPostDialog(post) {
+      this.post.dialogPost = post;
+      this.triggerViewPostDialog(true);
+    },
+    openUpdatePostDialog(post) {
+      this.post.dialogPost = post;
+      this.triggerUpdatePostDialog(true);
+    },
     async getPosts() {
+      this.loading = true;
       const res = await PostService.getPosts();
       if (res.status === 200) {
         this.post.all = res.data;
-        this.post.public = this.post.all.filter(post => post.status === STATUS.PUBLIC);
-        this.post.expired = this.post.all.filter(post => post.status === STATUS.EXPiRED);
-        this.post.denied = this.post.all.filter(post => post.status === STATUS.DENIED);
-        this.post.unpaid = this.post.all.filter(post => post.status === STATUS.UNPAID);
-        this.post.unconfirmed = this.post.all.filter(post => post.status === STATUS.UNCONFIRMED);
+        this.post.public.list = this.post.all.filter(post => post.status === STATUS.PUBLIC);
+        this.post.expired.list = this.post.all.filter(post => post.status === STATUS.EXPiRED);
+        this.post.denied.list = this.post.all.filter(post => post.status === STATUS.DENIED);
+        this.post.unpaid.list = this.post.all.filter(post => post.status === STATUS.UNPAID);
+        this.post.unconfirmed.list = this.post.all.filter(
+          post => post.status === STATUS.UNCONFIRMED,
+        );
+        this.post.public.total = this.post.public.list.length;
+        this.post.expired.total = this.post.expired.list.length;
+        this.post.denied.total = this.post.denied.list.length;
+        this.post.unpaid.total = this.post.unpaid.list.length;
+        this.post.unconfirmed.total = this.post.unconfirmed.list.length;
+      }
+      this.loading = false;
+    },
+    async deletePost(id) {
+      var obj = { ids: [id] };
+      const res = await PostService.deletePost(obj);
+      if (res.status === 200) {
+        this.getPosts();
+        this.$store.state.toast.success('Xóa tin thành công thành công!');
+      } else {
+        this.$store.state.toast.error('Xóa tin thất bại!');
+      }
+    },
+    async deletePosts(status) {
+      var obj = {};
+      if (status === STATUS.PUBLIC) {
+        obj.ids = this.idsPicked.public.map(post => post.id);
+      } else if (status === STATUS.EXPiRED) {
+        obj.ids = this.idsPicked.expired.map(post => post.id);
+      } else if (status === STATUS.DENIED) {
+        obj.ids = this.idsPicked.denied.map(post => post.id);
+      } else if (status === STATUS.UNPAID) {
+        obj.ids = this.idsPicked.unpaid.map(post => post.id);
+      } else if (status === STATUS.UNCONFIRMED) {
+        obj.ids = this.idsPicked.unconfirmed.map(post => post.id);
+      }
+      const res = await PostService.deletePost(obj);
+      if (res.status === 200) {
+        this.getPosts();
+        this.$store.state.toast.success('Xóa bài đăng thành công!');
+      } else {
+        this.$store.state.toast.error('Xóa bài đăng thất bại!');
+      }
+    },
+    async confirmPost() {
+      var obj = {
+        ids: this.idsPicked.unconfirmed.map(post => post.id),
+      };
+      const res = await PostService.confirmPost(obj);
+      if (res.status === 200) {
+        this.getPosts();
+        this.$store.state.toast.success('Xác thực bài đăng thành công!');
+      } else {
+        this.$store.state.toast.error('Xác thực bài đăng thất bại!');
+      }
+    },
+    async denyPost() {
+      var obj = {
+        ids: this.idsPicked.unconfirmed.map(post => post.id),
+      };
+      const res = await PostService.denyPost(obj);
+      if (res.status === 200) {
+        this.getPosts();
+        this.$store.state.toast.success('Xác thực bài đăng thành công!');
+      } else {
+        this.$store.state.toast.error('Xác thực bài đăng thất bại!');
       }
     },
   },
