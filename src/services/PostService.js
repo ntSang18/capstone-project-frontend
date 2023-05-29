@@ -3,12 +3,12 @@ import instance from './AxiosConfig';
 const formContentType = 'multipart/form-data';
 const jsonContentType = 'application/json';
 
-class UserService {
+class PostService {
   get entity() {
-    return 'user';
+    return 'post';
   }
 
-  async getUsers() {
+  async getPosts() {
     try {
       const res = await instance(jsonContentType).get(`${this.entity}`);
       return res;
@@ -17,7 +17,7 @@ class UserService {
     }
   }
 
-  async getUser(id) {
+  async getPost(id) {
     try {
       const res = await instance(jsonContentType).get(`${this.entity}/${id}`);
       return res;
@@ -26,25 +26,16 @@ class UserService {
     }
   }
 
-  async getCurrentUser() {
+  async createPublicPost(obj) {
     try {
-      const res = await instance(jsonContentType).get(`${this.entity}/current`);
+      const res = await instance(formContentType).post(`${this.entity}/create-public`, obj);
       return res;
     } catch (err) {
       return err;
     }
   }
 
-  async createUser(obj) {
-    try {
-      const res = await instance(jsonContentType).post(`${this.entity}`, { ...obj });
-      return res;
-    } catch (err) {
-      return err;
-    }
-  }
-
-  async updateUser(id, obj) {
+  async updatePost(id, obj) {
     try {
       const res = await instance(formContentType).patch(`${this.entity}/${id}`, obj);
       return res;
@@ -53,25 +44,25 @@ class UserService {
     }
   }
 
-  async lockUser(obj) {
+  async confirmPost(obj) {
     try {
-      const res = await instance(jsonContentType).patch(`${this.entity}/lock`, { ...obj });
+      const res = await instance(jsonContentType).patch(`${this.entity}/confirm`, obj);
       return res;
     } catch (err) {
       return err;
     }
   }
 
-  async unlockUser(obj) {
+  async denyPost(id, obj) {
     try {
-      const res = await instance(jsonContentType).patch(`${this.entity}/unlock`, { ...obj });
+      const res = await instance(jsonContentType).patch(`${this.entity}/deny/${id}`, obj);
       return res;
     } catch (err) {
       return err;
     }
   }
 
-  async deleteUser(obj) {
+  async deletePost(obj) {
     try {
       const res = await instance(jsonContentType).delete(`${this.entity}`, { data: { ...obj } });
       return res;
@@ -81,4 +72,4 @@ class UserService {
   }
 }
 
-export default new UserService();
+export default new PostService();

@@ -1,5 +1,11 @@
 <template>
-  <el-dialog id="create-user-dialog" v-model="modelDialogVisible" :show-close="false" width="40%">
+  <el-dialog
+    id="create-user-dialog"
+    class="dialog-component"
+    v-model="modelDialogVisible"
+    :show-close="false"
+    width="40%"
+  >
     <template #header>
       <div class="dialog-header">
         <h2 class="dialog-title">Tạo tài khoản mới</h2>

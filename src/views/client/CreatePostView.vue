@@ -62,27 +62,12 @@
                   placeholder="-- Chọn phường/xã --"
                 >
                   <el-option
-                    v-for="item in communes"
+                    v-for="item in wards"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
                   />
                 </el-select>
-              </div>
-              <div class="inp-group">
-                <label for="street">Đường/Phố</label>
-                <el-select id="street" v-model="value" filterable placeholder="Select">
-                  <el-option
-                    v-for="item in streets"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
-              </div>
-              <div class="inp-group">
-                <label for="house-number">Số nhà</label>
-                <el-input id="house-number" v-model="input" placeholder="Please input" />
               </div>
             </div>
             <div class="row">
@@ -93,7 +78,7 @@
                   v-model="query"
                   filterable
                   remote
-                  placeholder="Nhập địa chỉ chính xác"
+                  placeholder="Nhập địa chỉ chính xác. Ví dụ 45 Nguyễn Lương Bằng"
                   :remote-method="remoteMethod"
                   :loading="loading"
                 >

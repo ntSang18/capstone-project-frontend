@@ -10,7 +10,7 @@
       </div>
       <button class="btn-create">
         <i class="bx bxs-plus-circle"></i>
-        <span class="text">Tạo gói tin mới</span>
+        <span class="text">Tạo gói tin</span>
       </button>
     </div>
 
