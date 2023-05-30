@@ -66,12 +66,12 @@
               />
               <el-table-column label="Giá" prop="price" sortable width="120">
                 <template #default="scope">
-                  <span>{{ numberToVND(scope.row.price) }}</span>
+                  <span>{{ toVnd(scope.row.price) }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="deposit" label="Tiền cọc" width="120" sortable>
                 <template #default="scope">
-                  <span>{{ numberToVND(scope.row.deposit) }}</span>
+                  <span>{{ toVnd(scope.row.deposit) }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="Ngày bắt đầu" prop="paid" sortable width="180">
@@ -183,12 +183,12 @@
               />
               <el-table-column label="Giá" prop="price" sortable width="120">
                 <template #default="scope">
-                  <span>{{ numberToVND(scope.row.price) }}</span>
+                  <span>{{ toVnd(scope.row.price) }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="deposit" label="Tiền cọc" width="120" sortable>
                 <template #default="scope">
-                  <span>{{ numberToVND(scope.row.deposit) }}</span>
+                  <span>{{ toVnd(scope.row.deposit) }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="Ngày tạo" prop="created_at" sortable width="180">
@@ -317,12 +317,12 @@
               />
               <el-table-column label="Giá" prop="price" sortable width="120">
                 <template #default="scope">
-                  <span>{{ numberToVND(scope.row.price) }}</span>
+                  <span>{{ toVnd(scope.row.price) }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="deposit" label="Tiền cọc" width="120" sortable>
                 <template #default="scope">
-                  <span>{{ numberToVND(scope.row.deposit) }}</span>
+                  <span>{{ toVnd(scope.row.deposit) }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="Ngày tạo" prop="paid" sortable width="180">
@@ -430,12 +430,12 @@
               />
               <el-table-column label="Giá" prop="price" sortable width="120">
                 <template #default="scope">
-                  <span>{{ numberToVND(scope.row.price) }}</span>
+                  <span>{{ toVnd(scope.row.price) }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="deposit" label="Tiền cọc" width="120" sortable>
                 <template #default="scope">
-                  <span>{{ numberToVND(scope.row.deposit) }}</span>
+                  <span>{{ toVnd(scope.row.deposit) }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="Ngày tạo" prop="paid" sortable width="180">
@@ -543,12 +543,12 @@
               />
               <el-table-column label="Giá" prop="price" sortable width="120">
                 <template #default="scope">
-                  <span>{{ numberToVND(scope.row.price) }}</span>
+                  <span>{{ toVnd(scope.row.price) }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="deposit" label="Tiền cọc" width="120" sortable>
                 <template #default="scope">
-                  <span>{{ numberToVND(scope.row.deposit) }}</span>
+                  <span>{{ toVnd(scope.row.deposit) }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="Ngày bắt đầu" prop="paid" sortable width="180">
@@ -715,7 +715,7 @@
 </template>
 
 <script>
-import numberToVND from '@/utils/numberToVND';
+import { toVnd } from '@/utils/numberFormatter';
 import CatalogService from '@/services/CatalogService';
 import CatalogDialog from '@/components/admin/CatalogDialog';
 import { dateTimeFormatter } from '@/utils/dateFormatter';
@@ -887,7 +887,7 @@ export default {
 
   methods: {
     dateTimeFormatter,
-    numberToVND,
+    toVnd,
     handleSelectionChangePublic(val) {
       this.idsPicked.public = val;
     },
@@ -965,11 +965,11 @@ export default {
         this.post.unconfirmed.list = this.post.all.filter(
           post => post.status === STATUS.UNCONFIRMED,
         );
-        this.post.public.total = this.post.public.list.length;
-        this.post.expired.total = this.post.expired.list.length;
-        this.post.denied.total = this.post.denied.list.length;
-        this.post.unpaid.total = this.post.unpaid.list.length;
-        this.post.unconfirmed.total = this.post.unconfirmed.list.length;
+        this.post.public.pagination.total = this.post.public.list.length;
+        this.post.expired.pagination.total = this.post.expired.list.length;
+        this.post.denied.pagination.total = this.post.denied.list.length;
+        this.post.unpaid.pagination.total = this.post.unpaid.list.length;
+        this.post.unconfirmed.pagination.total = this.post.unconfirmed.list.length;
       }
       this.loading = false;
     },

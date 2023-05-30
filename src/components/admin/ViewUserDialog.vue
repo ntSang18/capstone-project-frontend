@@ -21,7 +21,7 @@
       <h2 class="username">{{ user.username }}</h2>
       <div class="balance">
         <span
-          >Số dư: <strong>{{ numberToVND(user.balance) }}</strong></span
+          >Số dư: <strong>{{ toVnd(user.balance) }}</strong></span
         >
       </div>
       <div class="info-container">
@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import numberToVND from '@/utils/numberToVND';
+import { toVnd } from '@/utils/numberFormatter';
 export default {
   props: {
     dialogVisible: Boolean,
@@ -111,7 +111,7 @@ export default {
     },
   },
   methods: {
-    numberToVND,
+    toVnd,
     closeDialog() {
       this.modelDialogVisible = false;
     },

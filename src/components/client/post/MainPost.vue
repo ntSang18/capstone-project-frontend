@@ -1,45 +1,40 @@
 <template>
-  <li :class="'post-item ' + classNameType">
+  <li :class="'post-item ' + className">
     <div class="post-thumb">
-      <img
-        src="https://pt123.cdn.static123.com/images/thumbs/450x300/fit/2021/03/10/z2372635816674-545794dbbc111cba4b6b0b4ed0d7d184_1615391076.jpg"
-      />
+      <img :src="post.medias[0].url" @click="viewDetailsPost()" />
       <div class="number-img">
-        <span>7 ảnh</span>
+        <span>{{ post.medias.length }} ảnh</span>
       </div>
-      <div class="saved"><i class="bx bxs-heart"></i></div>
+      <div :class="isSaved ? 'saved active' : 'saved'">
+        <i class="bx bxs-heart" @click="savePost()"></i>
+      </div>
     </div>
     <div class="post-meta">
-      <h3 class="post-title">
-        <div v-if="type != 5" class="stars-wrapper">
-          <div class="stars" v-for="n in 6 - type" :key="n">
+      <h3 class="post-title" @click="viewDetailsPost()">
+        <div v-if="stars" class="stars-wrapper">
+          <div v-for="n in stars" :key="n" class="stars">
             <i class="bx bxs-star"></i>
           </div>
         </div>
-        PHÒNG TRỌ MỚI RẤT ĐẸP SỐ 373/1/2A ĐƯỜNG LÝ THƯỜNG KIỆT, QUẬN TÂN BÌNh Binh thanh sang sang
-        sang sang sang sang sang sang sang sang san sang sang sang sang sang sang sang
+        {{ post.title }}
       </h3>
       <div class="row">
-        <span class="post-price">3.7 triệu/tháng</span>
-        <span class="post-acreage">25 m²</span>
-        <span class="post-location">Quận Gò Vấp, Hồ Chí Minh sang sang sang sang</span>
-        <span class="post-time">Hôm nay</span>
+        <span class="post-price">{{ toVndString(post.price) }}/tháng</span>
+        <span class="post-acreage">{{ post.acreage }} m²</span>
+        <span class="post-location">{{ StrAddress() }}</span>
+        <span class="post-time">{{ diffTime(post.paid_at) }}</span>
       </div>
       <p class="post-summary">
-        Khai trương tòa nhà sleepbox ngay tại chợ Gò Vấp, gần trường DH Công Nghiệp HCMVới vị trí
-        này, Chỉ cần một vài bước chân, bạn có thể đến trường sang sang sang sang sang sang sang
-        sang sang sang sang sang sang sang sang sang sang sang sang sang sang sang sang sangsang
-        sang sang sang sang sang sang sang
+        {{ post.description }}
       </p>
       <div class="row">
         <div class="post-author">
-          <img
-            src="https://pt123.cdn.static123.com/images/thumbs/450x300/fit/2022/05/23/anh-2-1-590x308_1653278194.jpg"
-          />
-          <span class="author-name">Nguyen Thanh Sang</span>
+          <img v-if="post.user.image_url" :src="post.user.image_url" />
+          <img v-else src="@/assets/images/default/default-user.png" />
+          <span class="author-name">{{ post.user.username }}</span>
         </div>
-        <div v-if="type == 1" class="btn-group">
-          <button class="author-phone-number">0777908037</button>
+        <div v-if="post.type === 'VIP_1'" class="btn-group">
+          <button class="author-phone-number">{{ post.user.phone_number }}</button>
           <button class="author-chat">Nhắn tin</button>
         </div>
       </div>
@@ -48,22 +43,74 @@
 </template>
 
 <script>
+import { TYPE } from '@/common/postTypes.js';
+import { toVndString } from '@/utils/numberFormatter';
+import { diffTime } from '@/utils/dateFormatter';
+import { mapActions, mapState } from 'vuex';
 export default {
   props: {
-    type: Number,
+    post: Object,
+  },
+  data() {
+    return {
+      className: '',
+      stars: 5,
+      isSaved: false,
+    };
+  },
+  mounted() {
+    this.setup();
+    this.checkSaved();
   },
   computed: {
-    classNameType() {
-      if (this.type == 1) {
-        return 'vip-1';
-      } else if (this.type == 2) {
-        return 'vip-2';
-      } else if (this.type == 3) {
-        return 'vip-3';
-      } else if (this.type == 4) {
-        return 'vip-4';
+    ...mapState('client', ['savedPosts']),
+  },
+  methods: {
+    ...mapActions('client', ['addSavedPost', 'removeSavedPost']),
+    toVndString,
+    diffTime,
+    viewDetailsPost() {
+      this.$router.push(`/post/${this.post.id}`);
+    },
+    setup() {
+      if (this.post.type === TYPE.VIP_1) {
+        this.className = 'vip-1';
+        this.stars = 5;
+      } else if (this.post.type === TYPE.VIP_2) {
+        this.className = 'vip-2';
+        this.stars = 4;
+      } else if (this.post.type === TYPE.VIP_3) {
+        this.className = 'vip-3';
+        this.stars = 3;
+      } else if (this.post.type === TYPE.VIP_4) {
+        this.className = 'vip-4';
+        this.stars = 2;
       } else {
-        return 'normal';
+        this.className = 'normal';
+        this.stars = 0;
+      }
+    },
+    StrAddress() {
+      return `${this.post.address.province},
+      ${this.post.address.district},
+      ${this.post.address.ward},
+      ${this.post.address.specific_address}`;
+    },
+    checkSaved() {
+      const index = this.savedPosts.findIndex(p => p.id === this.post.id);
+      if (index < 0) {
+        this.isSaved = false;
+      } else {
+        this.isSaved = true;
+      }
+    },
+    savePost() {
+      if (this.isSaved) {
+        this.removeSavedPost(this.post);
+        this.isSaved = false;
+      } else {
+        this.addSavedPost(this.post);
+        this.isSaved = true;
       }
     },
   },

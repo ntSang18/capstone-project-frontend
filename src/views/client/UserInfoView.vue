@@ -151,10 +151,10 @@ export default {
     this.getProvinces();
   },
   computed: {
-    ...mapState(['user']),
+    ...mapState('client', ['user']),
   },
   methods: {
-    ...mapActions(['setUser']),
+    ...mapActions('client', ['setUser']),
     getInfo() {
       this.info.id = this.user.id;
       this.info.email = this.user.email;

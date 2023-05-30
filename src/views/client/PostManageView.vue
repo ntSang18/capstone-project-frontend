@@ -20,7 +20,7 @@
           <el-table-column label="Tiêu đề" prop="title" width="300" />
           <el-table-column label="Giá" prop="price" sortable width="120">
             <template #default="scope">
-              <span>{{ numberToVND(scope.row.price) }}</span>
+              <span>{{ toVnd(scope.row.price) }}</span>
             </template>
           </el-table-column>
           <el-table-column label="Ngày bắt đầu" prop="start" sortable width="180" />
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import numberToVND from '@/utils/numberToVND';
+import { toVnd } from '@/utils/numberFormatter';
 export default {
   data() {
     return {
@@ -110,7 +110,7 @@ export default {
     },
   },
   methods: {
-    numberToVND,
+    toVnd,
   },
 };
 </script>

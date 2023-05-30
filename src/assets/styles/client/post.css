@@ -44,6 +44,9 @@
   cursor: pointer;
   transition: .3s all ease;
 }
+.post-item .post-thumb .saved.active {
+  color: #F70407;
+}
 .post-item .post-thumb .saved:hover {
   color: #F70407;
 }
@@ -106,6 +109,10 @@
 .post-item .post-meta .post-location {
   font-size: 14px;
   color: #333333;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .post-item .post-meta .post-summary {
@@ -187,9 +194,6 @@
 
 .post-item.vip-1 .post-meta .post-location {
   max-width: 160px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .post-item.vip-1 .post-meta .post-summary {

@@ -10,19 +10,21 @@ const loggedLinkNames = [
 const authLinkName = ['Login', 'Forgot'];
 
 export default function checkMiddleware(to, from, next) {
-  store.state.token =
-    store.state.token === null ? sessionStorage.getItem('token') : store.state.token;
-  store.state.user =
-    store.state.user === null ? JSON.parse(sessionStorage.getItem('user')) : store.state.user;
+  store.state.admin.token =
+    store.state.admin.token === null ? sessionStorage.getItem('token') : store.state.admin.token;
+  store.state.admin.user =
+    store.state.admin.user === null
+      ? JSON.parse(sessionStorage.getItem('user'))
+      : store.state.admin.user;
 
   var isAdmin = false;
-  if (store.state.user) {
-    isAdmin = store.state.user.role === ROLES.ADMIN;
+  if (store.state.admin.user) {
+    isAdmin = store.state.admin.user.role === ROLES.ADMIN;
   }
 
-  if (loggedLinkNames.some(name => name === to.name) && (!store.state.token || !isAdmin)) {
+  if (loggedLinkNames.some(name => name === to.name) && (!store.state.admin.token || !isAdmin)) {
     return next({ name: 'Login' });
-  } else if (authLinkName.some(name => name === to.name) && store.state.token && isAdmin) {
+  } else if (authLinkName.some(name => name === to.name) && store.state.admin.token && isAdmin) {
     return next({ name: 'Home' });
   } else return next();
 }

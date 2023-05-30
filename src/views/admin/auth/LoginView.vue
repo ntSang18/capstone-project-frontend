@@ -28,7 +28,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['setToken', 'setUser']),
+    ...mapActions('admin', ['setToken', 'setUser']),
     checkInfo() {
       if (!validateEmail(this.info.email)) {
         this.$store.state.toast.info(MESSAGES.ERROR_EMAIL);

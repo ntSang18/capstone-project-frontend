@@ -54,7 +54,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['setToken', 'setUser']),
+    ...mapActions('client', ['setToken', 'setUser']),
     checkInfo() {
       this.error = '';
       if (!validateEmail(this.info.email)) {

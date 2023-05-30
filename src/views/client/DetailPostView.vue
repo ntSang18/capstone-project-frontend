@@ -1,17 +1,15 @@
 <template>
   <div id="details-post" class="main-container">
-    <section id="breadcrumb">
+    <section v-if="post.detail" id="breadcrumb">
       <el-breadcrumb>
         <el-breadcrumb-item :to="{ path: '/' }">Trang chủ</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/' }"
-          >Phòng trọ cao cấp tại Quận Tân Bình</el-breadcrumb-item
-        >
+        <el-breadcrumb-item :to="{ path: '/' }">{{ post.detail.title }}</el-breadcrumb-item>
       </el-breadcrumb>
     </section>
 
     <div id="content" class="content-container">
       <div class="left-col">
-        <section id="post-img">
+        <section v-if="post.detail" id="post-img">
           <swiper
             :pagination="{
               type: 'progressbar',
@@ -20,55 +18,35 @@
             :modules="modules"
             class="img-container"
           >
-            <swiper-slide>
+            <swiper-slide v-for="media in this.post.detail.medias" :key="media.id">
               <div class="swiper-item">
-                <img
-                  src="https://pt123.cdn.static123.com/images/thumbs/900x600/fit/2020/09/02/20200523-125927_1599042543.jpg"
-                />
-              </div>
-            </swiper-slide>
-            <swiper-slide>
-              <div class="swiper-item">
-                <img
-                  src="https://pt123.cdn.static123.com/images/thumbs/900x600/fit/2019/01/03/0fb7ef5e-09a9-4a91-9555-853d3ff7bbab_1546511380.jpg"
-                />
-              </div>
-            </swiper-slide>
-            <swiper-slide>
-              <div class="swiper-item">
-                <img
-                  src="https://pt123.cdn.static123.com/images/thumbs/900x600/fit/2019/01/03/10c71ba1-4f83-47fc-8a8b-7a6839261619_1546511398.jpg"
-                />
+                <img :src="media.url" />
               </div>
             </swiper-slide>
           </swiper>
         </section>
 
-        <article id="the-post">
+        <article v-if="post.detail" id="the-post">
           <header id="post-header">
-            <h1 class="post-title vip-1">
-              <div class="stars">
-                <i class="bx bxs-star"></i>
-                <i class="bx bxs-star"></i>
-                <i class="bx bxs-star"></i>
-                <i class="bx bxs-star"></i>
+            <h1 :class="`post-title ${className}`">
+              <div v-for="n in stars" :key="n" class="stars">
                 <i class="bx bxs-star"></i>
               </div>
-              PHÒNG TRỌ CAO CẤP TẠI QUẬN TÂN BÌNH
+              {{ post.detail.title }}
             </h1>
             <div class="row">
               <div class="post-attribute">
                 <div class="attribute-item price">
                   <i class="bx bx-purchase-tag bx-flip-horizontal"></i>
-                  <span>3.5 triệu/tháng</span>
+                  <span>{{ toVndString(post.detail.price) }}/tháng</span>
                 </div>
                 <div class="attribute-item acreage">
                   <i class="bx bx-area"></i>
-                  <span>22m²</span>
+                  <span>{{ post.detail.acreage }}m²</span>
                 </div>
                 <div class="attribute-item time">
                   <i class="bx bx-time"></i>
-                  <span>Hôm nay</span>
+                  <span>{{ diffTime(post.detail.paid_at) }}</span>
                 </div>
               </div>
               <div class="post-action">
@@ -76,21 +54,25 @@
                   <i class="bx bx-share bx-flip-horizontal"></i>
                   <span>Chia sẻ</span>
                 </div>
-                <div class="action-item save">
+                <div
+                  :class="isSaved ? 'action-item save active' : 'action-item save'"
+                  @click="savePost()"
+                >
                   <i class="bx bx-heart"></i>
-                  <span>Lưu tin</span>
+                  <span v-if="isSaved">Bỏ lưu</span>
+                  <span v-else>Lưu tin</span>
                 </div>
               </div>
             </div>
             <div class="post-address">
               <i class="bx bxs-map"></i>
-              <span>202 Đường Phạm Văn Hai, Phường 4, Quận Tân Bình, Hồ Chí Minh</span>
+              <span>{{ strAddress() }}</span>
             </div>
           </header>
 
           <section id="post-summary" class="post-section">
             <h2 class="section-title">Thông tin mô tả</h2>
-            <p class="summary-content">{{ text }}</p>
+            <p class="summary-content">{{ post.detail.description }}</p>
           </section>
 
           <section id="post-overview" class="post-section">
@@ -99,35 +81,35 @@
               <tbody>
                 <tr>
                   <td class="name">Khu vực:</td>
-                  <td>Thành phố Đà Nẵng</td>
+                  <td>{{ post.detail.address.province }}</td>
                 </tr>
                 <tr>
                   <td class="name">Loại tin rao:</td>
-                  <td>Phòng trọ, nhà trọ</td>
+                  <td>{{ post.detail.catalog.name }}</td>
                 </tr>
                 <tr>
                   <td class="name">Khu vực:</td>
-                  <td>Thành phố Đà Nẵng</td>
+                  <td>{{ post.detail.address.province }}</td>
                 </tr>
                 <tr>
                   <td class="name">Tiền cọc:</td>
-                  <td>3.000.000 vnd</td>
+                  <td>{{ toVndString(post.detail.deposit) }}</td>
                 </tr>
                 <tr>
                   <td class="name">Đối tượng thuê:</td>
-                  <td>Tất cả</td>
+                  <td>{{ strTarget() }}</td>
                 </tr>
                 <tr>
                   <td class="name">Gói tin:</td>
-                  <td>Tin Vip 1</td>
+                  <td>{{ typeString }}</td>
                 </tr>
                 <tr>
                   <td class="name">Ngày đăng:</td>
-                  <td>Thứ 2, 21:23 01/05/2023</td>
+                  <td>{{ dateFormatter(post.detail.paid_at) }}</td>
                 </tr>
                 <tr>
                   <td class="name">Ngày hết hạn:</td>
-                  <td>Thứ 7, 21:23 06/05/2023</td>
+                  <td>{{ dateFormatter(post.detail.expired_at) }}</td>
                 </tr>
               </tbody>
             </table>
@@ -139,25 +121,25 @@
               <tbody>
                 <tr>
                   <td class="name">Liên hệ:</td>
-                  <td>Nguyễn Thanh Sang</td>
+                  <td>{{ post.detail.user.username }}</td>
                 </tr>
                 <tr>
                   <td class="name">Điện thoại:</td>
-                  <td>0777908037</td>
+                  <td>{{ post.detail.user.phone_number }}</td>
                 </tr>
                 <tr>
                   <td class="name">Email:</td>
-                  <td>thanhsang6325@gmail.com</td>
+                  <td>{{ post.detail.user.email }}</td>
                 </tr>
               </tbody>
             </table>
           </section>
 
-          <section id="post-map" class="post-section">
+          <section v-if="post.detail" id="post-map" class="post-section">
             <h2 class="section-title">Bản đồ</h2>
             <div class="post-address">
               <i class="bx bxs-map"></i>
-              <span>202 Đường Phạm Văn Hai, Phường 4, Quận Tân Bình, Hồ Chí Minh</span>
+              <span>{{ strAddress() }}</span>
             </div>
             <div class="map-content">
               <iframe
@@ -172,18 +154,18 @@
         </article>
       </div>
       <div class="right-col">
-        <section id="author">
+        <section v-if="post.detail" id="author">
           <div class="author-avt">
             <img src="@/assets/images/default/default-user.png" />
           </div>
-          <span class="author-name"> Nguyễn Thanh Sang </span>
+          <span class="author-name"> {{ post.detail.user.username }} </span>
           <div class="author-status">
             <div class="dot"></div>
             <span>Đang hoạt động</span>
           </div>
           <button class="phone">
             <i class="bx bxs-phone"></i>
-            <span>0777908037</span>
+            <span>{{ post.detail.user.phone_number }}</span>
           </button>
           <button class="chat">
             <i class="bx bxs-message-alt-detail"></i>
@@ -198,27 +180,14 @@
         <section id="vip-post" class="section link">
           <h2 class="section-header">Tin nổi bật</h2>
           <ul class="list-container">
-            <aside-post />
-            <aside-post />
-            <aside-post />
-            <aside-post />
-            <aside-post />
+            <aside-post v-for="post in post.vip" :key="post.id" :post="post" />
           </ul>
         </section>
 
         <section id="new-post" class="section link">
           <h2 class="section-header">Tin mới đăng</h2>
           <ul class="list-container">
-            <aside-post />
-            <aside-post />
-            <aside-post />
-            <aside-post />
-            <aside-post />
-            <aside-post />
-            <aside-post />
-            <aside-post />
-            <aside-post />
-            <aside-post />
+            <aside-post v-for="post in post.newest" :key="post.id" :post="post" />
           </ul>
         </section>
       </div>
@@ -231,10 +200,26 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/swiper-bundle.css';
 import { Pagination, Navigation } from 'swiper';
 import AsidePost from '@/components/client/post/AsidePost.vue';
+import PostService from '@/services/PostService';
+import { TYPE } from '@/common/postTypes.js';
+import { toVndString } from '@/utils/numberFormatter';
+import { dateFormatter, diffTime } from '@/utils/dateFormatter';
+import { TARGETS } from '@/common/postTargets';
+import { ElLoading } from 'element-plus';
+import { mapActions, mapState } from 'vuex';
 export default {
   data() {
     return {
-      text: 'Giá 3tr/tháng \nCách sân bay Tân Sơn Nhất 3 phút đi xe máy \nCách chợ Phạm Văn Hai 1 phút xe máy\nRất gần Quận 1 và Quận 3 : di chuyển thuận lợi bằng đường Hoàng Sa Trường Sa.\nTiện ích xung quanh gồm Biện Viện, Trường Học, Chợ, Siêu Thị, Nằm rất gần bờ kè kênh Nhiêu Lộc nên rất thuận tiện đi làm về giờ tan tầm, tránh được kẹt xe.\nDiện tích mỗi phòng từ 25m2 đến 27m2 có tầng lửng cho bạn không gian sống riêng tư cho dù bạn là gia đình nhỏ hay nhóm bạn ở chung\nKhu vực an ninh, yên tĩnh, thuận tiện trong mọi sinh hoạt\nCó bãi gửi xe riêng cho không gian sống them rộng mở.\nBảo vệ an ninh 24/7 bảo đảm cho bạn và tài sản của bạn.\nDịch vụ linh hoạt tùy thuộc vào nhu cầu của bạn.\nKhông gian RIÊNG TƯ, YÊN TĨNH, TỰ DO, không bị ai làm phiền.\nBạn được TỰ DO TIẾP KHÁCH người thân, bạn bè.\nVệ sinh sạch sẽ không gian sử dụng chung 24/7\nĐịa chỉ liên hệ : 380/290A Phạm Văn Hai (Đi vào bằng hẻm 202 Phạm Văn Hai)\nVui Lòng Liên Hệ Số Điện Thoại : 0909913596 cô Linh để xem phòng\n0796252354 Đạt\nHoặc 08.8899.2345 khánh',
+      post: {
+        detail: null,
+        newest: [],
+        vip: [],
+      },
+      stars: 0,
+      className: '',
+      typeString: '',
+      dataReady: false,
+      isSaved: false,
     };
   },
   components: {
@@ -242,10 +227,121 @@ export default {
     SwiperSlide,
     AsidePost,
   },
+  mounted() {
+    this.getPost();
+    this.getPublicPosts();
+  },
+  computed: {
+    ...mapState('client', ['savedPosts']),
+  },
+  methods: {
+    ...mapActions('client', ['addSavedPost', 'removeSavedPost']),
+    toVndString,
+    diffTime,
+    dateFormatter,
+    loading() {
+      const loading = ElLoading.service({
+        lock: true,
+        text: 'Loading',
+        background: 'rgba(0, 0, 0, 0.7)',
+      });
+      if (this.dataReady) {
+        loading.close();
+      }
+    },
+    async getPublicPosts() {
+      const res = await PostService.getPublicPosts();
+      if (res.status === 200) {
+        this.post.newest = res.data.sort((a, b) => new Date(a.paid_at) - new Date(b.paid_at));
+        if (this.post.newest.length > 10) {
+          this.post.newest = this.post.newest.slice(0, 10);
+        }
+        const vip1 = res.data.filter(post => post.type === TYPE.VIP_1);
+        const vip2 = res.data.filter(post => post.type === TYPE.VIP_2);
+        const vip3 = res.data.filter(post => post.type === TYPE.VIP_3);
+        const vip4 = res.data.filter(post => post.type === TYPE.VIP_4);
+        const normal = res.data.filter(post => post.type === TYPE.NORMAL);
+        this.post.vip = [].concat(vip1, vip2, vip3, vip4, normal);
+        if (this.post.vip.length > 10) {
+          this.post.newest = this.post.newest.slice(0, 10);
+        }
+      }
+    },
+    async getPost() {
+      this.loading();
+      const res = await PostService.getPost(this.$route.params.id);
+      if (res.status === 200) {
+        this.post.detail = res.data;
+        this.setup();
+        this.checkSaved();
+        this.dataReady = true;
+      }
+    },
+    setup() {
+      if (this.post.detail.type === TYPE.VIP_1) {
+        this.className = 'vip-1';
+        this.typeString = 'Tin vip 1';
+        this.stars = 5;
+      } else if (this.post.detail.type === TYPE.VIP_2) {
+        this.className = 'vip-2';
+        this.typeString = 'Tin vip 2';
+        this.stars = 4;
+      } else if (this.post.detail.type === TYPE.VIP_3) {
+        this.className = 'vip-3';
+        this.typeString = 'Tin vip 3';
+        this.stars = 3;
+      } else if (this.post.detail.type === TYPE.VIP_4) {
+        this.className = 'vip-4';
+        this.typeString = 'Tin vip 4';
+        this.stars = 2;
+      } else {
+        this.className = 'normal';
+        this.typeString = 'Tin thường';
+        this.stars = 0;
+      }
+    },
+    strAddress() {
+      return `${this.post.detail.address.specific_address},
+      ${this.post.detail.address.ward},
+      ${this.post.detail.address.district},
+      ${this.post.detail.address.province}`;
+    },
+    strTarget() {
+      var target = TARGETS.find(target => target.value === this.post.detail.target);
+      return target.name;
+    },
+    checkSaved() {
+      const index = this.savedPosts.findIndex(p => p.id === this.post.detail.id);
+      if (index < 0) {
+        this.isSaved = false;
+      } else {
+        this.isSaved = true;
+      }
+    },
+    savePost() {
+      if (this.isSaved) {
+        this.removeSavedPost(this.post.detail);
+        this.isSaved = false;
+      } else {
+        this.addSavedPost(this.post.detail);
+        this.isSaved = true;
+      }
+    },
+  },
   setup() {
     return {
       modules: [Pagination, Navigation],
     };
+  },
+  watch: {
+    dataReady() {
+      this.loading();
+    },
+    '$route.params.id'() {
+      if (this.$route.params.id) {
+        this.getPost();
+      }
+    },
   },
 };
 </script>

@@ -15,14 +15,14 @@
           <el-table-column label="Phương thức" prop="method" />
           <el-table-column label="Giá" prop="price" sortable>
             <template #default="scope">
-              <span>{{ numberToVND(scope.row.price) }}</span>
+              <span>{{ toVnd(scope.row.price) }}</span>
             </template>
           </el-table-column>
 
           <el-table-column label="Khuyến mãi" prop="discount" sortable />
           <el-table-column label="Thực nhận" prop="receipt" sortable>
             <template #default="scope">
-              <span>{{ numberToVND(scope.row.receipt) }}</span>
+              <span>{{ toVnd(scope.row.receipt) }}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import numberToVND from '@/utils/numberToVND';
+import { toVnd } from '@/utils/numberFormatter';
 export default {
   data() {
     return {
@@ -86,7 +86,7 @@ export default {
     };
   },
   methods: {
-    numberToVND,
+    toVnd,
   },
 };
 </script>

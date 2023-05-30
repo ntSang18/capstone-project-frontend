@@ -107,6 +107,10 @@
 #post-header .action-item.save:hover > span {
   color: #E13427;
 }
+#post-header .action-item.save.active i,
+#post-header .action-item.save.active span {
+  color: #E13427;
+}
 
 #post-header .post-address i {
   color: #1266dd;

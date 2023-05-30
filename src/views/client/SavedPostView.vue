@@ -8,9 +8,9 @@
     </section>
 
     <section id="content" class="section">
-      <h1 class="title">Tin đã lưu (2 / 100)</h1>
+      <h1 class="title">Tin đã lưu ({{ savedPosts.length }})</h1>
       <ul class="list-content">
-        <saved-post />
+        <saved-post v-for="(post, index) in savedPosts" :key="index" :post="post" />
       </ul>
     </section>
   </div>
@@ -18,10 +18,15 @@
 
 <script>
 import SavedPost from '@/components/client/post/SavedPost';
+import { mapState } from 'vuex';
 export default {
   components: {
     SavedPost,
   },
+  computed: {
+    ...mapState('client', ['savedPosts']),
+  },
+  methods: {},
 };
 </script>
 

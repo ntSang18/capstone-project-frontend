@@ -9,7 +9,7 @@ class CatalogService {
 
   async getCatalogs() {
     try {
-      const res = await instance(contentType).get(`${this.entity}`);
+      const res = await instance(contentType).get(`${this.entity}/public`);
       return res;
     } catch (err) {
       return err;

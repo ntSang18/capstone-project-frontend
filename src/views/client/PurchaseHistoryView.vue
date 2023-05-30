@@ -16,17 +16,17 @@
           <el-table-column label="Loại tin" prop="post_type" />
           <el-table-column label="Số dư" prop="before_balance">
             <template #default="scope">
-              <span>{{ numberToVND(scope.row.before_balance) }}</span>
+              <span>{{ toVnd(scope.row.before_balance) }}</span>
             </template>
           </el-table-column>
           <el-table-column label="Phí" prop="price" sortable>
             <template #default="scope">
-              <span>{{ numberToVND(scope.row.price) }}</span>
+              <span>{{ toVnd(scope.row.price) }}</span>
             </template>
           </el-table-column>
           <el-table-column label="Còn lại" prop="after_balance">
             <template #default="scope">
-              <span>{{ numberToVND(scope.row.after_balance) }}</span>
+              <span>{{ toVnd(scope.row.after_balance) }}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import numberToVND from '@/utils/numberToVND';
+import { toVnd } from '@/utils/numberFormatter';
 export default {
   data() {
     return {
@@ -89,7 +89,7 @@ export default {
     };
   },
   methods: {
-    numberToVND,
+    toVnd,
   },
 };
 </script>

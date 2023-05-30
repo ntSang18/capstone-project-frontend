@@ -80,11 +80,11 @@
             </div>
             <div class="inp-group half">
               <label>Giá cho thuê</label>
-              <span class="info">{{ numberToVND(post.price) }}</span>
+              <span class="info">{{ toVnd(post.price) }}</span>
             </div>
             <div class="inp-group half">
               <label>Tiền cọc</label>
-              <span class="info">{{ numberToVND(post.deposit) }}</span>
+              <span class="info">{{ toVnd(post.deposit) }}</span>
             </div>
             <div class="inp-group half">
               <label>Diện tích</label>
@@ -141,7 +141,7 @@
 </template>
 
 <script>
-import numberToVND from '@/utils/numberToVND';
+import { toVnd } from '@/utils/numberFormatter';
 import { TARGETS } from '@/common/postTargets';
 import { TYPES } from '@/common/postTypes';
 import { dateTimeFormatter } from '@/utils/dateFormatter';
@@ -169,7 +169,7 @@ export default {
     },
   },
   methods: {
-    numberToVND,
+    toVnd,
     dateTimeFormatter,
     closeDialog() {
       this.modelDialogVisible = false;

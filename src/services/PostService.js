@@ -17,9 +17,18 @@ class PostService {
     }
   }
 
+  async getPublicPosts() {
+    try {
+      const res = await instance(jsonContentType).get(`${this.entity}/public`);
+      return res;
+    } catch (err) {
+      return err;
+    }
+  }
+
   async getPost(id) {
     try {
-      const res = await instance(jsonContentType).get(`${this.entity}/${id}`);
+      const res = await instance(jsonContentType).get(`${this.entity}/public/${id}`);
       return res;
     } catch (err) {
       return err;

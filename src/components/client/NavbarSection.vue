@@ -148,10 +148,10 @@ export default {
     return {};
   },
   computed: {
-    ...mapState(['user']),
+    ...mapState('client', ['user']),
   },
   methods: {
-    ...mapActions(['clearStore']),
+    ...mapActions('client', ['clearStore']),
     async logout() {
       this.clearStore();
       this.$router.push('/login');

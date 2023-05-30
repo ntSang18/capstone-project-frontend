@@ -349,7 +349,7 @@ export default {
     this.additionalInfo.phoneNumber = this.user.phone_number;
   },
   computed: {
-    ...mapState(['user']),
+    ...mapState('admin', ['user']),
     modelDialogVisible: {
       get() {
         return this.dialogVisible;
