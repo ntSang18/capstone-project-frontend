@@ -1,31 +1,30 @@
 <template>
-  <div id="create-post" class="main-container">
-    <section id="breadcrumb">
-      <el-breadcrumb>
-        <el-breadcrumb-item :to="{ path: '/' }">Trang chủ</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/' }">Cài đặt tài khoản</el-breadcrumb-item>
-      </el-breadcrumb>
-    </section>
-
-    <section id="content" class="section">
-      <h1 class="title">Đăng tin mới</h1>
-      <div class="alert">
-        <p>
-          Nếu bạn đã từng đăng tin, hãy sử dụng chức năng ĐẨY TIN / GIA HẠN / NÂNG CẤP VIP trong mục
-          QUẢN LÝ TIN để làm mới, đẩy tin lên cao thay vì đăng tin mới. Tin đăng trùng nhau sẽ không
-          được duyệt.
-        </p>
+  <el-dialog
+    id="update-post-dialog"
+    v-model="modelDialogVisible"
+    :show-close="false"
+    width="80%"
+    top="5vh"
+    class="dialog-component post-dialog"
+    @open="setupData()"
+  >
+    <template #header>
+      <div class="dialog-header">
+        <h2 class="dialog-title">Chỉnh sửa bài đăng #{{ post.id }}</h2>
+        <i class="bx bx-x" @click="closeDialog()"></i>
       </div>
+    </template>
+    <div class="dialog-body">
       <section id="post-address" class="create-section">
         <div class="left">
           <h2 class="sub-title">Địa chỉ cho thuê</h2>
-          <form class="form-address">
+          <div class="form-address">
             <div class="row grid">
               <div class="inp-group">
                 <label for="province">Tỉnh/Thành phố</label>
                 <el-select
                   id="province"
-                  v-model="info.address.province"
+                  v-model="info.province"
                   filterable
                   placeholder="-- Chọn tỉnh/tp --"
                 >
@@ -42,7 +41,7 @@
                 <label for="district">Quận/Huyện</label>
                 <el-select
                   id="district"
-                  v-model="info.address.district"
+                  v-model="info.district"
                   filterable
                   placeholder="-- Chọn quận/huyện --"
                 >
@@ -56,10 +55,10 @@
                 </el-select>
               </div>
               <div class="inp-group">
-                <label for="commune">Phường/Xã</label>
+                <label for="ward">Phường/Xã</label>
                 <el-select
                   id="ward"
-                  v-model="info.address.ward"
+                  v-model="info.ward"
                   filterable
                   placeholder="-- Chọn phường/xã --"
                 >
@@ -77,13 +76,13 @@
                 <label for="specific-address">Địa chỉ cụ thể</label>
                 <el-input
                   id="specific-address"
-                  v-model="info.address.specific_address"
+                  v-model="info.specific_address"
                   placeholder="Nhập số nhà và đường. Ví dụ: 60 Ngô Sỹ Liên"
                   clearable
                 />
               </div>
             </div>
-          </form>
+          </div>
         </div>
         <div class="right">
           <div class="map-container">
@@ -102,7 +101,7 @@
       <section id="post-info" class="create-section">
         <div class="left">
           <h2 class="sub-title">Thông tin mô tả</h2>
-          <form class="form-info">
+          <div class="form-info">
             <div class="inp-group half">
               <label for="catalog">Loại chuyên mục</label>
               <el-select
@@ -133,17 +132,17 @@
                 id="post-summary"
                 v-model="info.description"
                 type="textarea"
-                :autosize="{ minRows: 10, maxRows: 20 }"
+                :autosize="{ minRows: 4, maxRows: 10 }"
                 placeholder="Mô tả chi tiết cơ sở vật chất cho thuê"
               />
             </div>
             <div class="inp-group half">
               <label for="post-username">Thông tin liên hệ</label>
-              <el-input id="post-username" v-model="additionalInfo.username" disabled />
+              <el-input id="post-username" v-model="info.username" disabled />
             </div>
             <div class="inp-group half">
               <label for="post-phone">Điện thoại</label>
-              <el-input id="post-phone" v-model="additionalInfo.phoneNumber" disabled />
+              <el-input id="post-phone" v-model="info.phone_number" disabled />
             </div>
             <div class="inp-group half">
               <label for="post-price">Giá cho thuê</label>
@@ -154,7 +153,7 @@
                 placeholder="Nhập đầy đủ số, ví dụ 1 triệu thì nhập là 1000000"
                 clearable
               >
-                <template #append>đ/tháng</template></el-input
+                <template #append>đ</template></el-input
               >
             </div>
             <div class="inp-group half">
@@ -192,7 +191,7 @@
                 />
               </el-select>
             </div>
-          </form>
+          </div>
         </div>
         <div class="right">
           <div class="post-note">
@@ -214,11 +213,52 @@
         </div>
       </section>
 
+      <section id="post-advance" class="create-section">
+        <div class="left">
+          <h2 class="sub-title">Thông tin nâng cao</h2>
+          <div class="inp-group half">
+            <label for="vip">Loại tin</label>
+            <el-select id="vip" v-model="info.type" placeholder="-- Chọn loại tin --">
+              <el-option
+                v-for="item in postTypes"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
+              />
+            </el-select>
+          </div>
+          <div class="inp-group">
+            <label for="expired">Ngày hết hạn</label>
+            <el-date-picker
+              id="expired"
+              v-model="info.expired_at"
+              type="datetime"
+              placeholder="Chọn ngày hết hạn"
+              format="YYYY/MM/DD hh:mm:ss"
+              value-format="YYYY-MM-DD hh:mm:ss"
+            />
+          </div>
+        </div>
+        <div class="right"></div>
+      </section>
+
       <section id="post-img" class="create-section">
         <div class="left">
           <h2 class="sub-title">Hình ảnh</h2>
           <p class="sub-text">Cập nhật hình ảnh rõ ràng sẽ cho thuê nhanh hơn</p>
           <form class="form-img">
+            <div class="original-media-container">
+              <h3>Ảnh mặc định</h3>
+              <div class="img-upload-container">
+                <div v-for="(media, index) in info.medias" :key="media.id" class="img-upload-item">
+                  <img :src="media.url" />
+                  <div class="item-action">
+                    <i class="bx bx-zoom-in" @click="handlePictureCardPreview(media.url)"></i>
+                    <i class="bx bx-trash" @click="delOriginalImage(index, media)"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
             <input
               ref="imgInput"
               type="file"
@@ -234,7 +274,7 @@
               @drop="drop"
             >
               <img src="@/assets/images/icon/image-upload.png" />
-              <span v-if="imageHandler.isDragging">Thả ảnh vào đây</span>
+              <span v-if="isDragging">Thả ảnh vào đây</span>
               <span v-else>Thả ảnh vào đây hoặc <strong>nhấn để chọn ảnh</strong></span>
             </div>
             <div class="img-upload-container">
@@ -254,23 +294,29 @@
           </form>
         </div>
       </section>
-
-      <button class="btn-continue" @click="createPost()">
-        <span>Tiếp tục</span>
-      </button>
-    </section>
-  </div>
+    </div>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="closeDialog()">Hủy</el-button>
+        <el-button type="primary" @click="updatePost()"> Sửa tin </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
 import AddressService from '@/services/AddressService';
 import { TARGETS } from '@/common/postTargets';
 import { TYPES } from '@/common/postTypes';
-import { mapState } from 'vuex';
 import PostService from '@/services/PostService';
-import CatalogService from '@/services/CatalogService';
-import { ElLoading } from 'element-plus';
+import { dateTimeFormatter } from '@/utils/dateFormatter';
 export default {
+  props: {
+    dialogVisible: Boolean,
+    getPosts: Function,
+    catalogs: Array,
+    post: Object,
+  },
   data() {
     return {
       info: {
@@ -279,20 +325,19 @@ export default {
         price: '',
         deposit: '',
         target: '',
+        type: '',
         acreage: '',
-        address: {
-          province: '',
-          district: '',
-          ward: '',
-          specific_address: '',
-        },
+        province: '',
+        district: '',
+        ward: '',
+        specific_address: '',
+        removed_media_ids: [],
         images: [],
+        medias: [],
+        expired_at: '',
         catalog_id: '',
-        user_id: null,
-      },
-      additionalInfo: {
         username: '',
-        phoneNumber: '',
+        phone_number: '',
       },
       imageHandler: {
         isDragging: false,
@@ -304,55 +349,88 @@ export default {
         districts: [],
         wards: [],
       },
-      catalogs: [],
       postTargets: [],
       postTypes: [],
-      dataReady: false,
     };
   },
   mounted() {
-    this.setupData();
+    this.getProvinces();
+    this.postTargets = TARGETS;
+    this.postTypes = TYPES;
   },
   computed: {
-    ...mapState('client', ['user']),
+    modelDialogVisible: {
+      get() {
+        return this.dialogVisible;
+      },
+      set(value) {
+        this.clearDialog();
+        this.$emit('triggerDialog', value);
+      },
+    },
     imagePaths() {
       return this.info.images.map(img => URL.createObjectURL(img));
     },
   },
   methods: {
-    loading() {
-      const loading = ElLoading.service({
-        text: 'Loading',
-        background: 'rgba(0, 0, 0, 0.7)',
-      });
-      if (this.dataReady) {
-        loading.close();
-      }
-    },
+    dateTimeFormatter,
     setupData() {
-      this.getProvinces();
-      this.getCatalogs();
-      this.postTargets = TARGETS;
-      this.postTypes = TYPES;
-      this.info.user_id = this.user.id;
-      this.additionalInfo.username = this.user.username;
-      this.additionalInfo.phoneNumber = this.user.phone_number;
+      this.info.title = this.post.title;
+      this.info.description = this.post.description;
+      this.info.price = this.post.price;
+      this.info.deposit = this.post.deposit;
+      this.info.target = this.post.target;
+      if (this.post.type) this.info.type = this.post.type;
+      this.info.acreage = this.post.acreage;
+      this.info.province = this.post.address.province;
+      this.info.district = this.post.address.district;
+      this.info.ward = this.post.address.ward;
+      this.info.specific_address = this.post.address.specific_address;
+      if (this.post.expired_at) this.info.expired_at = this.dateTimeFormatter(this.post.expired_at);
+      this.info.catalog_id = this.post.catalog.id;
+      this.info.username = this.post.user.username;
+      this.info.phone_number = this.post.user.phone_number;
+      this.info.medias = this.post.medias;
+    },
+    clearDialog() {
+      this.info.title = '';
+      this.info.description = '';
+      this.info.price = '';
+      this.info.deposit = '';
+      this.info.target = '';
+      this.info.type = '';
+      this.info.acreage = '';
+      this.info.province = '';
+      this.info.district = '';
+      this.info.ward = '';
+      this.info.specific_address = '';
+      this.info.images = [];
+      this.info.medias = [];
+      this.info.removed_media_ids = [];
+      this.info.expired_at = '';
+      this.info.catalog_id = '';
+      this.info.username = '';
+      this.info.phone_number = '';
+    },
+    closeDialog() {
+      this.clearDialog();
+      this.modelDialogVisible = false;
     },
     selectImage() {
       this.$refs.imgInput.click();
     },
     dragover(e) {
       e.preventDefault();
-      this.imageHandler.isDragging = true;
+      this.isDragging = true;
     },
     dragleave() {
-      this.imageHandler.isDragging = false;
+      this.isDragging = false;
     },
     drop(e) {
       e.preventDefault();
       this.$refs.imgInput.files = e.dataTransfer.files;
       this.pickImage();
-      this.imageHandler.isDragging = false;
+      this.isDragging = false;
     },
     pickImage() {
       let files = this.$refs.imgInput.files;
@@ -368,15 +446,13 @@ export default {
     delImage(index) {
       this.info.images.splice(index, 1);
     },
+    delOriginalImage(index, media) {
+      this.info.medias.splice(index, 1);
+      this.info.removed_media_ids.push(media.id);
+    },
     handlePictureCardPreview(path) {
       this.imageHandler.dialogImageUrl = path;
       this.imageHandler.dialogVisible = true;
-    },
-    async getCatalogs() {
-      const res = await CatalogService.getCatalogs();
-      if (res.status === 200) {
-        this.catalogs = res.data;
-      }
     },
     async getProvinces() {
       const res = await AddressService.getProvinces();
@@ -404,11 +480,10 @@ export default {
         !this.info.deposit ||
         !this.info.target ||
         !this.info.acreage ||
-        !this.info.address.province ||
-        !this.info.address.district ||
-        !this.info.address.ward ||
-        !this.info.address.specific_address ||
-        !this.info.images.length ||
+        !this.info.province ||
+        !this.info.district ||
+        !this.info.ward ||
+        !this.info.specific_address ||
         !this.info.catalog_id
       ) {
         return false;
@@ -423,16 +498,18 @@ export default {
       obj.append('deposit', this.info.deposit);
       obj.append('target', this.info.target);
       obj.append('acreage', this.info.acreage);
-      obj.append('province', this.info.address.province);
-      obj.append('district', this.info.address.district);
-      obj.append('ward', this.info.address.ward);
-      obj.append('specific_address', this.info.address.specific_address);
+      obj.append('province', this.info.province);
+      obj.append('district', this.info.district);
+      obj.append('ward', this.info.ward);
+      obj.append('specific_address', this.info.specific_address);
+      this.info.removed_media_ids.forEach(id => obj.append('removed_media_ids', id));
       this.info.images.forEach(image => obj.append('images', image));
-      obj.append('user_id', this.info.user_id);
+      if (this.info.expired_at) obj.append('expired_at', this.info.expired_at);
+      if (this.info.type) obj.append('type', this.info.type);
       obj.append('catalog_id', this.info.catalog_id);
       return obj;
     },
-    async createPost() {
+    async updatePost() {
       if (!this.checkInfo()) {
         this.$store.state.toast.info('Vui lòng nhập đầy đủ thông tin!');
         return;
@@ -440,27 +517,17 @@ export default {
 
       const obj = this.createFormData();
 
-      this.loading();
-      this.dataReady = false;
-
-      const res = await PostService.createPost(obj);
+      const res = await PostService.updatePost(this.post.id, obj);
       if (res.status === 200) {
-        this.dataReady = true;
-        this.$router.push('/notify');
+        this.$store.state.toast.success('Chỉnh sửa tin đăng thành công!');
+        this.closeDialog();
+        this.getPosts();
       } else {
         this.$store.state.toast.error('Có lỗi xảy ra!');
-        this.dataReady = true;
-      }
-    },
-  },
-  watch: {
-    dataReady() {
-      if (this.dataReady) {
-        this.loading();
       }
     },
   },
 };
 </script>
 
-<style scoped src="@/assets/styles/client/create_post.css"></style>
+<style src="@/assets/styles/admin/dialog.css"></style>

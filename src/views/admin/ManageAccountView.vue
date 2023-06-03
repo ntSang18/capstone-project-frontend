@@ -193,8 +193,8 @@
 
 <script>
 import UserService from '@/services/UserService';
-import CreateUserDialog from '@/components/admin/CreateUserDialog';
-import ViewUserDialog from '@/components/admin/ViewUserDialog';
+import CreateUserDialog from '@/components/admin/user/CreateUserDialog';
+import ViewUserDialog from '@/components/admin/user/ViewUserDialog';
 import { dateFormatter } from '@/utils/dateFormatter';
 export default {
   props: {

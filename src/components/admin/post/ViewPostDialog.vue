@@ -68,7 +68,7 @@
             </div>
             <div class="inp-group">
               <label>Nội dung mô tả</label>
-              <span class="info">{{ post.description }}</span>
+              <span class="info description">{{ post.description }}</span>
             </div>
             <div class="inp-group half">
               <label>Thông tin liên hệ</label>
@@ -111,7 +111,11 @@
         </div>
       </section>
 
-      <section id="post-advance" class="create-section half">
+      <section
+        v-if="post.status === 'PUBLIC' || post.status === 'EXPIRED'"
+        id="post-advance"
+        class="create-section half"
+      >
         <div class="left">
           <h2 class="sub-title">Thông tin nâng cao</h2>
           <div class="inp-group half">

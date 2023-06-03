@@ -42,6 +42,7 @@ import AuthService from '@/services/AuthService';
 import UserService from '@/services/UserService';
 import { mapActions } from 'vuex';
 import { ROLES } from '@/common/roles';
+import { ElLoading } from 'element-plus';
 export default {
   data() {
     return {
@@ -51,10 +52,20 @@ export default {
         role: ROLES.USER,
       },
       error: '',
+      dataReady: false,
     };
   },
   methods: {
     ...mapActions('client', ['setToken', 'setUser']),
+    loading() {
+      const loading = ElLoading.service({
+        text: 'Loading',
+        background: 'rgba(0, 0, 0, 0.7)',
+      });
+      if (this.dataReady) {
+        loading.close();
+      }
+    },
     checkInfo() {
       this.error = '';
       if (!validateEmail(this.info.email)) {
@@ -70,6 +81,8 @@ export default {
       if (!this.checkInfo()) {
         return;
       }
+      this.loading();
+      this.dataReady = false;
       const res = await AuthService.login(this.info);
       if (res.status === 200) {
         await this.setToken(res.data);
@@ -80,11 +93,15 @@ export default {
         this.$router.push('/');
       } else if (res.response.status === 423) {
         this.$store.state.toast.error('Tài khoản đã bị khóa!');
+        this.dataReady = true;
       } else {
         this.$store.state.toast.error('Email hoặc mật khẩu chưa chính xác!');
+        this.dataReady = true;
       }
     },
     async signInWithGoogle(response) {
+      this.loading();
+      this.dataReady = false;
       const data = {
         token: response.credential,
       };
@@ -98,8 +115,17 @@ export default {
         this.$router.push('/');
       } else if (res.response.status === 423) {
         this.$store.state.toast.error('Tài khoản đã bị khóa!');
+        this.dataReady = true;
       } else {
         this.$store.state.toast.error('Có lỗi xảy ra!');
+        this.dataReady = true;
+      }
+    },
+  },
+  watch: {
+    dataReady() {
+      if (this.dataReady) {
+        this.loading();
       }
     },
   },

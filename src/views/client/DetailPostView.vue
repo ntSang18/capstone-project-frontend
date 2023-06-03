@@ -44,12 +44,12 @@
                   <i class="bx bx-area"></i>
                   <span>{{ post.detail.acreage }}m²</span>
                 </div>
-                <div class="attribute-item time">
+                <div v-if="post.detail.paid_at" class="attribute-item time">
                   <i class="bx bx-time"></i>
                   <span>{{ diffTime(post.detail.paid_at) }}</span>
                 </div>
               </div>
-              <div class="post-action">
+              <div v-if="post.detail.status === 'PUBLIC'" class="post-action">
                 <div class="action-item share">
                   <i class="bx bx-share bx-flip-horizontal"></i>
                   <span>Chia sẻ</span>
@@ -80,8 +80,8 @@
             <table>
               <tbody>
                 <tr>
-                  <td class="name">Khu vực:</td>
-                  <td>{{ post.detail.address.province }}</td>
+                  <td class="name">Mã tin:</td>
+                  <td>#{{ post.detail.id }}</td>
                 </tr>
                 <tr>
                   <td class="name">Loại tin rao:</td>
@@ -103,11 +103,11 @@
                   <td class="name">Gói tin:</td>
                   <td>{{ typeString }}</td>
                 </tr>
-                <tr>
+                <tr v-if="post.detail.paid_at">
                   <td class="name">Ngày đăng:</td>
                   <td>{{ dateFormatter(post.detail.paid_at) }}</td>
                 </tr>
-                <tr>
+                <tr v-if="post.detail.expired_at">
                   <td class="name">Ngày hết hạn:</td>
                   <td>{{ dateFormatter(post.detail.expired_at) }}</td>
                 </tr>

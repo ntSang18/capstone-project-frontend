@@ -62,7 +62,7 @@ const routes = [
         path: '/admin/manage-package',
         name: 'Package Management',
         meta: {
-          title: 'package Management',
+          title: 'Package Management',
         },
         component: ManagePackageView,
       },

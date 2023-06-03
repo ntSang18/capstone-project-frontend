@@ -1,22 +1,22 @@
 const TYPES = [
   {
-    name: 'Vip 1',
+    name: 'Tin Vip 1',
     value: 'VIP_1',
   },
   {
-    name: 'Vip 2',
+    name: 'Tin Vip 2',
     value: 'VIP_2',
   },
   {
-    name: 'Vip 3',
+    name: 'Tin Vip 3',
     value: 'VIP_3',
   },
   {
-    name: 'Vip 4',
+    name: 'Tin Vip 4',
     value: 'VIP_4',
   },
   {
-    name: 'Normal',
+    name: 'Tin thường',
     value: 'NORMAL',
   },
 ];

@@ -39,8 +39,7 @@
               style="width: 100%"
               max-height="1000"
               height="400"
-              cell-class-name="table-cell"
-              header-cell-class-name="table-cell"
+              header-cell-class-name="table-head-cell"
               @selection-change="handleSelectionChangePublic"
               v-loading="loading"
             >
@@ -169,7 +168,11 @@
               <el-table-column fixed="left" prop="id" label="Mã tin" width="90" sortable />
               <el-table-column label="Ảnh đại diện" prop="avatar" width="140">
                 <template #default="scope">
-                  <img :src="scope.row.avatar" class="avatar" />
+                  <img
+                    v-if="scope.row.medias.length"
+                    :src="scope.row.medias[0].url"
+                    class="avatar"
+                  />
                 </template>
               </el-table-column>
               <el-table-column label="Tiêu đề" prop="title" width="300" />
@@ -213,12 +216,7 @@
                       ></el-button>
                     </el-tooltip>
                     <el-tooltip content="Duyệt tin" placement="top" effect="light">
-                      <el-button
-                        size="small"
-                        type="primary"
-                        circle
-                        @click="confirmPost(scope.row.id)"
-                      >
+                      <el-button size="small" type="primary" circle @click="confirmPost(scope.row)">
                         <i class="bx bx-check"></i
                       ></el-button>
                     </el-tooltip>
@@ -342,7 +340,7 @@
                 <template #default="scope">
                   <div class="action-container">
                     <el-tooltip content="Xem chi tiết tin" placement="top" effect="light">
-                      <el-button size="small" @click="openViewPostDialog(scope.row)">
+                      <el-button size="small" circle @click="openViewPostDialog(scope.row)">
                         <i class="bx bx-search-alt"></i
                       ></el-button>
                     </el-tooltip>
@@ -350,6 +348,7 @@
                       <el-button
                         size="small"
                         type="warning"
+                        circle
                         @click="openUpdatePostDialog(scope.row)"
                       >
                         <i class="bx bx-edit-alt"></i
@@ -364,7 +363,7 @@
                       @confirm="deletePost(scope.row.id)"
                     >
                       <template #reference>
-                        <el-button size="small" type="danger"
+                        <el-button size="small" type="danger" circle
                           ><i class="bx bx-trash-alt"></i
                         ></el-button>
                       </template>
@@ -455,7 +454,7 @@
                 <template #default="scope">
                   <div class="action-container">
                     <el-tooltip content="Xem chi tiết tin" placement="top" effect="light">
-                      <el-button size="small" @click="openViewPostDialog(scope.row)">
+                      <el-button size="small" circle @click="openViewPostDialog(scope.row)">
                         <i class="bx bx-search-alt"></i
                       ></el-button>
                     </el-tooltip>
@@ -463,6 +462,7 @@
                       <el-button
                         size="small"
                         type="warning"
+                        circle
                         @click="openUpdatePostDialog(scope.row)"
                       >
                         <i class="bx bx-edit-alt"></i
@@ -477,9 +477,9 @@
                       @confirm="deletePost(scope.row.id)"
                     >
                       <template #reference>
-                        <el-button size="small" type="danger"
-                          ><i class="bx bx-trash-alt"></i
-                        ></el-button>
+                        <el-button size="small" type="danger" circle>
+                          <i class="bx bx-trash-alt"></i>
+                        </el-button>
                       </template>
                     </el-popconfirm>
                   </div>
@@ -716,14 +716,16 @@
 
 <script>
 import { toVnd } from '@/utils/numberFormatter';
+import { isExpired } from '@/utils/isExpired';
 import CatalogService from '@/services/CatalogService';
-import CatalogDialog from '@/components/admin/CatalogDialog';
+import CatalogDialog from '@/components/admin/catalog/CatalogDialog';
 import { dateTimeFormatter } from '@/utils/dateFormatter';
-import CreatePostDialog from '@/components/admin/CreatePostDialog';
-import ViewPostDialog from '@/components/admin/ViewPostDialog';
-import UpdatePostDialog from '@/components/admin/UpdatePostDialog';
-import DenyPostDialog from '@/components/admin/DenyPostDialog';
+import CreatePostDialog from '@/components/admin/post/CreatePostDialog';
+import ViewPostDialog from '@/components/admin/post/ViewPostDialog';
+import UpdatePostDialog from '@/components/admin/post/UpdatePostDialog';
+import DenyPostDialog from '@/components/admin/post/DenyPostDialog';
 import PostService from '@/services/PostService';
+import { database, ref, push } from '@/services/FirebaseService';
 import { STATUS } from '@/common/postStatuses';
 
 export default {
@@ -886,23 +888,9 @@ export default {
   },
 
   methods: {
+    isExpired,
     dateTimeFormatter,
     toVnd,
-    handleSelectionChangePublic(val) {
-      this.idsPicked.public = val;
-    },
-    handleSelectionChangeExpired(val) {
-      this.idsPicked.expired = val;
-    },
-    handleSelectionChangeDenied(val) {
-      this.idsPicked.denied = val;
-    },
-    handleSelectionChangeUnpaid(val) {
-      this.idsPicked.unpaid = val;
-    },
-    handleSelectionChangeUnconfirmed(val) {
-      this.idsPicked.unconfirmed = val;
-    },
     async getCatalogs() {
       const res = await CatalogService.getCatalogs();
       if (res.status === 200) {
@@ -915,51 +903,17 @@ export default {
         });
       }
     },
-    filterCatalog(value, row) {
-      return row.catalog.id === value;
-    },
-    triggerCatalogDialog(value) {
-      this.dialogVisible.catalog = value;
-    },
-    triggerCreatePostDialog(value) {
-      this.dialogVisible.createPost = value;
-    },
-    triggerViewPostDialog(value) {
-      this.dialogVisible.viewPost = value;
-    },
-    triggerUpdatePostDialog(value) {
-      this.dialogVisible.updatePost = value;
-    },
-    triggerDenyPostDialog(value) {
-      this.dialogVisible.denyPost = value;
-    },
-    openDenyPostDialog(item) {
-      this.post.dialogPost = item;
-      this.triggerDenyPostDialog(true);
-    },
-    openCreateCatalogDialog() {
-      this.catalog.catalog = null;
-      this.triggerCatalogDialog(true);
-    },
-    openUpdateCatalogDialog(item) {
-      this.catalog.catalog = item;
-      this.triggerCatalogDialog(true);
-    },
-    openViewPostDialog(post) {
-      this.post.dialogPost = post;
-      this.triggerViewPostDialog(true);
-    },
-    openUpdatePostDialog(post) {
-      this.post.dialogPost = post;
-      this.triggerUpdatePostDialog(true);
-    },
     async getPosts() {
       this.loading = true;
       const res = await PostService.getPosts();
       if (res.status === 200) {
         this.post.all = res.data;
-        this.post.public.list = this.post.all.filter(post => post.status === STATUS.PUBLIC);
-        this.post.expired.list = this.post.all.filter(post => post.status === STATUS.EXPiRED);
+        this.post.public.list = this.post.all.filter(
+          post => post.status === STATUS.PUBLIC && !isExpired(post.expired_at),
+        );
+        this.post.expired.list = this.post.all.filter(
+          post => post.status === STATUS.PUBLIC && isExpired(post.expired_at),
+        );
         this.post.denied.list = this.post.all.filter(post => post.status === STATUS.DENIED);
         this.post.unpaid.list = this.post.all.filter(post => post.status === STATUS.UNPAID);
         this.post.unconfirmed.list = this.post.all.filter(
@@ -1004,29 +958,91 @@ export default {
         this.$store.state.toast.error('Xóa bài đăng thất bại!');
       }
     },
-    async confirmPost() {
-      var obj = {
-        ids: this.idsPicked.unconfirmed.map(post => post.id),
-      };
+    async confirmPost(post) {
+      if (!post && !this.idsPicked.unconfirmed.length) {
+        this.$store.state.toast.info('Bạn cần chọn tin để duyệt!');
+        return;
+      }
+      var obj = {};
+      var arrayNotify = [];
+      if (post) {
+        console.log(post);
+        obj.ids = [post.id];
+        arrayNotify = [post];
+      } else {
+        obj.ids = this.idsPicked.unconfirmed.map(post => post.id);
+        arrayNotify = this.idsPicked.unconfirmed;
+      }
+      // var obj = id ? { ids: [id] } : { ids: this.idsPicked.unconfirmed.map(post => post.id) };
       const res = await PostService.confirmPost(obj);
       if (res.status === 200) {
         this.getPosts();
         this.$store.state.toast.success('Xác thực bài đăng thành công!');
+        arrayNotify.forEach(el => {
+          let now = new Date();
+          push(ref(database, `notify-user/${el.user.id}`), {
+            time: now.toISOString(),
+            action: 'confirmed',
+            status: false,
+            message: `Bài đăng #${el.id} đã được duyệt`,
+          });
+        });
       } else {
         this.$store.state.toast.error('Xác thực bài đăng thất bại!');
       }
     },
-    async denyPost() {
-      var obj = {
-        ids: this.idsPicked.unconfirmed.map(post => post.id),
-      };
-      const res = await PostService.denyPost(obj);
-      if (res.status === 200) {
-        this.getPosts();
-        this.$store.state.toast.success('Xác thực bài đăng thành công!');
-      } else {
-        this.$store.state.toast.error('Xác thực bài đăng thất bại!');
-      }
+    handleSelectionChangePublic(val) {
+      this.idsPicked.public = val;
+    },
+    handleSelectionChangeExpired(val) {
+      this.idsPicked.expired = val;
+    },
+    handleSelectionChangeDenied(val) {
+      this.idsPicked.denied = val;
+    },
+    handleSelectionChangeUnpaid(val) {
+      this.idsPicked.unpaid = val;
+    },
+    handleSelectionChangeUnconfirmed(val) {
+      this.idsPicked.unconfirmed = val;
+    },
+    filterCatalog(value, row) {
+      return row.catalog.id === value;
+    },
+    triggerCatalogDialog(value) {
+      this.dialogVisible.catalog = value;
+    },
+    triggerCreatePostDialog(value) {
+      this.dialogVisible.createPost = value;
+    },
+    triggerViewPostDialog(value) {
+      this.dialogVisible.viewPost = value;
+    },
+    triggerUpdatePostDialog(value) {
+      this.dialogVisible.updatePost = value;
+    },
+    triggerDenyPostDialog(value) {
+      this.dialogVisible.denyPost = value;
+    },
+    openDenyPostDialog(item) {
+      this.post.dialogPost = item;
+      this.triggerDenyPostDialog(true);
+    },
+    openCreateCatalogDialog() {
+      this.catalog.catalog = null;
+      this.triggerCatalogDialog(true);
+    },
+    openUpdateCatalogDialog(item) {
+      this.catalog.catalog = item;
+      this.triggerCatalogDialog(true);
+    },
+    openViewPostDialog(post) {
+      this.post.dialogPost = post;
+      this.triggerViewPostDialog(true);
+    },
+    openUpdatePostDialog(post) {
+      this.post.dialogPost = post;
+      this.triggerUpdatePostDialog(true);
     },
   },
 };

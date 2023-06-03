@@ -14,3 +14,28 @@
 .action-container button {
   margin: 2px 0px;
 }
+
+.table-head-cell {
+  color: #333;
+}
+
+.title-container {
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.title-container p {
+  overflow: hidden;
+  display: -webkit-box;
+  word-break: break-word;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  cursor: pointer;
+  color: #055699;
+}
+
+.title-container p:hover {
+  text-decoration: underline;
+}

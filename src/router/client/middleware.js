@@ -3,7 +3,6 @@ import store from '@/store/index';
 const loggedLinkNames = [
   'User Information',
   'Post Management',
-  'Saved Post',
   'Payment',
   'Payment Method',
   'Payment History',

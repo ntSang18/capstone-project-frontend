@@ -265,6 +265,7 @@ import PostService from '@/services/PostService';
 import { TYPE } from '@/common/postTypes.js';
 import { PRICE_RANGE } from '@/common/filterPriceRange';
 import { ACREAGE_RANGE } from '@/common/filterAcreageRange';
+import { ElLoading } from 'element-plus';
 
 export default {
   components: {
@@ -315,9 +316,11 @@ export default {
         },
       },
       isDefaultSort: true,
+      dataReady: false,
     };
   },
   mounted() {
+    this.loading();
     this.priceRange = PRICE_RANGE;
     this.acreageRange = ACREAGE_RANGE;
     this.getCatalogs();
@@ -382,23 +385,37 @@ export default {
   },
   methods: {
     toVndString,
+    loading() {
+      const loading = ElLoading.service({
+        text: 'Loading',
+        background: 'rgba(0, 0, 0, 0.7)',
+      });
+      if (this.dataReady) {
+        loading.close();
+      }
+    },
     async getCatalogs() {
       const res = await CatalogService.getCatalogs();
       if (res.status === 200) {
         this.catalog.list = res.data;
+      } else {
+        this.dataReady = true;
       }
     },
     async getPublicPosts() {
       const res = await PostService.getPublicPosts();
       if (res.status === 200) {
         this.post.list = res.data;
-        this.post.newest = res.data.sort((a, b) => new Date(a.paid_at) - new Date(b.paid_at));
+        this.post.newest = res.data.sort((a, b) => new Date(b.paid_at) - new Date(a.paid_at));
         if (this.post.newest.length > 10) {
           this.post.newest = this.post.newest.slice(0, 10);
         }
         this.post.filter = this.post.list;
         this.post.pagination.total = this.post.list.length;
         this.defaultSort();
+        this.dataReady = true;
+      } else {
+        this.dataReady = true;
       }
     },
     filterPosts() {
@@ -432,6 +449,11 @@ export default {
         }
       }
       this.post.filter = filterList;
+      if (this.isDefaultSort) {
+        this.defaultSort();
+      } else {
+        this.newestSort();
+      }
     },
     setLocation(location) {
       this.filter.address.province = location;
@@ -464,7 +486,7 @@ export default {
     },
     newestSort() {
       this.isDefaultSort = false;
-      this.post.filter.sort((a, b) => new Date(a.paid_at) - new Date(b.paid_at));
+      this.post.filter.sort((a, b) => new Date(b.paid_at) - new Date(a.paid_at));
     },
     triggerCatalogDialog(value) {
       this.dialogVisible.catalog = value;
@@ -501,6 +523,11 @@ export default {
     },
     activeFilterAcreage() {
       this.filter.acreage.isActive = true;
+    },
+  },
+  watch: {
+    dataReady() {
+      this.loading();
     },
   },
 };

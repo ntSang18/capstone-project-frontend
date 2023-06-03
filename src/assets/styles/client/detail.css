@@ -45,6 +45,18 @@
 #post-header .post-title.vip-1 {
   color: #E13427;
 }
+#post-header .post-title.vip-2 {
+  color: #EA2E9D;
+}
+#post-header .post-title.vip-3 {
+  color: #FF6600;
+}
+#post-header .post-title.vip-4 {
+  color: #3763e0;
+}
+#post-header .post-title.normal {
+  color: #055699;
+}
 
 #post-header .post-title .stars {
   display: inline-block;

@@ -17,6 +17,15 @@ class PostService {
     }
   }
 
+  async getPersonalPosts() {
+    try {
+      const res = await instance(jsonContentType).get(`${this.entity}/personal`);
+      return res;
+    } catch (err) {
+      return err;
+    }
+  }
+
   async getPublicPosts() {
     try {
       const res = await instance(jsonContentType).get(`${this.entity}/public`);
@@ -38,6 +47,15 @@ class PostService {
   async createPublicPost(obj) {
     try {
       const res = await instance(formContentType).post(`${this.entity}/create-public`, obj);
+      return res;
+    } catch (err) {
+      return err;
+    }
+  }
+
+  async createPost(obj) {
+    try {
+      const res = await instance(formContentType).post(`${this.entity}`, obj);
       return res;
     } catch (err) {
       return err;

@@ -125,6 +125,7 @@
 import { mapActions, mapState } from 'vuex';
 import AddressService from '@/services/AddressService';
 import UserService from '@/services/UserService';
+import { ElLoading } from 'element-plus';
 export default {
   data() {
     return {
@@ -144,6 +145,7 @@ export default {
       districts: [],
       wards: [],
       avatarUrl: '',
+      dataReady: false,
     };
   },
   mounted() {
@@ -155,6 +157,15 @@ export default {
   },
   methods: {
     ...mapActions('client', ['setUser']),
+    loading() {
+      const loading = ElLoading.service({
+        text: 'Loading',
+        background: 'rgba(0, 0, 0, 0.7)',
+      });
+      if (this.dataReady) {
+        loading.close();
+      }
+    },
     getInfo() {
       this.info.id = this.user.id;
       this.info.email = this.user.email;
@@ -208,6 +219,8 @@ export default {
         this.$store.state.toast.error('Tên không được trống!');
         return;
       }
+      this.loading();
+      this.dataReady = false;
 
       const obj = new FormData();
       obj.append('phone_number', this.info.phone_number);
@@ -225,10 +238,19 @@ export default {
         this.setUser(res.data);
         this.getInfo();
         this.info.image = null;
+        this.dataReady = true;
       } else {
         this.$store.state.toast.error('Cập nhật thông tin thất bại!');
         this.getInfo();
         this.info.image = null;
+        this.dataReady = true;
+      }
+    },
+  },
+  watch: {
+    dataReady() {
+      if (this.dataReady) {
+        this.loading();
       }
     },
   },

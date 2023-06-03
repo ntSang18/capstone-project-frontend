@@ -19,6 +19,7 @@ import PaymentHistoryView from '@/views/client/PaymentHistoryView';
 import PurchaseHistoryView from '@/views/client/PurchaseHistoryView';
 import AccountSettingView from '@/views/client/AccountSettingView';
 import CreatePostView from '@/views/client/CreatePostView';
+import NotificationView from '@/views/client/NotificationView';
 
 const routes = [
   {
@@ -166,6 +167,14 @@ const routes = [
         component: CreatePostView,
       },
     ],
+  },
+  {
+    path: '/notify',
+    name: 'Notification',
+    meta: {
+      title: 'Notification',
+    },
+    component: NotificationView,
   },
 ];
 

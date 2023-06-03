@@ -8,109 +8,260 @@
     </section>
 
     <section id="content" class="section">
-      <h1 class="title">Quản lý tin đăng</h1>
+      <h1 class="title">Quản lý tin đăng ({{ post.list.length }} tin)</h1>
       <div class="table-content">
-        <el-table :data="filterTableData" style="width: 100%" :border="true" max-height="500">
-          <el-table-column label="Mã tin" prop="id" width="80" sortable fixed="left" />
+        <el-table
+          :data="postPage"
+          stripe
+          :default-sort="{ prop: 'id' }"
+          max-height="1000"
+          style="width: 100%"
+          :border="true"
+        >
+          <el-table-column label="Mã tin" prop="id" width="90" sortable fixed="left" />
           <el-table-column label="Ảnh đại diện" prop="avatar" width="140">
             <template #default="scope">
-              <img :src="scope.row.avatar" class="avatar" />
+              <img v-if="scope.row.medias.length" :src="scope.row.medias[0].url" class="avatar" />
             </template>
           </el-table-column>
-          <el-table-column label="Tiêu đề" prop="title" width="300" />
+          <el-table-column label="Tiêu đề" prop="title" width="300">
+            <template #default="scope">
+              <div class="title-container">
+                <p @click="viewDetailsPost(scope.row.id)">{{ scope.row.title }}</p>
+                <div class="btn-group">
+                  <el-tooltip
+                    v-if="scope.row.status !== 'UNCONFIRMED' && scope.row.status !== 'DENIED'"
+                    :content="scope.row.status === 'UNPAID' ? 'Thanh toán tin' : 'Gia hạn tin'"
+                    placement="top"
+                    effect="light"
+                  >
+                    <el-button
+                      type="primary"
+                      size="small"
+                      circle
+                      @click="openPostPaymentDialog(scope.row)"
+                    >
+                      <i class="bx bx-purchase-tag"></i>
+                    </el-button>
+                  </el-tooltip>
+                  <el-tooltip content="Chỉnh sửa tin" placement="top" effect="light">
+                    <el-button
+                      type="warning"
+                      size="small"
+                      circle
+                      @click="openUpdatePostDialog(scope.row)"
+                    >
+                      <i class="bx bx-edit-alt"></i>
+                    </el-button>
+                  </el-tooltip>
+                  <el-tooltip
+                    v-if="scope.row.status === 'DENIED'"
+                    content="Lý do bị từ chối"
+                    placement="top"
+                    effect="light"
+                  >
+                    <el-button size="small" circle @click="openRefuseReasonDialog(scope.row)">
+                      <i class="bx bx-show"></i>
+                    </el-button>
+                  </el-tooltip>
+                  <el-popconfirm
+                    width="200"
+                    confirm-button-type="danger"
+                    confirm-button-text="Xác nhận"
+                    cancel-button-text="Hủy"
+                    title="Xác nhận xóa tin này?"
+                    @confirm="deletePost(scope.row.id)"
+                  >
+                    <template #reference>
+                      <el-button size="small" type="danger" circle>
+                        <i class="bx bx-trash-alt"></i>
+                      </el-button>
+                    </template>
+                  </el-popconfirm>
+                </div>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column label="Giá" prop="price" sortable width="120">
             <template #default="scope">
-              <span>{{ toVnd(scope.row.price) }}</span>
+              <span>{{ toVndString(scope.row.price) }}/tháng</span>
             </template>
           </el-table-column>
-          <el-table-column label="Ngày bắt đầu" prop="start" sortable width="180" />
-          <el-table-column label="Ngày kết thúc" prop="end" sortable width="180" />
           <el-table-column
             label="Trạng thái"
             prop="status"
             width="150"
-            :filters="[
-              { text: 'Đang hiển thị', value: 'publish' },
-              { text: 'Hết hạn', value: 'expired' },
-              { text: 'Đang ẩn', value: 'hidden' },
-            ]"
+            :filters="labelStatus"
             :filter-method="filterTag"
             filter-placement="bottom"
           >
             <template #default="scope">
-              <el-tag>{{ scope.row.status }}</el-tag>
+              <el-tag effect="dark" round :type="statusType(scope.row)">
+                {{ statusString(scope.row) }}
+              </el-tag>
             </template>
           </el-table-column>
-          <el-table-column fixed="right" width="200">
-            <template #header>
-              <el-input v-model="search" size="small" placeholder="Type to search" />
-            </template>
+          <el-table-column label="Ngày bắt đầu" prop="start" sortable width="180">
             <template #default="scope">
-              <div class="action-container">
-                <el-button size="small" type="info" @click="handleEdit(scope.$index, scope.row)"
-                  >Xem</el-button
-                >
-                <el-button size="small" type="warning" @click="handleEdit(scope.$index, scope.row)"
-                  >Sửa</el-button
-                >
-                <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)"
-                  >Xóa</el-button
-                >
-                <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)"
-                  >Xóa</el-button
-                >
-              </div>
+              <span v-if="scope.row.paid_at">{{ dateTimeFormatter(scope.row.paid_at) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="Ngày kết thúc" prop="end" sortable width="180">
+            <template #default="scope">
+              <span v-if="scope.row.expired_at">{{ dateTimeFormatter(scope.row.expired_at) }}</span>
             </template>
           </el-table-column>
         </el-table>
       </div>
     </section>
   </div>
+
+  <post-payment-dialog
+    :post="post.dialogPost"
+    :dialogVisible="dialogVisible.postPayment"
+    @triggerDialog="triggerPostPaymentDialog"
+    :getPosts="getPosts"
+  />
+
+  <refuse-reason-dialog
+    :post="post.dialogPost"
+    :dialogVisible="dialogVisible.refuseReason"
+    @triggerDialog="triggerRefuseReasonDialog"
+  />
+
+  <update-post-dialog
+    :dialogVisible="dialogVisible.updatePost"
+    :post="post.dialogPost"
+    @triggerDialog="triggerUpdatePostDialog"
+    :getPosts="getPosts"
+  />
 </template>
 
 <script>
-import { toVnd } from '@/utils/numberFormatter';
+import { toVndString } from '@/utils/numberFormatter';
+import PostService from '@/services/PostService';
+import { dateTimeFormatter } from '@/utils/dateFormatter';
+import { isExpired } from '@/utils/isExpired';
+import { STATUS, LABEL_STATUS } from '@/common/postStatuses';
+import PostPaymentDialog from '@/components/client/manage/PostPaymentDialog';
+import RefuseReasonDialog from '@/components/client/manage/RefuseReasonDialog';
+import UpdatePostDialog from '@/components/client/manage/UpdatePostDialog';
 export default {
+  components: {
+    PostPaymentDialog,
+    RefuseReasonDialog,
+    UpdatePostDialog,
+  },
   data() {
     return {
-      tableData: [
-        {
-          id: 1,
-          avatar: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg',
-          title: 'cho thuê Ký Túc Xá giá 1.5tr bao điện nước',
-          price: 1500000,
-          start: '2023-05-02',
-          end: '2023-05-07',
-          status: 'publish',
-        },
-        {
-          id: 2,
-          avatar: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg',
-          title: 'cho thuê Ký Túc Xá giá 1.5tr bao điện nước',
-          price: 1500000,
-          start: '2023-05-02',
-          end: '2023-05-07',
-          status: 'expired',
-        },
-        {
-          id: 3,
-          avatar: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg',
-          title: 'cho thuê Ký Túc Xá giá 1.5tr bao điện nước',
-          price: 1500000,
-          start: '2023-05-02',
-          end: '2023-05-07',
-          status: 'hidden',
-        },
-      ],
+      post: {
+        list: [],
+        dialogPost: null,
+      },
+      pagination: {
+        size: 20,
+        total: 10,
+        page: 1,
+      },
+      dialogVisible: {
+        postPayment: false,
+        refuseReason: false,
+        updatePost: false,
+      },
+      labelStatus: [],
     };
   },
+  mounted() {
+    this.getPosts();
+    this.labelStatus = LABEL_STATUS;
+  },
   computed: {
-    filterTableData() {
-      return this.tableData;
+    postPage() {
+      const startIndex = (this.pagination.page - 1) * this.pagination.size;
+      const endIndex = this.pagination.page * this.pagination.size;
+      return this.post.list.slice(startIndex, endIndex);
     },
   },
   methods: {
-    toVnd,
+    toVndString,
+    isExpired,
+    viewDetailsPost(id) {
+      this.$router.push(`/post/${id}`);
+    },
+    dateTimeFormatter,
+    async getPosts() {
+      const res = await PostService.getPersonalPosts();
+      if (res.status === 200) {
+        this.post.list = res.data;
+        this.pagination.total = this.post.list.length;
+      }
+    },
+    async deletePost(id) {
+      const obj = {
+        ids: [id],
+      };
+      const res = await PostService.deletePost(obj);
+      if (res.status === 200) {
+        this.getPosts();
+        this.$store.state.toast.success('Xóa tin thành công!');
+      } else {
+        this.$store.state.toast.error('Xóa tin thất bại!');
+      }
+    },
+    statusString(post) {
+      var status = '';
+      if (post.status === STATUS.PUBLIC && this.isExpired(post.expired_at)) {
+        status = STATUS.EXPIRED;
+      } else {
+        status = post.status;
+      }
+      var label = this.labelStatus.find(ls => ls.value === status);
+      return label.text;
+    },
+    statusType(post) {
+      if (post.status === STATUS.PUBLIC) {
+        if (this.isExpired(post.expired_at)) {
+          return 'info';
+        } else {
+          return 'primary';
+        }
+      } else if (post.status === STATUS.UNPAID) {
+        return 'success';
+      } else if (post.status === STATUS.DENIED) {
+        return 'danger';
+      } else {
+        return 'warning';
+      }
+    },
+    filterTag(value, row) {
+      if (value === STATUS.EXPIRED) {
+        if (row.status === STATUS.PUBLIC && isExpired(row.expired_at)) {
+          return true;
+        } else return false;
+      }
+      return row.status === value;
+    },
+    triggerPostPaymentDialog(value) {
+      this.dialogVisible.postPayment = value;
+    },
+    openPostPaymentDialog(post) {
+      this.post.dialogPost = post;
+      this.triggerPostPaymentDialog(true);
+    },
+    triggerRefuseReasonDialog(value) {
+      this.dialogVisible.refuseReason = value;
+    },
+    openRefuseReasonDialog(post) {
+      this.post.dialogPost = post;
+      this.triggerRefuseReasonDialog(true);
+    },
+    triggerUpdatePostDialog(value) {
+      this.dialogVisible.updatePost = value;
+    },
+    openUpdatePostDialog(post) {
+      this.post.dialogPost = post;
+      this.triggerUpdatePostDialog(true);
+    },
   },
 };
 </script>

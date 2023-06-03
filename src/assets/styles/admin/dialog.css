@@ -342,8 +342,10 @@
   background-color: var(--grey);
   color: var(--dark);
   font-size: 14px;
-  padding: 8px;
+  padding: 4px 8px;
   border-radius: 5px;
+  line-height: 2;
+  white-space: pre-wrap;
 }
 
 #view-post-dialog .inp-group.half {
@@ -358,25 +360,23 @@
 
 #update-post-dialog .dialog-body .form-img .original-media-container {
   width: 100%;
-  padding: 12px;
   background: var(--grey);
   border: 1px dashed var(--dark-grey);
   margin-top: 10px;
   border-radius: 6px;
   color: var(--dark);
-  max-height: 400px;
-  overflow-y: auto;
   margin-bottom: 10px;
 }
 
+#update-post-dialog .dialog-body .form-img .original-media-container h3 {
+  padding: 12px 12px 0px;
+}
+
 #update-post-dialog .dialog-body .form-img .original-media-container .img-upload-container {
-  width: 100%;
-  padding: 0px;
+  padding-top: 0px;
   border: none;
-  margin-top: 10px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 15px;
-  max-height: 400px;
-  overflow-y: auto;
+}
+
+#package-dialog .inp-group {
+  margin-bottom: 15px;
 }

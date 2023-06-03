@@ -77,6 +77,7 @@
 <script>
 import AuthService from '@/services/AuthService';
 import { MESSAGES } from '@/common/message';
+import { ElLoading } from 'element-plus';
 export default {
   data() {
     return {
@@ -88,9 +89,19 @@ export default {
       night: false,
       status: false,
       error: '',
+      dataReady: false,
     };
   },
   methods: {
+    loading() {
+      const loading = ElLoading.service({
+        text: 'Loading',
+        background: 'rgba(0, 0, 0, 0.7)',
+      });
+      if (this.dataReady) {
+        loading.close();
+      }
+    },
     checkFormInfo() {
       this.error = '';
       if (this.info.newPassword.length < 8) {
@@ -105,12 +116,14 @@ export default {
     clearForm() {
       this.info.currentPassword = '';
       this.info.newPassword = '';
-      this.repeatNewPassword = '';
+      this.info.repeatNewPassword = '';
     },
     async changePassword() {
       if (!this.checkFormInfo()) {
         return;
       }
+      this.loading();
+      this.dataReady = false;
       const obj = {
         current_password: this.info.currentPassword,
         new_password: this.info.newPassword,
@@ -119,8 +132,17 @@ export default {
       if (res.status === 200) {
         this.$store.state.toast.success('Thay đổi mật khẩu thannhf công!');
         this.clearForm();
+        this.dataReady = true;
       } else {
         this.$store.state.toast.error('Thay đổi mật khẩu thất bại!');
+        this.dataReady = true;
+      }
+    },
+  },
+  watch: {
+    dataReady() {
+      if (this.dataReady) {
+        this.loading();
       }
     },
   },
