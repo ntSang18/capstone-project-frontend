@@ -1,5 +1,6 @@
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 module.exports = {
+  lintOnSave: false,
   outputDir: '../dist',
   assetsDir: './static',
   productionSourceMap: false,
