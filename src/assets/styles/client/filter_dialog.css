@@ -1,0 +1,139 @@
+@import url(./common.css);
+
+.el-dialog__header,
+.el-dialog__body,
+.el-dialog__footer {
+  margin-right: 0px !important;
+  padding: 0 !important;
+}
+
+.filter-dialog {
+  border-radius: 10px !important;
+}
+
+.filter-dialog .dialog-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333;
+  position: relative;
+  border-bottom: 1px solid #ddd;
+  height: 45px;
+}
+
+.filter-dialog .dialog-header .dialog-title {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.filter-dialog .dialog-header i {
+  position: absolute;
+  top: 10px;
+  left: 8px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.filter-dialog .dialog-body {
+  padding: 10px 25px;
+  height: 68vh !important;
+  overflow-y: auto !important;
+}
+.filter-dialog .dialog-body {
+  padding: 10px 40px;
+}
+
+.filter-dialog .dialog-body .list-radio {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.filter-dialog .dialog-body .list-radio .radio-item {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 12px 0px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.filter-dialog .dialog-body .list-radio .radio-item input {
+  cursor: pointer;
+  accent-color: #3C91E6;
+}
+
+.filter-dialog .dialog-body .list-radio .radio-item span {
+  margin-left: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.filter-dialog .dialog-body .list-radio .radio-item:hover {
+  color: #3C91E6;
+}
+
+.filter-dialog .dialog-body .price-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: #3C91E6;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0px;
+}
+
+.filter-dialog .dialog-body .slider-block {
+  margin-bottom: 30px;
+}
+
+.filter-dialog .dialog-body .sub-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.filter-dialog .dialog-body .list-range {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.filter-dialog .dialog-body .list-range .range-item {
+  padding: 5px 0px;
+  width: 100%;
+  min-width: 0;
+  border-radius: 4px;
+  background-color: #F1F1F1;
+  text-align: center;
+  color: #000;
+  font-size: 14px;
+  cursor: pointer;
+  overflow: hidden;
+  white-space:nowrap;
+  text-overflow: ellipsis;
+}
+
+.filter-dialog .dialog-footer {
+  width: 100%;
+  height: 50px;
+}
+
+.filter-dialog .dialog-footer button {
+  border: none;
+  outline: none;
+  color: #000;
+  background-color: orange;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+

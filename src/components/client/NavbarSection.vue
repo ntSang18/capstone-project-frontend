@@ -8,25 +8,69 @@
       </div>
       <ul class="nav">
         <li>
-          <router-link to="/">
+          <router-link to="/analysis">
             <i class="bx bx-bar-chart-alt"></i>
             <span data-replace="Quản lý tin">Biểu đồ giá</span>
           </router-link>
         </li>
-        <li>
-          <router-link to="/">
-            <i class="bx bx-chat"></i>
-            <span>Chat</span>
-          </router-link>
+        <li v-if="user">
+          <el-dropdown class="drop-down-btn" trigger="click" max-height="80vh" placement="bottom">
+            <a v-if="countNotifyUnread">
+              <el-badge :value="countNotifyUnread" :max="9">
+                <i class="bx bx-bell"></i>
+              </el-badge>
+              <span>Thông báo</span>
+            </a>
+            <a v-else>
+              <i class="bx bx-bell"></i>
+              <span>Thông báo</span>
+            </a>
+            <template #dropdown>
+              <div class="drop-down notify">
+                <div class="drop-down-header">
+                  <h2 class="drop-down-title">Thông báo</h2>
+                  <div class="drop-down-operations">
+                    <button :class="filterStatus ? 'active' : ''" @click="this.filterStatus = true">
+                      Tất cả
+                    </button>
+                    <button
+                      :class="filterStatus ? '' : 'active'"
+                      @click="this.filterStatus = false"
+                    >
+                      Chưa đọc
+                    </button>
+                  </div>
+                </div>
+                <ul class="list-notify">
+                  <li
+                    v-for="(item, index) in listNotify"
+                    :key="index"
+                    class="notify-item"
+                    @click="changeStatusNotify(item)"
+                  >
+                    <div class="item-header">
+                      <i
+                        v-if="item[1].action === 'confirmed'"
+                        class="bx bxs-check-square confirmed"
+                      ></i>
+                      <i v-else class="bx bxs-x-square"></i>
+                      <h3 v-if="item[1].action === 'confirmed'">Tin đã được duyệt</h3>
+                      <h3 v-else>Tin đã bị từ chối</h3>
+                      <div :class="item[1].status ? 'dot' : 'dot unread'"></div>
+                    </div>
+                    <p>{{ item[1].message }}</p>
+                    <div class="time">
+                      <i class="bx bx-time"></i>
+                      <span>{{ diffTime(item[1].time) }}</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </template>
+          </el-dropdown>
         </li>
         <li>
-          <router-link to="/">
-            <i class="bx bx-bell"></i>
-            <span>Thông báo</span>
-          </router-link>
-        </li>
-        <li>
-          <el-dropdown trigger="click" max-height="80vh" placement="bottom-end">
+          <el-dropdown class="drop-down-btn" trigger="click" max-height="80vh" placement="bottom">
             <a>
               <i class="bx bx-user-circle"></i>
               <span>Tài khoản</span>
@@ -37,7 +81,7 @@
                 <div v-if="user" class="drop-down-header">
                   <div class="user-info">
                     <div class="img-container">
-                      <img v-if="user.image" src="user.image" />
+                      <img v-if="user.image_url" :src="user.image_url" />
                       <img v-else src="@/assets/images/default/user.png" />
                     </div>
                     <div class="info-content">
@@ -55,8 +99,7 @@
                     <div class="container">
                       <h4>Số dư</h4>
                       <div class="balance">
-                        <strong>{{ user.balance }}</strong>
-                        <img src="@/assets/images/icon/gold.png" />
+                        <strong>{{ toVnd(user.balance) }}</strong>
                       </div>
                     </div>
                   </div>
@@ -72,22 +115,22 @@
                   <div class="title">
                     <span> Quản lý tài khoản</span>
                   </div>
-                  <router-link :to="user ? '/info' : '/login'" class="action-item">
+                  <router-link to="/info" class="action-item">
                     <img src="@/assets/images/icon/info.png" />
                     <span>Thông tin cá nhân</span>
                   </router-link>
-                  <router-link :to="user ? '/manage' : '/login'" class="action-item">
+                  <router-link to="/manage" class="action-item">
                     <img src="@/assets/images/icon/manage-post.png" />
                     <span>Quản lý tin</span>
                   </router-link>
-                  <router-link :to="user ? '/saved' : '/login'" class="action-item">
+                  <router-link to="/saved" class="action-item">
                     <img src="@/assets/images/icon/post-saved.png" />
                     <span>Tin đã lưu</span>
                   </router-link>
                   <div class="title">
                     <span> Dịch vụ trả phí </span>
                   </div>
-                  <router-link :to="user ? '/payment' : '/login'" class="action-item">
+                  <router-link to="/payment" class="action-item">
                     <img src="@/assets/images/icon/money.png" />
                     <span>Nạp tiền</span>
                   </router-link>
@@ -95,18 +138,18 @@
                     <img src="@/assets/images/icon/price-tag.png" />
                     <span>Bảng giá dịch vụ</span>
                   </router-link>
-                  <router-link :to="user ? '/payment-history' : '/login'" class="action-item">
+                  <router-link to="/payment-history" class="action-item">
                     <img src="@/assets/images/icon/receipt.png" />
                     <span>Lịch sử nạp tiền </span>
                   </router-link>
-                  <router-link :to="user ? '/purchase-history' : '/login'" class="action-item">
+                  <router-link to="/purchase-history" class="action-item">
                     <img src="@/assets/images/icon/payment-history.png" />
                     <span>Lịch sử thanh toán </span>
                   </router-link>
                   <div class="title">
                     <span> Khác </span>
                   </div>
-                  <router-link :to="user ? '/account-setting' : '/login'" class="action-item">
+                  <router-link to="/account-setting" class="action-item">
                     <img src="@/assets/images/icon/setting.png" />
                     <span>Cài đặt tài khoản </span>
                   </router-link>
@@ -128,7 +171,7 @@
           </el-dropdown>
         </li>
         <li>
-          <router-link to="/">
+          <router-link to="/create-post">
             <button>
               <i class="bx bx-edit"></i>
               <span>Đăng tin</span>
@@ -143,19 +186,74 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import AuthService from '@/services/AuthService';
+import { toVnd } from '@/utils/numberFormatter';
+import { diffTime } from '@/utils/dateFormatter';
+import { database, ref, onValue, set, get, child } from '@/services/FirebaseService';
 export default {
   data() {
-    return {};
+    return {
+      notifications: [],
+      firebaseUser: [],
+      countNotifyUnread: 0,
+      filterStatus: true,
+    };
   },
   computed: {
-    ...mapState(['user']),
+    ...mapState('client', ['user']),
+    listNotify() {
+      if (this.filterStatus) {
+        return this.notifications;
+      } else {
+        return this.notifications.filter(notify => !notify[1].status);
+      }
+    },
+  },
+  mounted() {
+    if (this.user) {
+      this.getNotifications();
+      this.getFirebaseUser();
+    }
   },
   methods: {
-    ...mapActions(['clearStore']),
+    ...mapActions('client', ['clearStore']),
+    toVnd,
+    diffTime,
     async logout() {
+      this.setUserOff();
       this.clearStore();
       this.$router.push('/login');
       await AuthService.logout();
+    },
+    async getFirebaseUser() {
+      const snapshot = await get(child(ref(database), 'users'));
+      if (snapshot.exists()) {
+        const firebaseUsers = Object.keys(snapshot.val()).map(key => [key, snapshot.val()[key]]);
+        this.firebaseUser = firebaseUsers.find(el => el[1].id === this.user.id);
+      }
+    },
+    getNotifications() {
+      onValue(ref(database, `notify-user/${this.user.id}`), snapshot => {
+        if (snapshot.exists()) {
+          this.notifications = Object.keys(snapshot.val()).map(key => [key, snapshot.val()[key]]);
+          this.countNotifyUnread = this.notifications.filter(notify => !notify[1].status).length;
+        }
+      });
+    },
+    changeStatusNotify(item) {
+      if (!item[1].status) {
+        item[1].status = true;
+        set(ref(database, `notify-user/${this.user.id}/${item[0]}`), { ...item[1] });
+      }
+    },
+    setUserOff() {
+      let now = new Date();
+      const obj = {
+        availability: false,
+        id: this.user.id,
+        timeStamp: now.toString(),
+      };
+      set(ref(database, `users/${this.firebaseUser[0]}`), { ...obj });
+      console.log('set');
     },
   },
 };

@@ -8,6 +8,7 @@ import DashboardView from '@/views/admin/DashboardView';
 import ManagePostView from '@/views/admin/ManagePostView';
 import ManageAccountView from '@/views/admin/ManageAccountView';
 import ManagePackageView from '@/views/admin/ManagePackageView';
+import IncomeView from '@/views/admin/IncomeView';
 
 const routes = [
   {
@@ -62,9 +63,17 @@ const routes = [
         path: '/admin/manage-package',
         name: 'Package Management',
         meta: {
-          title: 'package Management',
+          title: 'Package Management',
         },
         component: ManagePackageView,
+      },
+      {
+        path: '/admin/income',
+        name: 'Income',
+        meta: {
+          title: 'Income',
+        },
+        component: IncomeView,
       },
     ],
   },

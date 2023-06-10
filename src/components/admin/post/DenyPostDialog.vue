@@ -18,7 +18,7 @@
         <el-input
           id="refused-reason"
           type="textarea"
-          :rows="5"
+          :rows="8"
           v-model="info.refused_reason"
           placeholder="Nêu cụ thể lý do từ chối tin này"
           clearable
@@ -36,6 +36,7 @@
 
 <script>
 import PostService from '@/services/PostService';
+import { database, ref, push } from '@/services/FirebaseService';
 export default {
   props: {
     dialogVisible: Boolean,
@@ -77,6 +78,13 @@ export default {
         this.getPosts();
         this.$store.state.toast.success('Từ chối tin thành công');
         this.closeDialog();
+        let now = new Date();
+        push(ref(database, `notify-user/${this.post.user.id}`), {
+          time: now.toISOString(),
+          action: 'denied',
+          status: false,
+          message: `Bài đăng #${this.post.id} đã bị từ chối`,
+        });
       } else {
         this.$store.state.toast.error('Có lỗi xảy ra!');
       }

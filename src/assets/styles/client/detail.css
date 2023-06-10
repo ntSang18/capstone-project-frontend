@@ -45,6 +45,18 @@
 #post-header .post-title.vip-1 {
   color: #E13427;
 }
+#post-header .post-title.vip-2 {
+  color: #EA2E9D;
+}
+#post-header .post-title.vip-3 {
+  color: #FF6600;
+}
+#post-header .post-title.vip-4 {
+  color: #3763e0;
+}
+#post-header .post-title.normal {
+  color: #055699;
+}
 
 #post-header .post-title .stars {
   display: inline-block;
@@ -105,6 +117,10 @@
 }
 #post-header .action-item.save:hover > i,
 #post-header .action-item.save:hover > span {
+  color: #E13427;
+}
+#post-header .action-item.save.active i,
+#post-header .action-item.save.active span {
   color: #E13427;
 }
 
@@ -217,7 +233,11 @@
   height: 7px;
   width: 7px;
   border-radius: 50%;
-  background-color: #16c784;
+  background-color: #30D46F;
+  margin-right: 5px;
+}
+#author .author-status .dot.off {
+  background-color: #aaa;
   margin-right: 5px;
 }
 

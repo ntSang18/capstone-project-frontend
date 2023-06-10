@@ -19,6 +19,9 @@ import PaymentHistoryView from '@/views/client/PaymentHistoryView';
 import PurchaseHistoryView from '@/views/client/PurchaseHistoryView';
 import AccountSettingView from '@/views/client/AccountSettingView';
 import CreatePostView from '@/views/client/CreatePostView';
+import PriceAnalysisView from '@/views/client/PriceAnalysisView';
+import NotificationView from '@/views/client/NotificationView';
+import TransactionView from '@/views/client/TransactionView';
 
 const routes = [
   {
@@ -76,6 +79,7 @@ const routes = [
           title: 'Home',
         },
         component: HomeView,
+        props: true,
       },
       {
         path: '/post/:id',
@@ -84,6 +88,7 @@ const routes = [
           title: 'Details',
         },
         component: DetailPostView,
+        props: true,
       },
       {
         path: '/info',
@@ -165,7 +170,31 @@ const routes = [
         },
         component: CreatePostView,
       },
+      {
+        path: '/analysis',
+        name: 'Price Analysis',
+        meta: {
+          title: 'Price Analysis',
+        },
+        component: PriceAnalysisView,
+      },
     ],
+  },
+  {
+    path: '/notify',
+    name: 'Notification',
+    meta: {
+      title: 'Notification',
+    },
+    component: NotificationView,
+  },
+  {
+    path: '/transaction/:name',
+    name: 'Transaction',
+    meta: {
+      title: 'Transaction',
+    },
+    component: TransactionView,
   },
 ];
 

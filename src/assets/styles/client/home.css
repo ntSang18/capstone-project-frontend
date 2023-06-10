@@ -24,6 +24,7 @@
   position: relative;
   cursor: pointer;
   padding: 0px 6px;
+  min-width: 0;
 }
 
 #filter .filter-body button {
@@ -60,6 +61,9 @@
   flex-grow: 1;
   font-size: 13.3px;
   margin-left: 4px;
+  overflow: hidden;
+  white-space:nowrap;
+  text-overflow: ellipsis;
 }
 
 #page-header {
@@ -88,9 +92,6 @@
   margin-bottom: 20px;
 }
 
-#location .location-item input {
-  display: none;
-}
 
 #location .location-item label {
   display: block;
@@ -101,6 +102,7 @@
   box-shadow: 0 0 10px 1px rgb(0 0 0 / 10%);
   margin: 0 10px;
   background-color: #fff;
+  cursor: pointer;
 }
 
 #location .location-item label .location-bg {

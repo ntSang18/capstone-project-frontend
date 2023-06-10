@@ -68,7 +68,7 @@
             </div>
             <div class="inp-group">
               <label>Nội dung mô tả</label>
-              <span class="info">{{ post.description }}</span>
+              <span class="info description">{{ post.description }}</span>
             </div>
             <div class="inp-group half">
               <label>Thông tin liên hệ</label>
@@ -80,11 +80,11 @@
             </div>
             <div class="inp-group half">
               <label>Giá cho thuê</label>
-              <span class="info">{{ numberToVND(post.price) }}</span>
+              <span class="info">{{ toVnd(post.price) }}</span>
             </div>
             <div class="inp-group half">
               <label>Tiền cọc</label>
-              <span class="info">{{ numberToVND(post.deposit) }}</span>
+              <span class="info">{{ toVnd(post.deposit) }}</span>
             </div>
             <div class="inp-group half">
               <label>Diện tích</label>
@@ -111,7 +111,11 @@
         </div>
       </section>
 
-      <section id="post-advance" class="create-section half">
+      <section
+        v-if="post.status === 'PUBLIC' || post.status === 'EXPIRED'"
+        id="post-advance"
+        class="create-section half"
+      >
         <div class="left">
           <h2 class="sub-title">Thông tin nâng cao</h2>
           <div class="inp-group half">
@@ -141,7 +145,7 @@
 </template>
 
 <script>
-import numberToVND from '@/utils/numberToVND';
+import { toVnd } from '@/utils/numberFormatter';
 import { TARGETS } from '@/common/postTargets';
 import { TYPES } from '@/common/postTypes';
 import { dateTimeFormatter } from '@/utils/dateFormatter';
@@ -169,7 +173,7 @@ export default {
     },
   },
   methods: {
-    numberToVND,
+    toVnd,
     dateTimeFormatter,
     closeDialog() {
       this.modelDialogVisible = false;

@@ -71,7 +71,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['deToken']),
+    ...mapActions('client', ['deToken']),
     checkInfo() {
       this.error = '';
       if (!this.info.username) {

@@ -9,6 +9,30 @@ import 'element-plus/dist/index.css';
 import Toast from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 
+import {
+  Chart as ChartJS,
+  Title,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  ArcElement,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  PointElement,
+  LineElement,
+);
+
 var Vue = createApp(App);
 Vue.use(store);
 Vue.use(router);

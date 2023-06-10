@@ -10,8 +10,11 @@ const instance = contentType => {
         'Content-Type': contentType,
         // 'Referrer-Policy': 'no-referrer-when-downgrade',
       };
-      if (store.state.token != null) {
-        header.Authorization = `Bearer ${store.state.token}`;
+      if (store.state.client.token != null) {
+        header.Authorization = `Bearer ${store.state.client.token}`;
+      }
+      if (store.state.admin.token != null) {
+        header.Authorization = `Bearer ${store.state.admin.token}`;
       }
       config.headers = { ...header };
       return config;

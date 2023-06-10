@@ -62,7 +62,7 @@ export default {
     page: Number,
   },
   methods: {
-    ...mapActions(['clearStore']),
+    ...mapActions('admin', ['clearStore']),
     async logout() {
       this.clearStore();
       this.$router.push('/admin/login');

@@ -219,7 +219,7 @@
               </p>
             </td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td class="nowrap"><strong>Tự động duyệt</strong></td>
             <td>
               <p class="img-container"><img src="@/assets/images/icon/tick.png" /></p>
@@ -236,7 +236,7 @@
             <td>
               <p class="img-container"><img src="@/assets/images/icon/x.png" /></p>
             </td>
-          </tr>
+          </tr> -->
           <tr>
             <td class="nowrap">
               <strong

@@ -8,7 +8,7 @@
           <el-breadcrumb-item>Quản lý gói tin</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-      <button class="btn-create">
+      <button class="btn-create" @click="openCreatePackagePriceDialog()">
         <i class="bx bxs-plus-circle"></i>
         <span class="text">Tạo gói tin</span>
       </button>
@@ -30,9 +30,12 @@
             </div>
             <div class="list-wrapper">
               <ul>
-                <package-item />
-                <package-item />
-                <package-item />
+                <package-item
+                  v-for="item in packagePrice.vip1"
+                  :key="item.id"
+                  :packagePrice="item"
+                  :openUpdatePackagePriceDialog="openUpdatePackagePriceDialog"
+                />
               </ul>
               <p class="summary vip1">
                 <strong>TIÊU ĐỀ IN HOA MÀU ĐỎ</strong>, gắn biểu tượng 5 ngôi sao màu vàng và hiển
@@ -55,9 +58,12 @@
             </div>
             <div class="list-wrapper">
               <ul>
-                <package-item />
-                <package-item />
-                <package-item />
+                <package-item
+                  v-for="item in packagePrice.vip2"
+                  :key="item.id"
+                  :packagePrice="item"
+                  :openUpdatePackagePriceDialog="openUpdatePackagePriceDialog"
+                />
               </ul>
               <p class="summary vip2">
                 <strong>TIÊU ĐỀ IN HOA MÀU HỒNG</strong>, gắn biểu tượng 4 ngôi sao màu vàng ở tiêu
@@ -78,9 +84,12 @@
             </div>
             <div class="list-wrapper">
               <ul>
-                <package-item />
-                <package-item />
-                <package-item />
+                <package-item
+                  v-for="item in packagePrice.vip3"
+                  :key="item.id"
+                  :packagePrice="item"
+                  :openUpdatePackagePriceDialog="openUpdatePackagePriceDialog"
+                />
               </ul>
               <p class="summary vip3">
                 <strong>TIÊU ĐỀ IN HOA MÀU CAM</strong>, gắn biểu tượng 3 ngôi sao màu vàng ở tiêu
@@ -100,9 +109,12 @@
             </div>
             <div class="list-wrapper">
               <ul>
-                <package-item />
-                <package-item />
-                <package-item />
+                <package-item
+                  v-for="item in packagePrice.vip4"
+                  :key="item.id"
+                  :packagePrice="item"
+                  :openUpdatePackagePriceDialog="openUpdatePackagePriceDialog"
+                />
               </ul>
               <p class="summary vip4">
                 <strong>TIÊU ĐỀ IN HOA MÀU XANH</strong>, gắn biểu tượng 2 ngôi sao màu vàng ở tiêu
@@ -123,9 +135,12 @@
             </div>
             <div class="list-wrapper">
               <ul>
-                <package-item />
-                <package-item />
-                <package-item />
+                <package-item
+                  v-for="item in packagePrice.normal"
+                  :key="item.id"
+                  :packagePrice="item"
+                  :openUpdatePackagePriceDialog="openUpdatePackagePriceDialog"
+                />
               </ul>
               <p class="summary normal">
                 <strong>Tiêu đề màu mặc định, viết thường</strong>. Hiển thị sau các tin VIP.
@@ -136,19 +151,69 @@
       </el-tabs>
     </div>
   </main>
+
+  <package-price-dialog
+    :dialogVisible="dialogVisible"
+    :getPackagePrices="getPackagePrices"
+    :packagePrice="packagePrice.dialogPackagePrice"
+    @triggerDialog="triggerPackagePriceDialog"
+  />
 </template>
 
 <script>
-import PackageItem from '@/components/admin/PackageItem.vue';
+import PackageItem from '@/components/admin/packagePrice/PackageItem';
+import PackagePriceDialog from '@/components/admin/packagePrice/PackagePriceDialog';
+import PackagePriceService from '@/services/PackagePriceService';
+import { TYPE } from '@/common/postTypes';
 export default {
   props: {
     changePage: Function,
   },
   components: {
     PackageItem,
+    PackagePriceDialog,
+  },
+  data() {
+    return {
+      packagePrice: {
+        all: [],
+        vip1: [],
+        vip2: [],
+        vip3: [],
+        vip4: [],
+        normal: [],
+        dialogPackagePrice: null,
+      },
+      dialogVisible: false,
+    };
   },
   mounted() {
     this.changePage(4);
+    this.getPackagePrices();
+  },
+  methods: {
+    async getPackagePrices() {
+      const res = await PackagePriceService.getPackagePrices();
+      if (res.status === 200) {
+        this.packagePrice.list = res.data;
+        this.packagePrice.vip1 = this.packagePrice.list.filter(p => p.type === TYPE.VIP_1);
+        this.packagePrice.vip2 = this.packagePrice.list.filter(p => p.type === TYPE.VIP_2);
+        this.packagePrice.vip3 = this.packagePrice.list.filter(p => p.type === TYPE.VIP_3);
+        this.packagePrice.vip4 = this.packagePrice.list.filter(p => p.type === TYPE.VIP_4);
+        this.packagePrice.normal = this.packagePrice.list.filter(p => p.type === TYPE.NORMAL);
+      }
+    },
+    triggerPackagePriceDialog(value) {
+      this.dialogVisible = value;
+    },
+    openCreatePackagePriceDialog() {
+      this.packagePrice.dialogPackagePrice = null;
+      this.triggerPackagePriceDialog(true);
+    },
+    openUpdatePackagePriceDialog(item) {
+      this.packagePrice.dialogPackagePrice = item;
+      this.triggerPackagePriceDialog(true);
+    },
   },
 };
 </script>
