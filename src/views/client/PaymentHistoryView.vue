@@ -10,39 +10,36 @@
     <section id="content" class="section">
       <h1 class="title">Lịch sử nạp tiền</h1>
       <div class="table-content">
-        <el-table :data="tableData" style="width: 100%" :border="true" max-height="500">
-          <el-table-column label="Ngày nạp" prop="date" sortable />
+        <el-table
+          :data="transactions"
+          stripe
+          :default-sort="{ prop: 'created_at' }"
+          style="width: 100%"
+          :border="true"
+          height="400"
+          max-height="500"
+        >
+          <el-table-column label="Ngày nạp" prop="created_at" sortable>
+            <template #default="scope">
+              <span>{{ dateTimeFormatter(scope.row.created_at) }}</span>
+            </template>
+          </el-table-column>
           <el-table-column label="Phương thức" prop="method" />
-          <el-table-column label="Giá" prop="price" sortable>
+          <el-table-column label="Giá" prop="money" sortable>
             <template #default="scope">
-              <span>{{ toVnd(scope.row.price) }}</span>
+              <span>{{ toVnd(scope.row.money) }}</span>
             </template>
           </el-table-column>
-
-          <el-table-column label="Khuyến mãi" prop="discount" sortable />
-          <el-table-column label="Thực nhận" prop="receipt" sortable>
+          <el-table-column label="Khuyến mãi" prop="discount" sortable>
             <template #default="scope">
-              <span>{{ toVnd(scope.row.receipt) }}</span>
+              <span>{{ scope.row.discount * 100 }}%</span>
             </template>
           </el-table-column>
-          <el-table-column
-            label="Trạng thái"
-            prop="status"
-            :filters="[
-              { text: 'Thành công', value: 'success' },
-              { text: 'Thất bại', value: 'fail' },
-            ]"
-            :filter-method="filterTag"
-            filter-placement="bottom"
-          >
+          <el-table-column label="Thực nhận" prop="actual_money" sortable>
             <template #default="scope">
-              <el-tag v-if="scope.row.status === 'success'" :class="'status ' + scope.row.status"
-                >Thành công</el-tag
-              >
-              <el-tag v-else :class="'status ' + scope.row.status">Thất bại</el-tag>
+              <span>{{ toVnd(scope.row.actual_money) }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="Ghi chú" prop="note" width="250" />
         </el-table>
       </div>
     </section>
@@ -51,42 +48,26 @@
 
 <script>
 import { toVnd } from '@/utils/numberFormatter';
+import { dateTimeFormatter } from '@/utils/dateFormatter';
+import TransactionService from '@/services/TransactionService';
 export default {
   data() {
     return {
-      tableData: [
-        {
-          date: '2023-05-02',
-          method: 'MOMO',
-          price: 50000,
-          discount: '0%',
-          receipt: 50000,
-          status: 'success',
-          note: '',
-        },
-        {
-          date: '2023-05-01',
-          method: 'ZaloPay',
-          price: 100000,
-          discount: '0%',
-          receipt: 0,
-          status: 'fail',
-          note: 'Nạp tiền không thành công, Lỗi: #49, Đơn hàng đã bị huỷ bỏ',
-        },
-        {
-          date: '2023-05-04',
-          method: 'MOMO',
-          price: 10000,
-          discount: '0%',
-          receipt: 10000,
-          status: 'success',
-          note: '',
-        },
-      ],
+      transactions: [],
     };
+  },
+  mounted() {
+    this.getPersonalTransactions();
   },
   methods: {
     toVnd,
+    dateTimeFormatter,
+    async getPersonalTransactions() {
+      const res = await TransactionService.getPersonalTransactions();
+      if (res.status === 200) {
+        this.transactions = res.data;
+      }
+    },
   },
 };
 </script>

@@ -233,7 +233,11 @@
   height: 7px;
   width: 7px;
   border-radius: 50%;
-  background-color: #16c784;
+  background-color: #30D46F;
+  margin-right: 5px;
+}
+#author .author-status .dot.off {
+  background-color: #aaa;
   margin-right: 5px;
 }
 

@@ -75,7 +75,12 @@
             </button>
           </div>
           <ul class="list-container">
-            <main-post v-for="post in postPage" :key="post.id" :post="post" />
+            <main-post
+              v-for="post in postPage"
+              :key="post.id"
+              :post="post"
+              :setChatUser="setChatUser"
+            />
           </ul>
         </section>
         <section id="pagination">
@@ -268,6 +273,9 @@ import { ACREAGE_RANGE } from '@/common/filterAcreageRange';
 import { ElLoading } from 'element-plus';
 
 export default {
+  props: {
+    setChatUser: Function,
+  },
   components: {
     CatalogDialog,
     AddressDialog,

@@ -122,3 +122,7 @@ input::-webkit-inner-spin-button {
 .el-scrollbar {
 	background-color: var(--light) !important;
 }
+
+.el-table__header-wrapper {
+	background-color: var(--light) !important;
+}

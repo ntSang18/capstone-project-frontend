@@ -269,6 +269,7 @@ import { TYPES } from '@/common/postTypes';
 import { mapState } from 'vuex';
 import PostService from '@/services/PostService';
 import CatalogService from '@/services/CatalogService';
+import { database, ref, push } from '@/services/FirebaseService';
 import { ElLoading } from 'element-plus';
 export default {
   data() {
@@ -445,6 +446,13 @@ export default {
 
       const res = await PostService.createPost(obj);
       if (res.status === 200) {
+        let now = new Date();
+        push(ref(database, 'notify-admin'), {
+          time: now.toISOString(),
+          action: 'create_post',
+          status: false,
+          message: `Người dùng đăng tin mới #${res.data.id}`,
+        });
         this.dataReady = true;
         this.$router.push('/notify');
       } else {

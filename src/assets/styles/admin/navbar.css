@@ -86,6 +86,7 @@
 #navbar .notification {
 	font-size: 20px;
 	position: relative;
+	cursor: pointer;
 }
 
 #navbar .notification .num {
@@ -136,4 +137,107 @@
 
 #navbar #switch-mode:checked + .switch-mode::before {
 	left: calc(100% - (25px - 4px) - 2px);
+}
+
+.drop-down::-webkit-scrollbar {
+  width: 8px;
+}
+
+.drop-down {
+  background-color: var(--light) !important;
+  width: 300px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  overflow-y: scroll;
+  user-select: none;
+	padding: 10px 10px;
+}
+
+.drop-down .drop-down-header {
+  padding: 5px 0px 15px;
+}
+
+.drop-down .drop-down-header .drop-down-title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.drop-down .drop-down-header .drop-down-operations {
+  display: flex;
+  column-gap: 10px;
+}
+
+.drop-down .drop-down-header .drop-down-operations button {
+  font-size: 14px;
+  color: #333;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  background: #f1f1f1;
+  padding: 5px 10px;
+  transition: .3s all ease;
+}
+.drop-down .drop-down-header .drop-down-operations button:hover {
+  background: #dbdbdb; 
+}
+.drop-down .drop-down-header .drop-down-operations button.active {
+  text-decoration: underline;
+}
+
+.drop-down .list-notify .notify-item {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  row-gap: 4px;
+  transition: .3s all ease;
+  border-top: 1px solid #e7e7e7;
+}
+.drop-down .list-notify .notify-item:hover {
+  border-radius: 5px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+.drop-down .list-notify .notify-item .item-header {
+  display: flex;
+  align-items: center;
+}
+
+.drop-down .list-notify .notify-item .item-header i {
+  font-size: 24px;
+  color: #F56C6C;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.drop-down .list-notify .notify-item .item-header i.create {
+  color: #67C23A;
+}
+
+.drop-down .list-notify .notify-item .item-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-right: 10px;
+}
+
+.drop-down .list-notify .notify-item .item-header .dot.unread {
+  display: block;
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background-color: #409EFF;
+}
+
+.drop-down .list-notify .notify-item p {
+  font-size: 14px;
+}
+
+.drop-down .list-notify .notify-item .time {
+  display: flex;
+  align-items: center;
+}
+
+.drop-down .list-notify .notify-item .time i {
+  vertical-align: middle;
+  margin-right: 5px;
 }

@@ -1,0 +1,99 @@
+@import url(./common.css);
+
+#income {
+  color: var(--dark);
+}
+
+.data-section {
+  min-width: 0;
+  border-radius: 20px;
+	background: var(--light);
+	padding: 10px;
+	overflow-x: auto;
+}
+
+#income .data-overview {
+  margin-top: 36px;
+  display: grid;
+  grid-template-columns: 30fr 70fr;
+  width: 100%;
+  column-gap: 10px;
+}
+
+#income h2.title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+#income #payment-overview.data-overview {
+  margin-top: 10px;
+}
+
+#income .chart-overview {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+#income .chart-overview .monthly .chart{
+  height: 250px;
+}
+
+#income .chart-overview .in-month {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  height: fit-content;
+}
+
+#income .chart-overview .in-month .box-info {
+  background-color: var(--grey);
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+}
+
+#income .chart-overview .in-month .box-info img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+#income .chart-overview .in-month .box-info h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+#income .chart-overview .in-month .box-info p {
+  font-size: 14px;
+}
+
+.type {
+  height: 24px;
+  padding: 0 9px;
+  border-radius: 5px;
+  font-size: 12px;
+  color: #fff;
+  width: fit-content;
+}
+
+.type.VIP_1 {
+  background-color: #E13427;
+}
+.type.VIP_2 {
+  background-color: #EA2E9D;
+}
+.type.VIP_3 {
+  background-color: #FF6600;
+}
+.type.VIP_4 {
+  background-color: #3763e0;
+}
+.type.NORMAL {
+  background-color: #055699;
+}

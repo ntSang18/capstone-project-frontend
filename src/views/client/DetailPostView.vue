@@ -156,18 +156,23 @@
       <div class="right-col">
         <section v-if="post.detail" id="author">
           <div class="author-avt">
-            <img src="@/assets/images/default/default-user.png" />
+            <img v-if="post.detail.user.image_url" :src="post.detail.user.image_url" />
+            <img v-else src="@/assets/images/default/default-user.png" />
           </div>
           <span class="author-name"> {{ post.detail.user.username }} </span>
-          <div class="author-status">
+          <div v-if="firebaseUser[1].availability" class="author-status">
             <div class="dot"></div>
             <span>Đang hoạt động</span>
+          </div>
+          <div v-else class="author-status">
+            <div class="dot off"></div>
+            <span>Hoạt động {{ diffTime(firebaseUser[1].timeStamp) }}</span>
           </div>
           <button class="phone">
             <i class="bx bxs-phone"></i>
             <span>{{ post.detail.user.phone_number }}</span>
           </button>
-          <button class="chat">
+          <button class="chat" @click="chat(post.detail.user)">
             <i class="bx bxs-message-alt-detail"></i>
             <span>Nhắn tin</span>
           </button>
@@ -207,7 +212,11 @@ import { dateFormatter, diffTime } from '@/utils/dateFormatter';
 import { TARGETS } from '@/common/postTargets';
 import { ElLoading } from 'element-plus';
 import { mapActions, mapState } from 'vuex';
+import { database, ref, onValue } from '@/services/FirebaseService';
 export default {
+  props: {
+    setChatUser: Function,
+  },
   data() {
     return {
       post: {
@@ -215,6 +224,7 @@ export default {
         newest: [],
         vip: [],
       },
+      firebaseUser: [],
       stars: 0,
       className: '',
       typeString: '',
@@ -227,12 +237,15 @@ export default {
     SwiperSlide,
     AsidePost,
   },
-  mounted() {
-    this.getPost();
-    this.getPublicPosts();
+  async mounted() {
+    await this.getPost();
+    await this.getPublicPosts();
+    this.dataReady = true;
+    this.setup();
+    this.checkSaved();
   },
   computed: {
-    ...mapState('client', ['savedPosts']),
+    ...mapState('client', ['user', 'savedPosts']),
   },
   methods: {
     ...mapActions('client', ['addSavedPost', 'removeSavedPost']),
@@ -241,7 +254,6 @@ export default {
     dateFormatter,
     loading() {
       const loading = ElLoading.service({
-        lock: true,
         text: 'Loading',
         background: 'rgba(0, 0, 0, 0.7)',
       });
@@ -272,10 +284,16 @@ export default {
       const res = await PostService.getPost(this.$route.params.id);
       if (res.status === 200) {
         this.post.detail = res.data;
-        this.setup();
-        this.checkSaved();
-        this.dataReady = true;
+        this.getFirebaseUser();
       }
+    },
+    getFirebaseUser() {
+      onValue(ref(database, 'users'), snapshot => {
+        if (snapshot.exists()) {
+          const firebaseUsers = Object.keys(snapshot.val()).map(key => [key, snapshot.val()[key]]);
+          this.firebaseUser = firebaseUsers.find(el => el[1].id === this.post.detail.user.id);
+        }
+      });
     },
     setup() {
       if (this.post.detail.type === TYPE.VIP_1) {
@@ -325,6 +343,11 @@ export default {
       } else {
         this.addSavedPost(this.post.detail);
         this.isSaved = true;
+      }
+    },
+    chat(user) {
+      if (this.user.id !== user.id) {
+        this.setChatUser(user);
       }
     },
   },

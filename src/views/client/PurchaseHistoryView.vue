@@ -16,6 +16,7 @@
           :default-sort="{ prop: 'id' }"
           style="width: 100%"
           :border="true"
+          height="400"
           max-height="500"
         >
           <el-table-column label="Thời gian" prop="scope.row.paid_at" sortable width="180">

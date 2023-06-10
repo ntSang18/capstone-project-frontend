@@ -78,6 +78,7 @@
 #dashboard .table-data .post {
 	flex-grow: 1;
 	flex-basis: 600px;
+	height: fit-content;
 }
 
 #dashboard .table-data .package {
@@ -141,4 +142,10 @@
 
 #dashboard .table-data .package .package-list li:last-child {
 	margin-bottom: 0;
+}
+
+.post .avatar {
+  width: 100%;
+  height: 115px;
+  object-fit: cover;
 }

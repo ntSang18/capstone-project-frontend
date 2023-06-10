@@ -8,15 +8,9 @@
       </div>
       <ul class="nav">
         <li>
-          <router-link to="/">
+          <router-link to="/analysis">
             <i class="bx bx-bar-chart-alt"></i>
             <span data-replace="Quản lý tin">Biểu đồ giá</span>
-          </router-link>
-        </li>
-        <li v-if="user">
-          <router-link to="/">
-            <i class="bx bx-chat"></i>
-            <span>Chat</span>
           </router-link>
         </li>
         <li v-if="user">
@@ -194,11 +188,12 @@ import { mapActions, mapState } from 'vuex';
 import AuthService from '@/services/AuthService';
 import { toVnd } from '@/utils/numberFormatter';
 import { diffTime } from '@/utils/dateFormatter';
-import { database, ref, onValue, set } from '@/services/FirebaseService';
+import { database, ref, onValue, set, get, child } from '@/services/FirebaseService';
 export default {
   data() {
     return {
       notifications: [],
+      firebaseUser: [],
       countNotifyUnread: 0,
       filterStatus: true,
     };
@@ -216,6 +211,7 @@ export default {
   mounted() {
     if (this.user) {
       this.getNotifications();
+      this.getFirebaseUser();
     }
   },
   methods: {
@@ -223,9 +219,17 @@ export default {
     toVnd,
     diffTime,
     async logout() {
+      this.setUserOff();
       this.clearStore();
       this.$router.push('/login');
       await AuthService.logout();
+    },
+    async getFirebaseUser() {
+      const snapshot = await get(child(ref(database), 'users'));
+      if (snapshot.exists()) {
+        const firebaseUsers = Object.keys(snapshot.val()).map(key => [key, snapshot.val()[key]]);
+        this.firebaseUser = firebaseUsers.find(el => el[1].id === this.user.id);
+      }
     },
     getNotifications() {
       onValue(ref(database, `notify-user/${this.user.id}`), snapshot => {
@@ -235,13 +239,21 @@ export default {
         }
       });
     },
-    async changeStatusNotify(item) {
+    changeStatusNotify(item) {
       if (!item[1].status) {
         item[1].status = true;
-        console.log(item[0]);
-        console.log({ ...item[1] });
         set(ref(database, `notify-user/${this.user.id}/${item[0]}`), { ...item[1] });
       }
+    },
+    setUserOff() {
+      let now = new Date();
+      const obj = {
+        availability: false,
+        id: this.user.id,
+        timeStamp: now.toString(),
+      };
+      set(ref(database, `users/${this.firebaseUser[0]}`), { ...obj });
+      console.log('set');
     },
   },
 };

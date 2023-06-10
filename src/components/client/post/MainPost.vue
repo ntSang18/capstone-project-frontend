@@ -35,7 +35,7 @@
         </div>
         <div v-if="post.type === 'VIP_1'" class="btn-group">
           <button class="author-phone-number">{{ post.user.phone_number }}</button>
-          <button class="author-chat">Nhắn tin</button>
+          <button class="author-chat" @click="setChatUser(post.user)">Nhắn tin</button>
         </div>
       </div>
     </div>
@@ -50,6 +50,7 @@ import { mapActions, mapState } from 'vuex';
 export default {
   props: {
     post: Object,
+    setChatUser: Function,
   },
   data() {
     return {

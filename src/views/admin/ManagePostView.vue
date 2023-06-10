@@ -39,7 +39,8 @@
               style="width: 100%"
               max-height="1000"
               height="400"
-              header-cell-class-name="table-head-cell"
+              cell-class-name="table-cell"
+              header-cell-class-name="table-cell"
               @selection-change="handleSelectionChangePublic"
               v-loading="loading"
             >
@@ -166,7 +167,7 @@
             >
               <el-table-column type="selection" width="55" />
               <el-table-column fixed="left" prop="id" label="Mã tin" width="90" sortable />
-              <el-table-column label="Ảnh đại diện" prop="avatar" width="140">
+              <el-table-column label="Ảnh đại diện" width="140">
                 <template #default="scope">
                   <img
                     v-if="scope.row.medias.length"
@@ -973,7 +974,6 @@ export default {
         obj.ids = this.idsPicked.unconfirmed.map(post => post.id);
         arrayNotify = this.idsPicked.unconfirmed;
       }
-      // var obj = id ? { ids: [id] } : { ids: this.idsPicked.unconfirmed.map(post => post.id) };
       const res = await PostService.confirmPost(obj);
       if (res.status === 200) {
         this.getPosts();

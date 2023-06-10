@@ -34,6 +34,13 @@
                 </div>
                 <div class="method-item-name"><span>ZaloPay</span></div>
               </router-link>
+
+              <router-link to="/payment-method/vnpay" class="method-item">
+                <div class="method-item-icon">
+                  <img src="@/assets/images/icon/vnpay.png" />
+                </div>
+                <div class="method-item-name"><span>VNPay</span></div>
+              </router-link>
             </div>
           </div>
           <div class="right"></div>
@@ -48,9 +55,18 @@
 
 <script>
 import BalanceOverview from '@/components/client/BalanceOverview';
+import { METHODS } from '@/common/paymentMethods';
 export default {
   components: {
     BalanceOverview,
+  },
+  data() {
+    return {
+      methods: [],
+    };
+  },
+  mounted() {
+    this.methods = METHODS;
   },
 };
 </script>
