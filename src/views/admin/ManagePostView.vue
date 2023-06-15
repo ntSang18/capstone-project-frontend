@@ -667,9 +667,18 @@
                       <i class="bx bx-edit-alt"></i>
                     </el-button>
                   </el-tooltip>
-                  <el-tooltip content="Xóa danh mục" placement="top" effect="light">
-                    <el-button type="danger" circle><i class="bx bx-trash"></i></el-button>
-                  </el-tooltip>
+                  <el-popconfirm
+                    width="200"
+                    confirm-button-type="danger"
+                    confirm-button-text="Xác nhận"
+                    cancel-button-text="Hủy"
+                    title="Xác nhận xóa danh mục này?"
+                    @confirm="deleteCatalog(item.id)"
+                  >
+                    <template #reference>
+                      <el-button type="danger" circle><i class="bx bx-trash"></i></el-button>
+                    </template>
+                  </el-popconfirm>
                 </div>
               </li>
             </ul>
@@ -914,6 +923,15 @@ export default {
             value: catalog.id,
           };
         });
+      }
+    },
+    async deleteCatalog(id) {
+      const res = await CatalogService.deleteCatalog(id);
+      if (res.status === 200) {
+        this.$store.state.toast.success('Xóa danh mục thành công!');
+        this.getCatalogs();
+      } else {
+        this.$store.state.toast.error('Xóa danh mục thất bại!');
       }
     },
     async getPosts() {
