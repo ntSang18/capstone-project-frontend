@@ -13,12 +13,12 @@
             <span data-replace="Quản lý tin">Khuyến mãi</span>
           </router-link>
         </li>
-        <li>
+        <!-- <li>
           <router-link to="/analysis">
             <i class="bx bx-bar-chart-alt"></i>
             <span data-replace="Quản lý tin">Biểu đồ giá</span>
           </router-link>
-        </li>
+        </li> -->
         <li v-if="user">
           <el-dropdown class="drop-down-btn" trigger="click" max-height="80vh" placement="bottom">
             <a v-if="countNotifyUnread">
