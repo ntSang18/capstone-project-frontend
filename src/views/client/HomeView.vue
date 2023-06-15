@@ -152,7 +152,7 @@
           </ul>
         </section>
 
-        <section id="blog" class="section link">
+        <!-- <section id="blog" class="section link">
           <h2 class="section-header">Bài viết mới</h2>
           <ul class="list">
             <li class="list-item">
@@ -216,7 +216,7 @@
               </span>
             </li>
           </ul>
-        </section>
+        </section> -->
       </div>
     </div>
   </div>

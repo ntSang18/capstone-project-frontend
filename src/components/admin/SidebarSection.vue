@@ -30,6 +30,12 @@
         </router-link>
       </li>
       <li :class="page === 5 ? 'active' : ''">
+        <router-link to="/admin/manage-promotion">
+          <i class="bx bxs-discount"></i>
+          <span class="text">Khuyến mãi</span>
+        </router-link>
+      </li>
+      <li :class="page === 6 ? 'active' : ''">
         <router-link to="/admin/income">
           <i class="bx bx-money"></i>
           <span class="text">Doanh thu</span>
@@ -37,12 +43,12 @@
       </li>
     </ul>
     <ul class="side-menu ps-0">
-      <li>
+      <!-- <li>
         <a router-link to="/">
           <i class="bx bxs-cog"></i>
           <span class="text">Settings</span>
         </a>
-      </li>
+      </li> -->
       <li>
         <a class="logout" @click="logout()">
           <i class="bx bxs-log-out-circle"></i>

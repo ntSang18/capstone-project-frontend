@@ -34,6 +34,7 @@
                   v-for="item in packagePrice.vip1"
                   :key="item.id"
                   :packagePrice="item"
+                  :getPackagePrices="getPackagePrices"
                   :openUpdatePackagePriceDialog="openUpdatePackagePriceDialog"
                 />
               </ul>

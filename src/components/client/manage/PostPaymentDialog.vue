@@ -188,9 +188,9 @@ export default {
           this.setUser(response.data);
         }
         this.$store.state.toast.success('Mua gói tin thành công!');
-        this.dataReady = true;
         this.getPosts();
         this.closeDialog();
+        this.dataReady = true;
       } else {
         this.$store.state.toast.error('Có lỗi xảy ra!');
         this.dataReady = true;

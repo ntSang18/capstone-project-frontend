@@ -235,7 +235,7 @@ export default {
     };
   },
   async mounted() {
-    this.changePage(5);
+    this.changePage(6);
     await this.getTransactions();
     await this.getPostPayments();
     this.dataReady = true;

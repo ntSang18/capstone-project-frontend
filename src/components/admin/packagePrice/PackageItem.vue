@@ -20,7 +20,18 @@
       <el-button type="warning" circle @click="openUpdatePackagePriceDialog(packagePrice)">
         <i class="bx bx-edit"></i>
       </el-button>
-      <el-button type="danger" circle><i class="bx bx-trash"></i></el-button>
+      <el-popconfirm
+        width="210"
+        confirm-button-type="danger"
+        confirm-button-text="Xác nhận"
+        cancel-button-text="Hủy"
+        title="Xác nhận xóa gói tin này?"
+        @confirm="deletePackagePrice()"
+      >
+        <template #reference>
+          <el-button type="danger" circle><i class="bx bx-trash"></i></el-button>
+        </template>
+      </el-popconfirm>
     </div>
   </li>
 </template>
@@ -28,9 +39,11 @@
 <script>
 import { TYPE } from '@/common/postTypes';
 import { toVnd } from '@/utils/numberFormatter';
+import PackagePriceService from '@/services/PackagePriceService';
 export default {
   props: {
     packagePrice: Object,
+    getPackagePrices: Function,
     openUpdatePackagePriceDialog: Function,
   },
   data() {
@@ -49,6 +62,15 @@ export default {
       else if (this.packagePrice.type === TYPE.VIP_3) this.className = 'vip3';
       else if (this.packagePrice.type === TYPE.VIP_4) this.className = 'vip4';
       else this.className = 'normal';
+    },
+    async deletePackagePrice() {
+      const res = await PackagePriceService.deletePackagePrice(this.packagePrice.id);
+      if (res.status === 200) {
+        this.$store.state.toast.success('Xóa gói tin thành công!');
+        this.getPackagePrices();
+      } else {
+        this.$store.state.toast.error('Xóa gói tin thất bại!');
+      }
     },
   },
 };

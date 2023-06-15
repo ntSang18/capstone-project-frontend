@@ -7,12 +7,18 @@
         </router-link>
       </div>
       <ul class="nav">
-        <li>
+        <li v-if="promotion">
+          <router-link to="/promotion">
+            <i class="bx bxs-discount"></i>
+            <span data-replace="Quản lý tin">Khuyến mãi</span>
+          </router-link>
+        </li>
+        <!-- <li>
           <router-link to="/analysis">
             <i class="bx bx-bar-chart-alt"></i>
             <span data-replace="Quản lý tin">Biểu đồ giá</span>
           </router-link>
-        </li>
+        </li> -->
         <li v-if="user">
           <el-dropdown class="drop-down-btn" trigger="click" max-height="80vh" placement="bottom">
             <a v-if="countNotifyUnread">
@@ -190,6 +196,9 @@ import { toVnd } from '@/utils/numberFormatter';
 import { diffTime } from '@/utils/dateFormatter';
 import { database, ref, onValue, set, get, child } from '@/services/FirebaseService';
 export default {
+  props: {
+    promotion: Object,
+  },
   data() {
     return {
       notifications: [],
@@ -202,9 +211,9 @@ export default {
     ...mapState('client', ['user']),
     listNotify() {
       if (this.filterStatus) {
-        return this.notifications;
+        return this.notifications.reverse();
       } else {
-        return this.notifications.filter(notify => !notify[1].status);
+        return this.notifications.filter(notify => !notify[1].status).reverse();
       }
     },
   },

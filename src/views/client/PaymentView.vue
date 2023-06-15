@@ -11,10 +11,18 @@
       <h1 class="title">Nạp tiền vào tài khoản</h1>
       <div class="content-wrapper">
         <div class="left">
-          <div class="alert">
-            <p>Tặng thêm <strong>+10%</strong> cho giá trị nạp từ 50.000đ đến dưới 1.000.000đ</p>
-            <p>Tặng thêm <strong>+20%</strong> cho giá trị nạp từ 1.000.000đ đến dưới 2.000.000đ</p>
-            <p>Tặng thêm <strong>+25%</strong> cho giá trị nạp trên 2.000.000đ</p>
+          <div v-if="promotion" class="alert">
+            <div v-for="child in promotion.childs" :key="child.id" class="child-item">
+              <p v-if="child.end_range !== 999999999">
+                Tặng thêm <strong>+{{ child.percent }}%</strong> cho giá trị nạp từ
+                {{ toVnd(child.start_range) }} đến dưới
+                {{ toVnd(child.end_range) }}
+              </p>
+              <p v-else>
+                Tặng thêm <strong>+{{ child.percent }}%</strong> cho giá trị nạp trên
+                {{ toVnd(child.start_range) }}
+              </p>
+            </div>
           </div>
 
           <div class="method">
@@ -56,7 +64,11 @@
 <script>
 import BalanceOverview from '@/components/client/BalanceOverview';
 import { METHODS } from '@/common/paymentMethods';
+import { toVnd } from '@/utils/numberFormatter';
 export default {
+  props: {
+    promotion: Object,
+  },
   components: {
     BalanceOverview,
   },
@@ -65,8 +77,19 @@ export default {
       methods: [],
     };
   },
-  mounted() {
+  computed: {
+    listPromotionChild() {
+      if (this.promotion) {
+        return this.promotion.childs;
+      }
+      return [];
+    },
+  },
+  async mounted() {
     this.methods = METHODS;
+  },
+  methods: {
+    toVnd,
   },
 };
 </script>
