@@ -13,7 +13,7 @@
           <i class="bx bxs-plus-circle"></i>
           <span class="text">Tạo bài đăng</span>
         </button>
-        <button class="btn-download">
+        <button class="btn-download" @click="exportCsv()">
           <i class="bx bxs-cloud-download"></i>
           <span class="text">Download CSV</span>
         </button>
@@ -892,6 +892,18 @@ export default {
     isExpired,
     dateTimeFormatter,
     toVnd,
+    exportCsv() {
+      let csv =
+        'id, title, type, status, address_province, address_district, address_ward, address_detail,catalog, created_at, deposit, price, target, user_id\n';
+      this.post.all.forEach(post => {
+        csv += `${post.id}, ${post.title}, ${post.type}, ${post.status}, ${post.address.province}, ${post.address.district}, ${post.address.ward}, ${post.address.specific_address}, ${post.catalog.name}, ${post.created_at}, ${post.deposit}, ${post.price}, ${post.target}, ${post.user.id}\n`;
+      });
+      const anchor = document.createElement('a');
+      anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+      anchor.target = '_blank';
+      anchor.download = 'posts.csv';
+      anchor.click();
+    },
     async getCatalogs() {
       const res = await CatalogService.getCatalogs();
       if (res.status === 200) {

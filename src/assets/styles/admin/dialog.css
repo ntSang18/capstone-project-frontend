@@ -380,3 +380,61 @@
 #package-dialog .inp-group {
   margin-bottom: 15px;
 }
+
+
+
+
+
+
+
+
+
+/* PROMOTION */
+
+.promotion-dialog .dialog-body {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.promotion-dialog .dialog-body .child-inp {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--grey);
+  border-radius: 5px;
+}
+
+.promotion-dialog .dialog-body .child-inp h3 {
+  font-size: 16px;
+  color: var(--dark);
+}
+
+.promotion-dialog .dialog-body .child-inp .child-inp-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 10px;
+}
+
+.promotion-dialog .dialog-body .child-inp .child-inp-item .content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--grey);
+  border-radius: 5px;
+  column-gap: 10px;
+}
+
+.promotion-dialog .dialog-body .child-inp .add-child-btn {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  background-color: var(--blue);
+  color: var(--light);
+  cursor: pointer;
+  font-size: 14px;
+}

@@ -2,7 +2,7 @@
   <main id="account-management" class="main-container">
     <div class="head-title">
       <div class="left">
-        <h1 class="title">Quản lý tin đăng</h1>
+        <h1 class="title">Quản lý người dùng</h1>
         <el-breadcrumb separator="/" class="breadcrumb">
           <el-breadcrumb-item :to="{ path: '/admin' }">Admin</el-breadcrumb-item>
           <el-breadcrumb-item>Quản lý người dùng</el-breadcrumb-item>
@@ -13,9 +13,9 @@
           <i class="bx bxs-plus-circle"></i>
           <span class="text">Tạo tài khoản</span>
         </button>
-        <button class="btn-download">
+        <button class="btn-download" @click="exportCsv()">
           <i class="bx bxs-cloud-download"></i>
-          <span class="text" @click="exportCsv()">Download CSV</span>
+          <span class="text">Download CSV</span>
         </button>
       </div>
     </div>

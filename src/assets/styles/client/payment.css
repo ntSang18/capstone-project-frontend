@@ -7,12 +7,12 @@
   border-radius: 5px;
 }
 
-.alert p {
+.alert .child-item {
   margin-bottom: 14px;
   font-size: 14px;
   color: #e75004;
 }
-.alert p:last-child {
+.alert .child-item:last-child {
   margin-bottom: 0px;
 }
 

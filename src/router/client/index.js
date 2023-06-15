@@ -22,6 +22,7 @@ import CreatePostView from '@/views/client/CreatePostView';
 import PriceAnalysisView from '@/views/client/PriceAnalysisView';
 import NotificationView from '@/views/client/NotificationView';
 import TransactionView from '@/views/client/TransactionView';
+import PromotionView from '@/views/client/PromotionView';
 
 const routes = [
   {
@@ -121,6 +122,7 @@ const routes = [
           title: 'Payment',
         },
         component: PaymentView,
+        props: true,
       },
       {
         path: '/payment-method/:name',
@@ -177,6 +179,15 @@ const routes = [
           title: 'Price Analysis',
         },
         component: PriceAnalysisView,
+      },
+      {
+        path: '/promotion',
+        name: 'Promotions',
+        meta: {
+          title: 'Promotions',
+        },
+        component: PromotionView,
+        props: true,
       },
     ],
   },

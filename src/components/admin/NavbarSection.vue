@@ -1,64 +1,57 @@
 <template>
   <nav id="navbar">
     <i class="bx bx-menu" @click="triggerSidebar"></i>
-    <a href="#" class="nav-link">Categories</a>
-    <form action="#">
-      <div class="form-input">
-        <input type="search" placeholder="Search..." />
-        <button type="submit" class="search-btn">
-          <i class="bx bx-search"></i>
-        </button>
-      </div>
-    </form>
-    <input type="checkbox" id="switch-mode" hidden @change="triggerTheme" />
-    <label for="switch-mode" class="switch-mode"></label> `
-    <el-dropdown class="drop-down-btn" trigger="click" max-height="80vh" placement="bottom">
-      <a v-if="countNotifyUnread" class="notification">
-        <el-badge :value="countNotifyUnread" :max="9">
+    <div class="left">
+      <input type="checkbox" id="switch-mode" hidden @change="triggerTheme" />
+      <label for="switch-mode" class="switch-mode"></label>
+      <el-dropdown class="drop-down-btn" trigger="click" max-height="80vh" placement="bottom">
+        <a v-if="countNotifyUnread" class="notification">
+          <el-badge :value="countNotifyUnread" :max="9">
+            <i class="bx bxs-bell"></i>
+          </el-badge>
+        </a>
+        <a v-else class="notification">
           <i class="bx bxs-bell"></i>
-        </el-badge>
-      </a>
-      <a v-else class="notification">
-        <i class="bx bxs-bell"></i>
-      </a>
-      <template #dropdown>
-        <div class="drop-down">
-          <div class="drop-down-header">
-            <h2 class="drop-down-title">Thông báo</h2>
-            <div class="drop-down-operations">
-              <button :class="filterStatus ? 'active' : ''" @click="this.filterStatus = true">
-                Tất cả
-              </button>
-              <button :class="filterStatus ? '' : 'active'" @click="this.filterStatus = false">
-                Chưa đọc
-              </button>
+        </a>
+        <template #dropdown>
+          <div class="drop-down">
+            <div class="drop-down-header">
+              <h2 class="drop-down-title">Thông báo</h2>
+              <div class="drop-down-operations">
+                <button :class="filterStatus ? 'active' : ''" @click="this.filterStatus = true">
+                  Tất cả
+                </button>
+                <button :class="filterStatus ? '' : 'active'" @click="this.filterStatus = false">
+                  Chưa đọc
+                </button>
+              </div>
             </div>
+            <ul class="list-notify">
+              <li
+                v-for="(item, index) in listNotify"
+                :key="index"
+                class="notify-item"
+                @click="changeStatusNotify(item)"
+              >
+                <div class="item-header">
+                  <i class="bx bxs-plus-square create"></i>
+                  <h3>Đăng tin mới</h3>
+                  <div :class="item[1].status ? 'dot' : 'dot unread'"></div>
+                </div>
+                <p>{{ item[1].message }}</p>
+                <div class="time">
+                  <i class="bx bx-time"></i>
+                  <span>{{ diffTime(item[1].time) }}</span>
+                </div>
+              </li>
+            </ul>
           </div>
-          <ul class="list-notify">
-            <li
-              v-for="(item, index) in listNotify"
-              :key="index"
-              class="notify-item"
-              @click="changeStatusNotify(item)"
-            >
-              <div class="item-header">
-                <i class="bx bxs-plus-square create"></i>
-                <h3>Đăng tin mới</h3>
-                <div :class="item[1].status ? 'dot' : 'dot unread'"></div>
-              </div>
-              <p>{{ item[1].message }}</p>
-              <div class="time">
-                <i class="bx bx-time"></i>
-                <span>{{ diffTime(item[1].time) }}</span>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </template>
-    </el-dropdown>
-    <router-link to="/" class="profile">
-      <img src="@/assets/images/default/user.png" />
-    </router-link>
+        </template>
+      </el-dropdown>
+      <router-link to="/" class="profile">
+        <img src="@/assets/images/default/user.png" />
+      </router-link>
+    </div>
   </nav>
 </template>
 
@@ -80,9 +73,9 @@ export default {
   computed: {
     listNotify() {
       if (this.filterStatus) {
-        return this.notifications;
+        return this.notifications.reverse();
       } else {
-        return this.notifications.filter(notify => !notify[1].status);
+        return this.notifications.filter(notify => !notify[1].status).reverse();
       }
     },
   },
