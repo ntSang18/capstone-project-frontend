@@ -261,8 +261,9 @@ export default {
         id: this.user.id,
         timeStamp: now.toString(),
       };
-      set(ref(database, `users/${this.firebaseUser[0]}`), { ...obj });
-      console.log('set');
+      if (this.firebaseUser.length) {
+        set(ref(database, `users/${this.firebaseUser[0]}`), { ...obj });
+      }
     },
   },
 };
