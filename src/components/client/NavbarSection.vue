@@ -228,10 +228,10 @@ export default {
     toVnd,
     diffTime,
     async logout() {
+      this.setUserOff();
       this.clearStore();
       this.$router.push('/login');
       await AuthService.logout();
-      this.setUserOff();
     },
     async getFirebaseUser() {
       const snapshot = await get(child(ref(database), 'users'));
