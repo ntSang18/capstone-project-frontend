@@ -228,10 +228,10 @@ export default {
     toVnd,
     diffTime,
     async logout() {
-      this.setUserOff();
       this.clearStore();
       this.$router.push('/login');
       await AuthService.logout();
+      this.setUserOff();
     },
     async getFirebaseUser() {
       const snapshot = await get(child(ref(database), 'users'));
@@ -261,9 +261,7 @@ export default {
         id: this.user.id,
         timeStamp: now.toString(),
       };
-      if (this.firebaseUser.length) {
-        set(ref(database, `users/${this.firebaseUser[0]}`), { ...obj });
-      }
+      set(ref(database, `users/${this.firebaseUser[0]}`), { ...obj });
     },
   },
 };
