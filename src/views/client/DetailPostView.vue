@@ -346,8 +346,12 @@ export default {
       }
     },
     chat(user) {
-      if (this.user.id !== user.id) {
-        this.setChatUser(user);
+      if (!this.user) {
+        this.$router.push('/login');
+      } else {
+        if (this.user.id !== user.id) {
+          this.setChatUser(user);
+        }
       }
     },
   },

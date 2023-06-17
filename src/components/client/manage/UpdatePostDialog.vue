@@ -500,6 +500,7 @@ export default {
         return;
       }
 
+      this.dataReady = false;
       this.loading();
       const obj = this.createFormData();
 

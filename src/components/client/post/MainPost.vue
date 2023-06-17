@@ -35,7 +35,7 @@
         </div>
         <div v-if="post.type === 'VIP_1'" class="btn-group">
           <button class="author-phone-number">{{ post.user.phone_number }}</button>
-          <button class="author-chat" @click="setChatUser(post.user)">Nhắn tin</button>
+          <button class="author-chat" @click="chat(post.user)">Nhắn tin</button>
         </div>
       </div>
     </div>
@@ -64,7 +64,7 @@ export default {
     this.checkSaved();
   },
   computed: {
-    ...mapState('client', ['savedPosts']),
+    ...mapState('client', ['user', 'savedPosts']),
   },
   methods: {
     ...mapActions('client', ['addSavedPost', 'removeSavedPost']),
@@ -112,6 +112,15 @@ export default {
       } else {
         this.addSavedPost(this.post);
         this.isSaved = true;
+      }
+    },
+    chat(user) {
+      if (!this.user) {
+        this.$router.push('/login');
+      } else {
+        if (this.user.id !== user.id) {
+          this.setChatUser(user);
+        }
       }
     },
   },
