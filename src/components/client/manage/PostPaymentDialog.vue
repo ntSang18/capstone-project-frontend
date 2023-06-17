@@ -219,7 +219,7 @@ export default {
       return true;
     },
     clearDialog() {
-      this.info.postType = 1;
+      this.info.postType = 'VIP_1';
       this.info.packagePrice = 0;
       this.info.number = 1;
       this.isExtend = false;
