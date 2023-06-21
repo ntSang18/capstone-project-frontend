@@ -14,7 +14,7 @@
           :data="postPage"
           stripe
           :default-sort="{ prop: 'id' }"
-          max-height="1000"
+          height="500"
           style="width: 100%"
           :border="true"
         >
