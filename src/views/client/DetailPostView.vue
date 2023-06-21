@@ -275,7 +275,7 @@ export default {
         const normal = res.data.filter(post => post.type === TYPE.NORMAL);
         this.post.vip = [].concat(vip1, vip2, vip3, vip4, normal);
         if (this.post.vip.length > 10) {
-          this.post.newest = this.post.newest.slice(0, 10);
+          this.post.vip = this.post.vip.slice(0, 10);
         }
       }
     },
