@@ -1,20 +1,23 @@
-import instance from './AxiosConfig';
+import instance from "./AxiosConfig";
 
-const contentType = 'application/json';
+const contentType = "application/json";
 
 class PaymentMethodService {
-  get entity() {
-    return 'payment-method';
-  }
+	get entity() {
+		return "payment-method";
+	}
 
-  async vnpayMethod(obj) {
-    try {
-      const res = await instance(contentType).post(`${this.entity}/vnpay`, { ...obj });
-      return res;
-    } catch (err) {
-      return err;
-    }
-  }
+	async generateUrl(method, obj) {
+		try {
+			const res = await instance(contentType).post(
+				`${this.entity}/${method}`,
+				{ ...obj }
+			);
+			return res;
+		} catch (err) {
+			return err;
+		}
+	}
 }
 
 export default new PaymentMethodService();
