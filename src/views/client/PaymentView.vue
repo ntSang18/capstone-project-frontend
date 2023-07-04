@@ -41,7 +41,7 @@
 						<h2 class="method-title">Chọn phương thức nạp tiền</h2>
 
 						<div class="method-list">
-							<router-link
+							<!-- <router-link
 								to="/payment-method/momo"
 								class="method-item"
 							>
@@ -65,7 +65,7 @@
 								<div class="method-item-name">
 									<span>ZaloPay</span>
 								</div>
-							</router-link>
+							</router-link> -->
 
 							<router-link
 								to="/payment-method/vnpay"
