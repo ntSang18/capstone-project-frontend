@@ -222,10 +222,10 @@ export default {
 			transaction: {
 				list: [],
 				data: {
-					labels: ["MoMo", "ZaloPay", "VNPay", "Paypal"],
+					labels: ["VNPay", "Paypal"],
 					datasets: [
 						{
-							backgroundColor: ["#B0006E", "#0090EC", "#E11921", "#003087"],
+							backgroundColor: ["#E11921", "#003087"],
 							data: [],
 						},
 					],
