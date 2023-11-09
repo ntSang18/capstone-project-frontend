@@ -1,0 +1,236 @@
+@import url(./common.css);
+
+#price {
+  padding: 12px 0px;
+}
+
+#price #breadcrumb {
+  padding: 12px 120px;
+}
+
+#price-tag {
+  padding: 40px 20px;
+  text-align: center;
+  color: #333;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+#price-tag .title {
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+
+#price-tag .date-apply {
+  font-size: 14px;
+  display: block;
+  margin-bottom: 30px;
+}
+
+#price-tag .table-price {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: start;
+  display: table;
+  border-spacing: 2px;
+  border-color: gray;
+  font-variant: normal;
+}
+
+#price-tag .table-price td,
+#price-tag .table-price th {
+  padding: 10px 15px;
+  border-left: 10px solid #fff;
+  border-right: 10px solid #fff;
+  border-bottom: 1px solid #eee;
+  background-color: #f9f9f9;
+  text-align: left;
+  width: 12.5%;
+  vertical-align: top;
+}
+
+#price-tag .table-price th {
+  color: #fff;
+}
+
+#price-tag .table-price .header-empty {
+  background: #fff;
+  border: 0;
+}
+
+#price-tag .table-price span {
+  font-size: 14px;
+}
+
+#price-tag .table-price .stars {
+  color: #FFD456;
+}
+
+#price-tag .table-price .package-vip1 {
+  background-color: #E13427;
+}
+
+#price-tag .table-price .package-vip2 {
+  background-color: #ea2e9d;
+}
+
+#price-tag .table-price .package-vip3 {
+  background-color: #FF6600;
+}
+
+#price-tag .table-price .package-vip4 {
+  background-color: #007BFF;
+}
+
+#price-tag .table-price .package-normal {
+  background-color: #055699;
+}
+
+#price-tag .table-price .nowrap {
+  font-size: 13px;
+  color: #333;
+  vertical-align: middle;
+}
+
+#price-tag .table-price .nowrap.top {
+  vertical-align: top;
+}
+
+#price-tag .table-price .nowrap .subtitle {
+  color: #4caf50;
+  font-size: 11px;
+}
+
+#price-tag .table-price td p {
+  font-size: 13px;
+  color: #333;
+  margin: 5px 0px;
+  line-height: 1.5;
+}
+
+#price-tag .table-price .price-day {
+  font-size: 21px;
+  font-weight: bold;
+}
+
+#price-tag .table-price .min-day {
+  display: block;
+  font-size: 11px;
+}
+
+#price-tag .table-price .price-week {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#price-tag .table-price .before-price-month {
+  display: block;
+  text-decoration: line-through;
+  color: red;
+}
+
+#price-tag .table-price .discount {
+  display: block;
+  color: #4caf50;
+}
+
+#price-tag .table-price .price-month {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+#price-tag .table-price .title-color {
+  font-weight: bold;
+}
+#price-tag .table-price .title-color.vip1 {
+  color: #E13427;
+}
+#price-tag .table-price .title-color.vip2 {
+  color: #ea2e9d;
+}
+#price-tag .table-price .title-color.vip3 {
+  color: #FF6600;
+}
+#price-tag .table-price .title-color.vip4 {
+  color: #007BFF;
+}
+#price-tag .table-price .title-color.normal  {
+  color: #055699;
+}
+
+#price-tag .table-price .img-container {
+  width: 100%;
+  text-align: center;
+}
+
+#price-tag .table-price .img-container img {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+}
+
+#illustration {
+  text-align: center;
+  padding: 50px 0px 0px;
+  color: #333;
+}
+
+#illustration .title {
+  font-size: 28px;
+  margin-bottom: 50px;
+}
+
+#illustration .vip-demo {
+  text-align: start;
+  margin: 0 auto 70px;
+  max-width: 700px;
+}
+#illustration .vip-demo:last-child {
+  margin-bottom: 0px;
+}
+
+.vip-demo .demo-title {
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.vip-demo .demo-title .stars {
+  color: #FFD456;
+}
+
+.vip-demo .description {
+  line-height: 1.5;
+  margin: 16px 0px;
+}
+
+.vip-demo.vip1 .description strong {
+  color: #E13427;
+}
+.vip-demo.vip2 .description strong {
+  color: #ea2e9d;
+}
+.vip-demo.vip3 .description strong {
+  color: #FF6600;
+}
+.vip-demo.vip3 .description strong {
+  color: #007BFF;
+}
+.vip-demo.normal .description strong {
+  color: #055699;
+}
+
+.vip-demo .place-display {
+  margin-bottom: 16px;
+}
+
+.vip-demo img {
+  display: block;
+  margin: 0 auto;
+  padding: 10px;
+  box-shadow: 0 0 30px 10px rgb(0 0 0 / 3%);
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 3px;
+  object-fit: cover;
+}

@@ -1,0 +1,151 @@
+@import url(./common.css);
+
+#dashboard .box-info {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	grid-gap: 24px;
+	margin-top: 36px;
+}
+
+#dashboard .box-info li {
+	padding: 24px;
+	background: var(--light);
+	border-radius: 20px;
+	display: flex;
+	align-items: center;
+	grid-gap: 24px;
+}
+
+#dashboard .box-info li .bx {
+	width: 80px;
+	height: 80px;
+	border-radius: 10px;
+	font-size: 36px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#dashboard .box-info li:nth-child(1) .bx {
+	background: var(--light-blue);
+	color: var(--blue);
+}
+
+#dashboard .box-info li:nth-child(2) .bx {
+	background: var(--light-yellow);
+	color: var(--yellow);
+}
+
+#dashboard .box-info li:nth-child(3) .bx {
+	background: var(--light-orange);
+	color: var(--orange);
+}
+
+#dashboard .box-info li .text h3 {
+	font-size: 20px;
+	font-weight: 600;
+	color: var(--dark);
+}
+
+#dashboard .box-info li .text p {
+  font-size: 14px;
+	color: var(--dark);	
+}
+
+#dashboard .table-data {
+	display: flex;
+	flex-wrap: wrap;
+	grid-gap: 24px;
+	margin-top: 24px;
+	width: 100%;
+	color: var(--dark);
+}
+
+#dashboard .table-data .post,
+#dashboard .table-data .package {
+	border-radius: 20px;
+	background: var(--light);
+	padding: 24px;
+	overflow-x: auto;
+}
+
+#dashboard .table-data .head-title {
+	font-size: 24px;
+	font-weight: 600;
+  margin-bottom: 24px;
+}
+
+#dashboard .table-data .post {
+	flex-grow: 1;
+	flex-basis: 600px;
+	height: fit-content;
+}
+
+#dashboard .table-data .package {
+	flex-grow: 1;
+	flex-basis: 300px;
+}
+
+#dashboard .table-data .package .package-list {
+	width: 100%;
+}
+
+#dashboard .table-data .package .package-list li {
+	width: 100%;
+	margin-bottom: 16px;
+	background: var(--grey);
+	border-radius: 10px;
+	padding: 14px 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+  position: relative;
+  color: var(--light);
+}
+
+#dashboard .table-data .package .package-list li p {
+  z-index: 2;
+}
+
+#dashboard .table-data .package .package-list .package-item-dashboard::before {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 33%;
+  left: 0;
+  border-radius: 10px;
+  z-index: 1;
+}
+
+#dashboard .table-data .package .package-list li i {
+	color: var(--yellow);
+}
+
+#dashboard .table-data .package .package-list li.vip1::before {
+	background-color: var(--vip-1);
+}
+#dashboard .table-data .package .package-list li.vip2::before {
+	background-color: var(--vip-2);
+}
+
+#dashboard .table-data .package .package-list li.vip3::before {
+	background-color: var(--vip-3);
+}
+
+#dashboard .table-data .package .package-list li.vip4::before {
+	background-color: var(--vip-4);
+}
+
+#dashboard .table-data .package .package-list li.normal::before {
+	background-color: var(--normal);
+}
+
+#dashboard .table-data .package .package-list li:last-child {
+	margin-bottom: 0;
+}
+
+.post .avatar {
+  width: 100%;
+  height: 115px;
+  object-fit: cover;
+}

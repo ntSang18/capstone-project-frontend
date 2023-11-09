@@ -1,0 +1,87 @@
+@import url(./common.css);
+
+#content {
+  color: #333;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 75fr 25fr;
+  column-gap: 30px;
+}
+
+.content-wrapper .left,
+.content-wrapper .right {
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  padding: 12px;
+}
+
+.sub-title {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.form-change-password .error {
+  text-align: center;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #FFE5EA;
+  color: #b01730;
+  border-radius: 5px;
+  font-size: 14px;
+  display: none;
+}
+
+.form-change-password .error.show {
+  display: block;
+}
+
+.inp-group {
+  margin-bottom: 15px;
+}
+
+.inp-group label {
+  font-size: 14px;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.btn-change-password,
+.btn-delete-account {
+  padding: 5px 30px;
+  border: none;
+  outline: none;
+  background-color: #f80;
+  border-radius: 4px;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  transition: .3s all ease;
+}
+.btn-delete-account {
+  background-color: #f14949;
+}
+
+.btn-change-password:hover {
+  background-color: rgba(255, 136, 0, 0.781);
+}
+.btn-delete-account:hover {
+  background-color: #f14949d3;
+}
+
+.setting-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.switch {
+  float: right;
+  --el-switch-on-color: #f80;
+}

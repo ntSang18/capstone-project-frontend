@@ -1,0 +1,57 @@
+@import url(./common.css);
+
+#content .form {
+  text-align: center;
+}
+
+.form .avatar-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0px;
+}
+
+.form .avatar-container .avatar {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid #fafafa;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.form .avatar-container input {
+  display: none;
+}
+
+.form .content-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 20px 0px;
+  grid-column-gap: 20px;
+}
+
+.form .content-container .content-general, 
+.form .content-container .content-address {
+  text-align: start;
+}
+
+.form .content-container .content-title {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.form .content-container .inp-group {
+  padding: 10px 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form .content-container .inp-group label {
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #333;
+}

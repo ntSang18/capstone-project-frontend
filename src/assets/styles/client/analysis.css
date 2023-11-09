@@ -1,0 +1,248 @@
+@import url(./common.css);
+
+#overview {
+  position: relative;
+  background-color: #fff;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+#overview .img-background {
+  background-image: url(@/assets/images/background/analysis_bg.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 431px;
+}
+
+#overview .header {
+  display: flex;
+  flex-direction: column;
+  left: 49px;
+  position: absolute;
+  text-align: left;
+  top: 84px;
+}
+
+#overview .header h1 {
+  color: #5c3700;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 40px;
+  margin: 0 0 16px;
+  max-width: 427px;
+}
+
+#overview .header p {
+  color: #5c3700;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 28px;
+  max-width: 374px;
+}
+
+#overview .about {
+  backdrop-filter: blur(25px);
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  bottom: -81px;
+  width: 90%;
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto; 
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 48px;
+  padding: 12px 16px;
+  position: absolute;
+}
+
+#overview .about .about-item {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  row-gap: 10px;
+  justify-content: space-between;
+}
+
+#overview .about .about-item img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+}
+
+#overview .about .about-item p {
+  color: #222;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 28px;
+  text-align: center;
+}
+
+#filter {
+  background-image: url(https://static.chotot.com/storage/default_images/pty/market_price/desktop-bg-1.png);
+  margin: 0px 0px 12px;
+  padding: 100px 12px 24px;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: end;
+  align-items: flex-end;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  background-color: #fff;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+#filter .filter-container {
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 6px;
+  border-radius: 8px;
+  padding: 16px;
+  width: 92%;
+}
+
+#filter .filter-container .header h1 {
+  margin-bottom: 4px;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 26px;
+  color: rgb(34, 34, 34);
+  text-align: center;
+}
+
+#filter .filter-container .header p {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  margin-bottom: 16px;
+  color: rgb(119, 119, 119);
+}
+
+#filter .filter-container .select {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr;
+  column-gap: 12px;
+}
+
+#filter .filter-container .select button {
+  padding: 9px 20px;
+  background: rgb(255, 109, 37);
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+#default-content {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+#default-content .header {
+  font-size: 16px;
+  padding: 12px 0px 12px 12px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.41;
+  letter-spacing: normal;
+  color: rgb(34, 34, 34);
+  border-bottom: 1px solid #eee;
+}
+
+#default-content .box-info-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 12px;
+  padding: 12px;
+  width: 100%;
+}
+
+#default-content .box-info-group .box-info-item {
+  height: 240px;
+  background-image: url(@/assets/images/background/box_dn_bg.jpg);
+  background-position: center;
+  background-size: cover;
+  position: relative;
+  border-radius: 8px;
+}
+
+#default-content .box-info-group .box-info-item:nth-child(2) {
+  background-image: url(@/assets/images/background/box_hn_bg.jpg);
+}
+
+#default-content .box-info-group .box-info-item:nth-child(3) {
+  background-image: url(@/assets/images/background/box_hcm_bg.jpg);
+}
+
+#default-content .box-info-group .box-info-item .info-container {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 12px 12px 0px;
+  border-radius: 8px;
+  color: #fff;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  background-color: #00000080;
+}
+
+#default-content .box-info-group .box-info-item h2 {
+  display: block;
+  font-size: 24px;
+  padding: 20px 0px 10px;
+  font-weight: bold;
+}
+
+#default-content .box-info-group .box-info-item .info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0px 12px;
+  border-bottom: 1px solid #fff;
+}
+
+#default-content .box-info-group .box-info-item .info-row p {
+  font-size: 14px;
+}
+
+#default-content .box-info-group .box-info-item .detail-btn {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#default-content .box-info-group .box-info-item .info-container .detail-btn button {
+  cursor: pointer;
+  outline: none;
+  background: none;
+  border: none;
+  display: block;
+  width: 100%;
+  color: rgb(34, 117, 211);
+  font-size: 16px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 20px;
+  margin: 0px auto;
+}
+
+#default-content .box-info-group .box-info-item .info-container .detail-btn button i {
+  font-size: 24px;
+  vertical-align: middle;
+}

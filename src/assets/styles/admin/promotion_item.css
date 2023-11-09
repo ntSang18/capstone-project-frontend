@@ -1,0 +1,81 @@
+@import url(./common.css);
+
+.promotion-item {
+  margin-bottom: 16px;
+  background: var(--grey);
+  border-radius: 10px;
+  padding: 14px 20px;
+  width: 100%;
+}
+
+.promotion-item input[type="checkbox"] {
+  display: none;
+}
+
+.promotion-item label {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  position: relative;
+}
+
+.promotion-item label::before {
+  content: '+';
+  margin-right: 10px;
+  font-size: 24px;
+  font-weight: 600;
+  position: absolute;
+  top: 15%;
+  left: 0;
+}
+
+.promotion-item label .head {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding-left: 28px;
+}
+
+.promotion-item label .head .status {
+  display: block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #909399;
+  color: #fff;
+}
+
+.promotion-item label .time {
+  font-size: 14px;
+  padding-left: 28px;
+  display: flex;
+  align-items: center;
+}
+
+.promotion-item label .time i {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.promotion-item .promotion-child {
+  max-height: 0;
+  padding-left: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  transition: max-height 0.5s, padding 0.5s;
+}
+
+.promotion-item .promotion-child .child-item {
+  font-size: 14px;
+}
+
+.promotion-item input[type="checkbox"]:checked + label +.promotion-child {
+  max-height: 400px;
+  padding: 20px 0px 10px 10px;
+}
+
+.promotion-item input[type="checkbox"]:checked + label::before {
+  content: '-';
+}

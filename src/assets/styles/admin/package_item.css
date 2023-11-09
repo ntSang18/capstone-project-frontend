@@ -1,0 +1,54 @@
+@import url(./common.css);
+
+.package-item {
+  margin-bottom: 16px;
+  background: var(--grey);
+  border-radius: 10px;
+  padding: 14px 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.package-item.vip1 {
+  border-left: 10px solid var(--vip-1);
+}
+.package-item.vip2 {
+  border-left: 10px solid var(--vip-2);
+}
+.package-item.vip3 {
+  border-left: 10px solid var(--vip-3);
+}
+.package-item.vip4 {
+  border-left: 10px solid var(--vip-4);
+}
+.package-item.normal {
+  border-left: 10px solid var(--normal);
+}
+
+.package-item .item-content{
+  display: flex;
+  flex-direction: column;
+  color: var(--dark);
+  row-gap: 10px;
+}
+
+.package-item .item-content .name strong {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.package-item .item-content .price {
+  color: var(--text-yellow);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.package-item .item-content .time {
+  font-size: 14px;
+}
+
+.package-item .item-content i {
+  margin-right: 5px;
+  font-size: 18px;
+  vertical-align: text-bottom;
+}

@@ -1,0 +1,219 @@
+@import url(./common.css);
+
+#filter {
+  background-color: #ffcd44;
+  width: 100%;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+#filter .filter-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  column-gap: 6px;
+}
+
+#filter .filter-body .filter-item {
+  background-color: #fff;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  height: 35px;
+  position: relative;
+  cursor: pointer;
+  padding: 0px 6px;
+  min-width: 0;
+}
+
+#filter .filter-body button {
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: #FF6D25;
+  color: #fff;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: ease all .3s;
+}
+
+#filter .filter-body button:hover {
+  background-color: #ED570E;
+}
+
+#filter .filter-body button i {
+  font-size: 18px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+#filter .filter-body .filter-item i {
+  color: #777777;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+#filter .filter-body .filter-item span {
+  flex-grow: 1;
+  font-size: 13.3px;
+  margin-left: 4px;
+  overflow: hidden;
+  white-space:nowrap;
+  text-overflow: ellipsis;
+}
+
+#page-header {
+  padding: 15px 0px;
+}
+
+#page-header h1 {
+  font-size: 28px;
+  line-height: 1.2;
+  color: #333333;
+  margin-bottom: 5px;
+}
+
+#page-header p {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #65676b;
+}
+
+#location {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+
+#location .location-item label {
+  display: block;
+  width: 190px;
+  height: fit-content;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px 1px rgb(0 0 0 / 10%);
+  margin: 0 10px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+#location .location-item label .location-bg {
+  width: 100%;
+  height: 110px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#location .location-item label .location-bg.hcm {
+  background-image: url('@/assets/images/background/location_hcm.jpg');
+}
+#location .location-item label .location-bg.hn {
+  background-image: url('@/assets/images/background/location_hn.jpg');
+}
+#location .location-item label .location-bg.dn {
+  background-image: url('@/assets/images/background/location_dn.jpg');
+}
+
+#location .location-item label span {
+  display: block;
+  padding: 12px 10px;
+  width: 100%;
+  color: #ED570E;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#post-list .post-sort {
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+#post-list .post-sort button {
+  margin-left: 5px;
+  color: #333;
+  background: #f1f1f1;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: .3s all ease;
+}
+#post-list .post-sort button.active {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+#post-list .post-sort button:hover {
+  background: #dbdbdb
+}
+
+#pagination {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0px 50px;
+  width: 100%;
+  text-align: center;
+}
+
+/* CATALOG - PRICE - S */
+
+.section .list {
+  user-select: none;
+}
+
+.section .list.price,
+.section .list.acreage {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.section .list .list-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 20px;
+  border-bottom: 1px dashed #eee;
+  padding: 5px 0px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.section .list .list-item:hover > .item-title {
+  color: #ED570E;
+}
+
+.section .list .list-item.sub {
+  padding-left: 15px;
+}
+
+.section .list .list-item .item-title {
+  color: #333;
+  font-size: 14px;
+  transition: ease all .2s;
+}
+
+.section .list .list-item .item-title i {
+  color: #aaaaaa;
+  font-size: 16px;
+  vertical-align: text-bottom;
+  margin-right: 5px;
+}
+
+.section .list .list-item .count {
+  color: #aaa;
+  font-size: 12.6px;
+}
+
+

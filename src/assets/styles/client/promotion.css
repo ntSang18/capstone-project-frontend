@@ -1,0 +1,44 @@
+@import url(./common.css);
+
+#promotion {
+  color: #333;
+}
+
+#promotion #content .summary {
+  font-style: italic;
+  font-size: 16px;
+  line-height: 26px;
+}
+
+#promotion #content .promotion-detail {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px 20px 0px;
+  row-gap: 20px;
+}
+
+#promotion #content .promotion-detail .name {
+  width: 100%;
+  font-size: 22px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+#promotion #content .promotion-detail .time {
+  display: flex;
+  align-items: center;
+}
+
+#promotion #content .promotion-detail .time i {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+#promotion #content .promotion-detail .childs {
+  list-style: disc;
+  padding: 0px 20px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
